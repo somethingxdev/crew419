@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/resources/cta-bg.png';
+import { Button } from '@/shared/ui/button';
+
+interface Props {
+  secondaryLabel: string;
+  secondaryHref: string;
+}
+
+const { secondaryLabel, secondaryHref } = Astro.props;
+---
+
+<section class="py-15" aria-labelledby="resources-cta-heading">
+  <div class="container">
+    <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
+      <div class="absolute inset-0 overflow-hidden">
+        <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover" />
+        <div class="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      <div class="relative z-10 mx-auto flex w-full max-w-155 flex-col items-center justify-center gap-7.5 px-5 py-15 text-center text-cream md:py-0">
+        <div class="flex w-full flex-col items-center gap-6">
+          <h2 id="resources-cta-heading" class="text-3xl font-bold md:text-5xl">Your Mission Starts With One Step</h2>
+          <p class="leading-none">
+            God is already moving around the world.<br />
+            Let’s discover where He’s inviting you to serve.
+          </p>
+        </div>
+        <div class="flex flex-col items-center gap-4 sm:flex-row">
+          <Button href="/contact" variant="cream" size="lg">Book a 30–minute call</Button>
+          <Button href={secondaryHref} variant="glass" size="lg" class="max-w-full">{secondaryLabel}</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

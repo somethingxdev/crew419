@@ -1,0 +1,49 @@
+---
+import getYourCopyBg from '@/assets/images/resources/fundraising/get-your-copy-bg.png';
+import heroBg from '@/assets/images/resources/fundraising/hero-bg.png';
+import Layout from '@/layouts/Layout.astro';
+import LifeInMission from '@/components/home/LifeInMission.astro';
+import ResourcesCta from '@/components/resources/Cta.astro';
+import GuideCards from '@/components/resources/guide/Cards.astro';
+import GetYourCopy from '@/components/resources/guide/GetYourCopy.astro';
+import GuideHero from '@/components/resources/guide/Hero.astro';
+import GuideIntro from '@/components/resources/guide/Intro.astro';
+
+const cards = [
+  {
+    title: 'Build Your Budget',
+    text: 'Know exactly what you’ll need before asking for support.',
+  },
+  {
+    title: 'Write Support Letters',
+    text: 'Simple templates you can personalize.',
+  },
+  {
+    title: 'Share Your Story',
+    text: 'Learn how to communicate your mission with confidence.',
+  },
+  {
+    title: 'Thank Your Supporters',
+    text: 'Build lasting relationships with the people who make your mission possible.',
+  },
+];
+---
+
+<Layout title="Fundraising Guide | Crew419">
+  <GuideHero
+    bg={heroBg}
+    eyebrow="Free fundraising guide"
+    title="Raise Support with Confidence"
+    description="Practical advice, templates, and proven strategies to help you invite others into your mission journey."
+    primaryLabel="Download Free Guide"
+  />
+  <GuideCards eyebrow="What’s included" heading="Everything You Need to Start Raising Support" cards={cards} />
+  <GuideIntro
+    eyebrow="What’s inside the guide"
+    heading="Everything You Need to Prepare for Your Mission Journey"
+    text="Whether you’re leading a team or joining a trip, this guide will help you prepare spiritually, organize your plans, and confidently invite others to be part of your mission."
+  />
+  <GetYourCopy bg={getYourCopyBg} />
+  <ResourcesCta secondaryLabel="Find your destination" secondaryHref="/trips" />
+  <LifeInMission />
+</Layout>

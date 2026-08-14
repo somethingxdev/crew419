@@ -1,0 +1,43 @@
+---
+import { Image, type LocalImageProps } from 'astro:assets';
+import decor from '@/assets/images/decor-bottom.png';
+import { Button } from '@/shared/ui/button';
+
+interface Props {
+  bg: LocalImageProps['src'];
+  eyebrow: string;
+  title: string;
+  description: string;
+  primaryLabel: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+
+const { bg, eyebrow, title, description, primaryLabel, primaryHref = '#get-your-copy', secondaryLabel = 'Book a 30–minute call', secondaryHref = '/contact' } = Astro.props;
+---
+
+<section class="relative" aria-labelledby="guide-hero-heading">
+  <div class="absolute inset-0 overflow-hidden">
+    <Image src={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover" />
+    <div class="absolute inset-0 bg-black/10"></div>
+  </div>
+
+  <div class="relative container flex w-full flex-1 flex-col justify-between gap-20 py-60">
+    <div class="flex w-full max-w-242 flex-col items-center text-center xl:items-start xl:text-left">
+      <p class="leading-none font-bold text-cream/80 uppercase">{eyebrow}</p>
+      <h1 id="guide-hero-heading" class="mt-3 text-4xl font-bold text-cream text-shadow-2xs md:text-6xl xl:text-[74px]">
+        {title}
+      </h1>
+      <p class="mt-7.5 max-w-156 text-lg leading-none font-medium text-cream">{description}</p>
+      <div class="mt-7.5 flex w-full max-w-165 flex-col gap-4 sm:flex-row">
+        <Button href={primaryHref} variant="cream" size="lg" class="flex-1">{primaryLabel}</Button>
+        <Button href={secondaryHref} variant="glass" size="lg" class="flex-1">{secondaryLabel}</Button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute -bottom-5 left-0 z-10 w-full translate-y-1/2">
+    <Image src={decor} alt="" widths={[1600, 3200]} class="h-auto w-full" />
+  </div>
+</section>

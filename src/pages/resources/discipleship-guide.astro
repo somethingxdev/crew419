@@ -1,0 +1,49 @@
+---
+import getYourCopyBg from '@/assets/images/resources/discipleship/get-your-copy-bg.png';
+import heroBg from '@/assets/images/resources/discipleship/hero-bg.png';
+import Layout from '@/layouts/Layout.astro';
+import LifeInMission from '@/components/home/LifeInMission.astro';
+import ResourcesCta from '@/components/resources/Cta.astro';
+import GuideCards from '@/components/resources/guide/Cards.astro';
+import GetYourCopy from '@/components/resources/guide/GetYourCopy.astro';
+import GuideHero from '@/components/resources/guide/Hero.astro';
+import GuideIntro from '@/components/resources/guide/Intro.astro';
+
+const cards = [
+  {
+    title: 'The Heart of Missions',
+    text: 'Understand the biblical purpose behind short-term missions.',
+  },
+  {
+    title: 'Preparing Spiritually',
+    text: 'Develop healthy habits of prayer, Scripture, and servant leadership.',
+  },
+  {
+    title: 'Serving Cross-Culturally',
+    text: 'Learn how to honor local churches and cultures.',
+  },
+  {
+    title: 'Life After the Mission',
+    text: 'Continue growing after returning home.',
+  },
+];
+---
+
+<Layout title="Discipleship Guide | Crew419">
+  <GuideHero
+    bg={heroBg}
+    eyebrow="Free discipleship guide"
+    title="Prepare Your Heart Before You Go"
+    description="Mission trips begin long before your flight. This free guide will help you understand the purpose of missions, prepare spiritually, and serve with humility wherever God leads."
+    primaryLabel="Download Discipleship Guide"
+  />
+  <GuideCards eyebrow="What you’ll learn" heading="A Practical Guide for Every Mission Participant" cards={cards} />
+  <GuideIntro
+    eyebrow="Free mission trip guide"
+    heading="Prepare for Your Mission Journey With Confidence"
+    text="Planning a mission trip can feel overwhelming. Our free guide gives you practical steps, helpful resources, and proven strategies to prepare your team, raise support, and create a meaningful mission experience from start to finish."
+  />
+  <GetYourCopy bg={getYourCopyBg} />
+  <ResourcesCta secondaryLabel="Find your destination" secondaryHref="/trips" />
+  <LifeInMission />
+</Layout>
