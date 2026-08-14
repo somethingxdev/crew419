@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/logo.png';
+import Facebook from '@/icons/facebook.svg';
+import Instagram from '@/icons/instragram.svg';
+import Youtube from '@/icons/youtube.svg';
+
+const columns = [
+  {
+    title: 'Mission Trips',
+    links: [
+      { label: 'All Trips', href: '/trips' },
+      { label: 'Custom Trips', href: '/trips/custom' },
+      { label: 'USA', href: '/trips/usa' },
+      { label: 'Canada', href: '/trips/canada' },
+      { label: 'Caribbean', href: '/trips/caribbean' },
+      { label: 'Central America', href: '/trips/central-america' },
+      { label: 'South America', href: '/trips/south-america' },
+      { label: 'Africa', href: '/trips/africa' },
+      { label: 'Europe', href: '/trips/europe' },
+      { label: 'Middle East', href: '/trips/middle-east' },
+      { label: 'Asia', href: '/trips/asia' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Discipleship Guide', href: '/resources/discipleship-guide' },
+      { label: 'Travel Guides', href: '/resources/travel-guides' },
+      { label: 'Fundraising Guide', href: '/resources/fundraising-guide' },
+    ],
+  },
+  {
+    title: 'About',
+    links: [
+      { label: 'Our Mission', href: '/about/mission' },
+      { label: 'Leadership Team', href: '/about/leadership' },
+      { label: 'Statement of Faith', href: '/about/statement-of-faith' },
+      { label: 'Stories', href: '/stories' },
+    ],
+  },
+  {
+    title: 'Connect',
+    links: [
+      { label: 'Book a 30-Minute Call', href: '/contact' },
+      { label: 'Contact', href: '/contact' },
+      { label: 'Donate', href: '/donate' },
+    ],
+  },
+];
+
+const legal = [
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms' },
+  { label: 'Refund Policy', href: '/refund-policy' },
+];
+---
+
+<footer class="pb-10 pt-15">
+  <div class="container">
+    <div class="flex justify-between">
+      <div class="w-96">
+        <a href="/">
+          <Image src={logo} alt="Crew419" width={221} height={70} class="h-18 w-auto" />
+        </a>
+        <p class="mt-8 text-lg leading-none font-medium">Mobilizing believers for Gospel-centered mission trips around the world – until the nets are full.</p>
+        <div class="mt-8 flex gap-3">
+          <a href="#" aria-label="Facebook" class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300">
+            <Facebook />
+          </a>
+          <a href="#" aria-label="Instagram" class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300">
+            <Instagram />
+          </a>
+          <a href="#" aria-label="YouTube" class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300">
+            <Youtube />
+          </a>
+        </div>
+      </div>
+
+      <nav class="flex items-start gap-12">
+        {
+          columns.map((column) => (
+            <div class="w-48 last:w-auto">
+              <p class="text-base leading-none font-bold text-muted-foreground uppercase mb-6">{column.title}</p>
+              <ul class="space-y-3">
+                {column.links.map((item) => (
+                  <li>
+                    <a href={item.href} class="text-lg leading-none font-medium  hover:text-primary">
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <div class="mt-12 flex items-center justify-between text-lg leading-none font-medium">
+      <p>© Crew419. All Rights Reserved.</p>
+      <div class="flex gap-25">
+        {
+          legal.map((item) => (
+            <a href={item.href} class="hover:text-primary transition-colors">
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</footer>

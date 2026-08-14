@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/home/cta/bg.png';
+import { Button } from '@/shared/ui/button';
+---
+
+<section class="py-15" aria-labelledby="cta-heading">
+  <div class="container">
+    <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
+      <div class="absolute inset-0 overflow-hidden">
+        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover object-[center_72%]" />
+        <div class="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      <div class="relative z-10 mx-auto flex w-full max-w-160 flex-col items-center justify-center gap-10 px-5 py-15 text-center text-cream md:py-0">
+        <div class="flex w-full flex-col items-center gap-6">
+          <h2 id="cta-heading" class="text-3xl leading-none font-bold md:text-5xl">Don't Stay on the Bench. Step Into God's Mission.</h2>
+          <p class="text-base leading-none">
+            Whether you're leading a church, bringing students on their first mission trip, or answering God's call yourself, we're here to help you take the next step.
+          </p>
+        </div>
+
+        <div class="flex w-full max-w-135 flex-col items-center gap-8">
+          <p class="max-w-108 text-lg leading-none font-medium">Let's build a mission experience that changes lives – and strengthens your faith.</p>
+          <div class="flex flex-col items-center gap-4 sm:flex-row">
+            <Button href="/contact" variant="cream">Book a 30–minute call</Button>
+            <Button href="/trips" variant="glass">Explore Mission Trips</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

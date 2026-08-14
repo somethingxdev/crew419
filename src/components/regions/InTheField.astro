@@ -1,0 +1,102 @@
+---
+import { Image, type LocalImageProps } from 'astro:assets';
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import decorBottom from '@/assets/images/decor-bottom.png';
+import decorTop from '@/assets/images/decor-top.png';
+import bg from '@/assets/images/regions/africa/in-field/bg.png';
+import photo1 from '@/assets/images/regions/africa/in-field/photo-1.png';
+import photo2 from '@/assets/images/regions/africa/in-field/photo-2.png';
+import photo3 from '@/assets/images/regions/africa/in-field/photo-3.png';
+import photo4 from '@/assets/images/regions/africa/in-field/photo-4.png';
+import photo5 from '@/assets/images/regions/africa/in-field/photo-5.png';
+import photo6 from '@/assets/images/regions/africa/in-field/photo-6.png';
+import { Button } from '@/shared/ui/button';
+
+interface Photo {
+  image: LocalImageProps['src'];
+  alt: string;
+  class: string;
+}
+
+const photos: Photo[] = [
+  { image: photo1, alt: 'A mission team praying with a local family', class: 'h-93 -rotate-6' },
+  { image: photo5, alt: 'Volunteers handing out supplies in a village', class: 'h-65 rotate-6' },
+  { image: photo6, alt: 'A volunteer laughing with local children', class: 'h-93 -rotate-3' },
+  { image: photo2, alt: 'Team members serving a meal outdoors', class: 'h-93 rotate-6' },
+  { image: photo4, alt: 'A worship gathering under an open sky', class: 'h-65 -rotate-3' },
+  { image: photo3, alt: 'A mission team walking through a rural community', class: 'h-93 -rotate-10' },
+];
+---
+
+<section class="relative py-15 md:py-30" aria-labelledby="in-field-heading" data-in-field>
+  <div class="absolute inset-0 overflow-hidden">
+    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+    <div class="absolute inset-0 bg-black/20"></div>
+  </div>
+
+  <div class="relative container z-10">
+    <div class="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center text-cream">
+      <p class="text-base leading-none font-bold uppercase opacity-80">In the field</p>
+      <h2 id="in-field-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">See the Mission in Action</h2>
+    </div>
+
+    <div class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0">
+      <Button type="button" variant="cream" size="icon" aria-label="Previous photo" data-in-field-prev>
+        <ArrowLeft />
+      </Button>
+      <Button type="button" variant="cream" size="icon" aria-label="Next photo" data-in-field-next>
+        <ArrowRight />
+      </Button>
+    </div>
+  </div>
+
+  <div class="relative z-10 mt-15 overflow-hidden py-6" data-in-field-viewport>
+    <ul class="flex touch-pan-y items-center gap-8 pl-5 md:pl-12" data-in-field-container>
+      {
+        photos.map((photo) => (
+          <li class:list={['bg-cream w-81 shrink-0 rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]', photo.class]}>
+            <Image src={photo.image} alt={photo.alt} widths={[800]} class="size-full rounded-sm object-cover" />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="pointer-events-none absolute top-0 left-0 z-10 w-full -translate-y-1/2">
+    <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
+  </div>
+  <div class="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-[63%]">
+    <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
+  </div>
+</section>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+
+  const section = document.querySelector<HTMLElement>('[data-in-field]');
+  const viewport = section?.querySelector<HTMLElement>('[data-in-field-viewport]');
+  const prev = section?.querySelector<HTMLButtonElement>('[data-in-field-prev]');
+  const next = section?.querySelector<HTMLButtonElement>('[data-in-field-next]');
+
+  if (section && viewport && prev && next) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const embla = EmblaCarousel(viewport, {
+      align: 'start',
+      containScroll: 'trimSnaps',
+      duration: reduced ? 0 : 25,
+      watchDrag: !reduced,
+    });
+
+    const toggleButtons = () => {
+      prev.disabled = !embla.canScrollPrev();
+      next.disabled = !embla.canScrollNext();
+    };
+
+    prev.addEventListener('click', () => embla.scrollPrev());
+    next.addEventListener('click', () => embla.scrollNext());
+    embla.on('select', toggleButtons);
+    embla.on('reInit', toggleButtons);
+    toggleButtons();
+  }
+</script>

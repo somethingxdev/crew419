@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import photo1 from '@/assets/images/regions/africa/stories/photo-1.png';
+import photo2 from '@/assets/images/regions/africa/stories/photo-2.png';
+import { Button } from '@/shared/ui/button';
+
+const stories = [
+  {
+    label: 'Testimony',
+    title: '“One Week That Changed My Life”',
+    text: 'One week of serving, learning, and stepping outside my comfort zone changed the way I see mission – and my own calling.',
+    date: 'January 2025',
+  },
+  {
+    label: 'Trip Recap',
+    title: 'Serving alongside local churches',
+    text: 'We came to serve, but quickly learned that the best ministry happens when we listen, build relationships, and serve alongside the local church.',
+    date: 'December 2024',
+  },
+];
+
+const photos = [
+  { image: photo1, alt: 'A volunteer standing in front of a village home', class: 'rotate-5' },
+  { image: photo2, alt: 'A mission team gathered outside a local church', class: '-rotate-3' },
+];
+---
+
+<section class="overflow-x-hidden py-15 md:py-30" aria-labelledby="region-stories-heading" data-region-stories>
+  <div class="relative container">
+    <div class="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Real Stories</p>
+      <h2 id="region-stories-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Featured Stories from This Region</h2>
+    </div>
+
+    <div class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0">
+      <Button type="button" variant="secondary" size="icon" aria-label="Previous story" data-region-stories-prev>
+        <ArrowLeft />
+      </Button>
+      <Button type="button" variant="secondary" size="icon" aria-label="Next story" data-region-stories-next>
+        <ArrowRight />
+      </Button>
+    </div>
+  </div>
+
+  <div class="mt-10 overflow-hidden py-6" data-region-stories-viewport>
+    <ul class="flex touch-pan-y items-center gap-8 pl-5 md:pl-12" data-region-stories-container>
+      {
+        stories.map((story, index) => (
+          <Fragment>
+            <li class="min-w-0 flex-[0_0_min(480px,calc(100vw-2.5rem))]">
+              <article class="bg-cream flex flex-col rounded-sm p-5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
+                <p class="text-muted-foreground text-base leading-none font-bold uppercase">{story.label}</p>
+                <h3 class="mt-2.5 text-2xl leading-[1.1] font-bold">{story.title}</h3>
+                <p class="mt-6 text-base leading-none">{story.text}</p>
+                <div class="mt-7.5 flex items-center justify-between">
+                  <p class="text-muted-foreground text-base leading-none">{story.date}</p>
+                  <a href="/stories" class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground border-b pb-2 text-base leading-none font-black uppercase transition-colors">
+                    Read story
+                  </a>
+                </div>
+              </article>
+            </li>
+            <li class:list={['bg-cream hidden h-112.5 w-87.5 shrink-0 rounded-sm p-2.5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] sm:block', photos[index].class]}>
+              <Image src={photos[index].image} alt={photos[index].alt} widths={[800]} class="size-full rounded-sm object-cover" />
+            </li>
+          </Fragment>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="mt-12.5 flex justify-center">
+    <Button href="/stories" size="lg" class="w-82.5 max-w-full">View All stories</Button>
+  </div>
+</section>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+
+  const section = document.querySelector<HTMLElement>('[data-region-stories]');
+  const viewport = section?.querySelector<HTMLElement>('[data-region-stories-viewport]');
+  const prev = section?.querySelector<HTMLButtonElement>('[data-region-stories-prev]');
+  const next = section?.querySelector<HTMLButtonElement>('[data-region-stories-next]');
+
+  if (section && viewport && prev && next) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const embla = EmblaCarousel(viewport, {
+      align: 'start',
+      containScroll: 'trimSnaps',
+      duration: reduced ? 0 : 25,
+      watchDrag: !reduced,
+    });
+
+    const toggleButtons = () => {
+      prev.disabled = !embla.canScrollPrev();
+      next.disabled = !embla.canScrollNext();
+    };
+
+    prev.addEventListener('click', () => embla.scrollPrev());
+    next.addEventListener('click', () => embla.scrollNext());
+    embla.on('select', toggleButtons);
+    embla.on('reInit', toggleButtons);
+    toggleButtons();
+  }
+</script>

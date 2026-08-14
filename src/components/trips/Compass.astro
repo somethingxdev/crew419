@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import decorBottom from '@/assets/images/decor-bottom.png';
+import decorTop from '@/assets/images/decor-top.png';
+import bg from '@/assets/images/trips/compass/bg.png';
+import compass from '@/assets/images/trips/compass/compass.png';
+import { Button } from '@/shared/ui/button';
+---
+
+<section id="compass" class="relative overflow-x-clip" aria-labelledby="compass-heading">
+  <div class="absolute inset-0 overflow-hidden">
+    <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
+      <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+    </div>
+    <div class="absolute inset-0 bg-black/20 backdrop-blur-xs"></div>
+  </div>
+
+  <h2 id="compass-heading" class="sr-only">Not Sure Where God Is Calling You?</h2>
+  <p class="sr-only">Use the compass to explore mission opportunities around the world and discover a destination you may have never considered.</p>
+
+  <div class="relative z-10 flex min-h-200 items-center justify-center px-5 py-28 xl:py-0">
+    <div class="flex flex-col items-center gap-8 text-center text-cream xl:hidden">
+      <p class="font-serif font-bold leading-[1.1]" aria-hidden="true">
+        <span class="block text-4xl uppercase md:text-5xl">Not Sure</span>
+        <span class="mt-1 block text-4xl md:text-5xl">Where God</span>
+        <span class="block text-4xl md:text-5xl">Is Calling You?</span>
+      </p>
+      <p class="max-w-85 text-base leading-none" aria-hidden="true">Use the compass to explore mission opportunities around the world and discover a destination you may have never considered.</p>
+      <Button href="#destinations" variant="primary" size="lg">Follow the compass</Button>
+      <figure class="w-64 md:w-80">
+        <Image src={compass} alt="A gold antique compass" widths={[540, 1080]} class="h-auto w-full" />
+      </figure>
+    </div>
+
+    <div class="hidden origin-center items-center gap-5 text-cream xl:flex max-2xl:scale-[0.85] 2xl:scale-100">
+      <div class="relative inline-grid shrink-0 grid-cols-[max-content] grid-rows-[max-content] place-items-start leading-0">
+        <p class="contents" aria-hidden="true">
+          <span class="col-1 row-1 ml-30 font-serif text-[72px] leading-[1.1] font-bold whitespace-nowrap uppercase">Not Sure</span>
+          <span class="col-1 row-1 mt-19 font-serif text-[74px] leading-[1.1] font-bold whitespace-nowrap">Where God</span>
+          <span class="col-1 row-1 mt-38.5 ml-55.75 font-serif text-[74px] leading-[1.1] font-bold whitespace-nowrap">Is Calling You?</span>
+        </p>
+        <p class="col-1 row-1 mt-23.25 ml-114 w-85 text-base leading-none" aria-hidden="true">
+          Use the compass to explore mission opportunities around the world and discover a destination you may have never considered.
+        </p>
+        <div class="col-1 row-1 mt-66.25 ml-55.75">
+          <Button href="#destinations" variant="primary" size="lg" class="w-82.5">Follow the compass</Button>
+        </div>
+      </div>
+
+      <figure class="relative h-135.25 w-135 shrink-0">
+        <Image src={compass} alt="A gold antique compass" widths={[540, 1080]} class="size-full object-contain" />
+      </figure>
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute top-0 left-0 z-10 w-full -translate-y-1/2">
+    <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
+  </div>
+  <div class="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-[63%]">
+    <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('#compass');
+  const layer = section?.querySelector<HTMLElement>('[data-parallax-bg]');
+
+  if (section && layer) {
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const syncParallax = () => {
+        gsap.set(layer, { y: -section.getBoundingClientRect().top });
+      };
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        refreshPriority: 1,
+        onUpdate: syncParallax,
+        onRefresh: syncParallax,
+      });
+    });
+  }
+</script>

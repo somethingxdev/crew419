@@ -1,0 +1,22 @@
+---
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/regions/africa/cta-bg.png';
+import { Button } from '@/shared/ui/button';
+---
+
+<section class="py-15" aria-labelledby="region-cta-heading">
+  <div class="container">
+    <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
+      <div class="absolute inset-0 overflow-hidden">
+        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
+        <div class="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      <div class="relative z-10 mx-auto flex w-full max-w-158 flex-col items-center justify-center px-5 py-15 text-center text-cream md:py-0">
+        <h2 id="region-cta-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Ready to Serve in Africa?</h2>
+        <p class="mt-6 max-w-90 text-base leading-none">Explore upcoming trips or talk with our team to find the mission that’s right for you.</p>
+        <Button href="/contact" variant="cream" size="lg" class="mt-7.5 w-82.5 max-w-full">Book a 30–minute call</Button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+import { Image, type LocalImageProps } from 'astro:assets';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import photo1 from '@/assets/images/home/life-in-mission/photo-1.jpg';
+import photo2 from '@/assets/images/home/life-in-mission/photo-2.jpg';
+import photo3 from '@/assets/images/home/life-in-mission/photo-3.jpg';
+import photo4 from '@/assets/images/home/life-in-mission/photo-4.jpg';
+import photo5 from '@/assets/images/home/life-in-mission/photo-5.jpg';
+import photo6 from '@/assets/images/home/life-in-mission/photo-6.jpg';
+import photo7 from '@/assets/images/home/life-in-mission/photo-7.jpg';
+import { Button } from '@/shared/ui/button';
+
+const photos = [
+  { src: photo1, alt: 'Volunteers sitting with a local family outside a rustic home' },
+  { src: photo2, alt: 'Young women singing together indoors, led by a guitarist' },
+  { src: photo3, alt: 'Mission team and local community posing together outdoors' },
+  { src: photo4, alt: 'Volunteers painting an interior wall light blue' },
+  { src: photo5, alt: 'Two young girls smiling together outdoors' },
+  { src: photo6, alt: 'Young men in a huddle on a grassy field' },
+  { src: photo7, alt: 'A volunteer with a backpack smiling back while walking a rural path' },
+];
+---
+
+<section class="overflow-x-hidden py-10" aria-labelledby="life-in-mission-heading">
+  <div class="container">
+    <div class="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
+      <h2 id="life-in-mission-heading" class="text-3xl leading-none font-bold md:text-5xl"> 
+        Life in <span class="text-primary">Mission</span>
+      </h2>
+      <Button class="px-10" href="https://www.instagram.com/crew419/" size="lg" target="_blank" rel="noopener noreferrer" aria-label="Crew419 on Instagram">
+        @crew419
+        <ArrowRight class="size-6" />
+      </Button>
+    </div>
+
+    <div class="mt-6 flex justify-center pt-3 pb-6">
+      <ul class="flex gap-3">
+        {
+          photos.map((photo, index) => (
+            <li class:list={['bg-cream size-40 shrink-0 rounded-lg p-1 shadow-[0px_4px_7.5px_rgba(0,0,0,0.2)] sm:size-50 md:size-62', index % 2 === 0 ? 'translate-y-4 -rotate-6' : 'rotate-6']}>
+              <Image src={photo.src} alt={photo.alt} width={800} height={800} class="size-full rounded-sm object-cover" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,124 @@
+---
+import { Image, type LocalImageProps } from 'astro:assets';
+import children from '@/assets/images/regions/africa/ministry/children.png';
+import construction from '@/assets/images/regions/africa/ministry/construction.png';
+import evangelism from '@/assets/images/regions/africa/ministry/evangelism.png';
+import medical from '@/assets/images/regions/africa/ministry/medical.png';
+import sports from '@/assets/images/regions/africa/ministry/sports.png';
+
+interface Opportunity {
+  title: string;
+  text: string;
+  image: LocalImageProps['src'];
+  alt: string;
+  class: string;
+}
+
+const opportunities: Opportunity[] = [
+  {
+    title: 'Sports Ministry',
+    text: 'Help reach young people through sports clinics and mentorship.',
+    image: sports,
+    alt: 'Volunteers playing sports with local kids on a dirt field',
+    class: 'xl:left-0 xl:-rotate-5',
+  },
+  {
+    title: 'Construction',
+    text: 'Support local churches and families through building projects.',
+    image: construction,
+    alt: 'Team members laying bricks on a construction site',
+    class: 'xl:left-17.5 xl:rotate-5',
+  },
+  {
+    title: 'Medical Outreach',
+    text: 'Provide healthcare while sharing the love of Christ.',
+    image: medical,
+    alt: 'A volunteer checking a patient at a field clinic',
+    class: 'xl:left-35 xl:-rotate-5',
+  },
+  {
+    title: 'Children’s Ministry',
+    text: 'Partner with local churches through VBS and community programs.',
+    image: children,
+    alt: 'Children smiling during a community program',
+    class: 'xl:left-52.5 xl:rotate-5',
+  },
+  {
+    title: 'Evangelism',
+    text: 'Share the Gospel alongside trusted local believers.',
+    image: evangelism,
+    alt: 'Believers praying together outdoors',
+    class: 'xl:left-75',
+  },
+];
+
+const last = opportunities.length - 1;
+---
+
+<section id="ministry" class="overflow-x-clip py-15" aria-labelledby="ministry-heading">
+  <div class="container flex flex-col xl:flex-row xl:items-center xl:justify-between xl:gap-20">
+    <div class="flex max-w-130 flex-col items-start">
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Ministry Opportunities</p>
+      <h2 id="ministry-heading" class="mt-3.75 text-3xl leading-[1.1] font-bold md:text-5xl">How You Can Serve</h2>
+      <p class="mt-7.5 max-w-112 text-base leading-none">Every trip offers different ways to serve, from using your skills to meeting practical needs and sharing the Gospel.</p>
+      <p class="mt-12.5 hidden font-serif text-5xl leading-[1.1] font-bold xl:block" data-ministry-counter aria-hidden="true">01 / 05</p>
+    </div>
+
+    <div class="mt-10 flex flex-col gap-5 xl:relative xl:mt-0 xl:block xl:h-130 xl:w-192.5 xl:shrink-0">
+      {
+        opportunities.map((item, index) => (
+          <article
+            data-ministry-card
+            class:list={['bg-cream w-full max-w-112.5 rounded-lg p-5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] xl:absolute xl:top-1/2 xl:w-112.5 xl:-translate-y-1/2', item.class]}
+          >
+            <Image src={item.image} alt={item.alt} widths={[800]} class="h-65 w-full rounded-lg object-cover xl:h-85" />
+            <h3 class="mt-5 text-2xl leading-[1.1] font-bold">{item.title}</h3>
+            <p class="mt-5 text-base leading-none">{item.text}</p>
+            {index < last && <div data-ministry-overlay class="absolute inset-0 hidden rounded-lg bg-black/20 opacity-0 xl:block" />}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('#ministry');
+
+  if (section) {
+    const cards = gsap.utils.toArray<HTMLElement>('[data-ministry-card]', section);
+    const overlays = gsap.utils.toArray<HTMLElement>('[data-ministry-overlay]', section);
+    const counter = section.querySelector<HTMLElement>('[data-ministry-counter]');
+    const mm = gsap.matchMedia();
+
+    mm.add('(min-width: 1280px) and (prefers-reduced-motion: no-preference)', () => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'power1.out' },
+        scrollTrigger: {
+          trigger: section,
+          start: 'center center',
+          end: `+=${cards.length * 500}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (!counter) return;
+            const step = Math.min(cards.length, 1 + Math.floor(self.progress * cards.length));
+            counter.textContent = `0${step} / 0${cards.length}`;
+          },
+        },
+      });
+
+      cards.forEach((card, index) => {
+        tl.from(card, { x: () => window.innerWidth, duration: 1 });
+        if (index > 0) tl.to(overlays[index - 1], { opacity: 1, duration: 0.5 }, '<');
+      });
+    });
+  }
+</script>

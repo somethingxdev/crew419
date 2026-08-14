@@ -1,0 +1,205 @@
+---
+import { Image } from 'astro:assets';
+import complexLogistics from '@/assets/images/home/answering-the-call/complex-logistics.png';
+import cookieCutter from '@/assets/images/home/answering-the-call/cookie-cutter.jpg';
+import noNextStep from '@/assets/images/home/answering-the-call/no-next-step.png';
+import spiritualPreparation from '@/assets/images/home/answering-the-call/spiritual-preparation.png';
+import decorBottom from '@/assets/images/decor-bottom.png';
+import decorTop from '@/assets/images/decor-top.png';
+
+const problems = [
+  {
+    label: 'Cookie-cutter mission trips',
+    title: 'Cookie-cutter mission trips',
+    text: 'Every team has different goals. Churches, schools, sports teams, and individuals need mission experiences designed around their unique purpose – not a one-size-fits-all itinerary.',
+    image: cookieCutter,
+  },
+  {
+    label: 'Little spiritual preparation',
+    title: 'Little Spiritual Preparation',
+    text: 'A mission trip should be more than travel. Intentional discipleship before, during, and after helps participants grow in faith and return home ready to serve.',
+    image: spiritualPreparation,
+  },
+  {
+    label: 'Complex logistics',
+    title: 'Complex Logistics',
+    text: 'Planning travel, lodging, transportation, and ministry partnerships can quickly become overwhelming. We coordinate every detail so your team can focus on serving.',
+    image: complexLogistics,
+  },
+  {
+    label: 'No clear next step',
+    title: 'No Clear Next Step',
+    text: 'The mission doesn’t end when the trip is over. We provide resources and discipleship that help participants continue living on mission long after they return home.',
+    image: noNextStep,
+  },
+];
+---
+
+<section id="answering-the-call" class="relative" data-answering>
+  <div class="absolute inset-0 overflow-hidden">
+    {
+      problems.map((problem, index) => (
+        <div data-slide-bg data-active={index === 0 ? '' : undefined} class="absolute inset-0">
+          <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
+            <Image src={problem.image} alt="" widths={[1600]} class="size-full object-cover object-center blur-[2px]" loading={index > 0 ? 'lazy' : 'eager'} />
+          </div>
+          <div class="absolute inset-0 bg-black/20" />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="relative z-10 mx-auto flex max-w-400 flex-col gap-12 px-12 pt-48 pb-25 lg:grid lg:min-h-212 lg:grid-cols-[1fr_420px_1fr] lg:gap-x-12 lg:pb-48">
+    <div class="flex flex-col gap-4 lg:self-start">
+      <p class="text-base leading-none font-bold text-muted-foreground uppercase">Answering the call</p>
+      <h2 class="max-w-117 text-5xl leading-none font-bold text-cream">Every Believer Is Called. But Too Many Never Go.</h2>
+    </div>
+
+    <div class="relative w-full max-w-105 justify-self-center lg:self-start">
+      {
+        problems.map((problem, index) => (
+          <article data-slide data-active={index === 0 ? '' : undefined} class="flex w-full flex-col gap-4 rounded-lg bg-cream px-2.5 pt-2.5 pb-5">
+            <Image src={problem.image} alt={problem.title} widths={[800]} class="h-81 w-full rounded-lg object-cover" loading={index > 0 ? 'lazy' : 'eager'} />
+            <div class="flex flex-col gap-5 px-2.5">
+              <h3 class="text-2xl leading-none font-bold">{problem.title}</h3>
+              <p class="text-justify text-sm leading-none">{problem.text}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="flex flex-col items-start gap-5 lg:items-end lg:self-end lg:justify-self-end">
+      {
+        problems.map((problem, index) => (
+          <button type="button" data-slide-btn data-active={index === 0 ? '' : undefined} class="group flex items-center gap-4" aria-pressed={index === 0 ? 'true' : 'false'}>
+            <span class="text-lg leading-none font-medium text-cream opacity-60 transition-opacity duration-300 group-hover:opacity-100 group-data-active:opacity-100">{problem.label}</span>
+            <span class="flex w-6 items-center opacity-50 transition-all duration-300 group-hover:opacity-100 group-data-active:w-8 group-data-active:opacity-100">
+              <span class="h-0.5 flex-1 bg-cream" />
+              <span class="-ml-1.5 size-2 shrink-0 rotate-45 bg-cream" />
+            </span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute top-0 left-0 z-20 w-full -translate-y-1/2">
+    <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
+  </div>
+  <div class="pointer-events-none absolute bottom-0 left-0 z-20 w-full translate-y-[63%]">
+    <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('[data-answering]');
+  if (!section) {
+    /* no-op */
+  } else {
+    const bgs = [...section.querySelectorAll<HTMLElement>('[data-slide-bg]')];
+    const slides = [...section.querySelectorAll<HTMLElement>('[data-slide]')];
+    const buttons = [...section.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')];
+    const layers = gsap.utils.toArray<HTMLElement>('[data-parallax-bg]', section);
+    let current = 0;
+
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.fromTo(
+        layers,
+        { y: () => -window.innerHeight },
+        {
+          y: () => section.offsetHeight,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
+    });
+
+    const INTERVAL_MS = 4000;
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    const activate = (index: number) => {
+      if (index === current) return;
+      current = index;
+
+      bgs.forEach((bg, i) => bg.toggleAttribute('data-active', i === index));
+      slides.forEach((slide, i) => slide.toggleAttribute('data-active', i === index));
+      buttons.forEach((button, i) => {
+        button.toggleAttribute('data-active', i === index);
+        button.setAttribute('aria-pressed', String(i === index));
+      });
+    };
+
+    const next = () => activate((current + 1) % slides.length);
+
+    const stop = () => {
+      clearInterval(timer);
+      timer = undefined;
+    };
+
+    const start = () => {
+      stop();
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      timer = setInterval(next, INTERVAL_MS);
+    };
+
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        activate(index);
+        start();
+      });
+    });
+
+    section.addEventListener('mouseenter', stop);
+    section.addEventListener('mouseleave', start);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    start();
+  }
+</script>
+
+<style>
+  [data-slide-bg] {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  [data-slide-bg][data-active] {
+    opacity: 1;
+  }
+
+  [data-slide] {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px);
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease,
+      visibility 0.35s;
+  }
+
+  [data-slide][data-active] {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+</style>

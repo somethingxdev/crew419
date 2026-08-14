@@ -1,0 +1,34 @@
+---
+const facts = [
+  { title: 'Countries We Serve', value: '6+' },
+  { title: 'Mission Opportunities', value: 'Sports, Construction, Medical, Children, Evangelism' },
+  { title: 'Languages', value: 'English, French, Swahili and more' },
+  { title: 'Best Seasons', value: 'Spring, Summer, Fall' },
+];
+---
+
+<section class="pt-15 pb-15 md:pt-30" aria-labelledby="about-region-heading">
+  <div class="container">
+    <div class="mx-auto flex max-w-122 flex-col items-center gap-7.5 text-center">
+      <div class="flex flex-col gap-4">
+        <p class="text-muted-foreground text-base leading-none font-bold uppercase">About the region</p>
+        <h2 id="about-region-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Why Africa?</h2>
+      </div>
+      <p class="text-base leading-none">
+        Africa is home to vibrant churches, rapidly growing churches, and communities with both physical and spiritual needs. Every mission trip is built in partnership with trusted local
+        ministries, creating opportunities for lasting impact and meaningful relationships.
+      </p>
+    </div>
+
+    <div class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      {
+        facts.map((fact) => (
+          <article class="bg-cream flex h-45 flex-col justify-between rounded-lg p-7.5">
+            <h3 class="text-muted-foreground text-2xl leading-[1.1] font-bold">{fact.title}</h3>
+            <p class="text-lg leading-none font-medium">{fact.value}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

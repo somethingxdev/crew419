@@ -1,0 +1,154 @@
+---
+import { Image } from 'astro:assets';
+import decorBottom from '@/assets/images/decor-bottom.png';
+import decorTop from '@/assets/images/decor-top.png';
+import bg from '@/assets/images/home/how-it-works/bg.png';
+import { Button } from '@/shared/ui/button';
+
+const steps = [
+  {
+    step: 'Step 1',
+    title: 'Book a 30-Minute Call',
+    text: 'Tell us about your church, school, or personal mission goals. We’ll help you choose the right opportunity.',
+    class: 'bg-[#576d87] md:left-2.5 md:top-2 md:-rotate-3',
+  },
+  {
+    step: 'Step 2',
+    title: 'We’ll Build Your Mission Experience',
+    text: 'From logistics and trusted local partnerships to discipleship training and travel preparation – we’ll handle the details together.',
+    class: 'bg-[#2b4767] md:left-30 md:top-12 md:rotate-3',
+  },
+  {
+    step: 'Step 3',
+    title: 'Go. Serve. Grow.',
+    text: 'Experience a mission that changes lives – including your own – and continue growing through post-trip discipleship.',
+    class: 'bg-secondary md:left-16 md:top-20',
+  },
+];
+---
+
+<section id="how-it-works" class="relative py-15 md:py-0" aria-labelledby="how-it-works-heading">
+  <div class="absolute inset-0 overflow-hidden">
+    <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
+      <Image src={bg} alt="" widths={[1600]} class="size-full object-cover object-bottom" />
+    </div>
+    <div class="absolute inset-0 bg-black/20"></div>
+  </div>
+  <div class="container">
+    <div class="relative overflow-hidden py-40 md:py-52" data-how-it-works-stage>
+      <div class="relative mx-auto flex flex-col items-center gap-10">
+        <div class="flex flex-col gap-8 text-center text-cream">
+          <div class="flex flex-col gap-4">
+            <p class="text-base leading-none font-bold uppercase opacity-65">How it works</p>
+            <h2 id="how-it-works-heading" class="text-3xl leading-none font-bold md:text-5xl">Mission Trips Done Right</h2>
+          </div>
+          <p class="text-base leading-none">A simple process that helps you serve with confidence.</p>
+        </div>
+
+        <div class="flex w-full flex-col items-center gap-5 md:relative md:block md:h-105 md:w-115">
+          {
+            steps.map((item) => (
+              <article
+                data-step-card
+                class:list={[
+                  'flex h-85 w-full max-w-82 flex-col justify-between rounded-lg border border-white/15 p-8 text-cream shadow-[0px_4px_10px_rgba(0,0,0,0.1)] md:absolute md:w-82',
+                  item.class,
+                ]}
+              >
+                <div class="flex flex-col gap-5">
+                  <p class="text-base leading-none font-bold uppercase opacity-50">{item.step}</p>
+                  <h3 class="text-2xl leading-none font-bold">{item.title}</h3>
+                </div>
+                <p class="text-base leading-none">{item.text}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <Button href="/contact" size="lg" class="w-82 max-w-full">Take the first step</Button>
+      </div>
+    </div>
+
+    <div class="pointer-events-none absolute top-0 left-0 z-10 w-full -translate-y-1/2">
+      <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
+    </div>
+    <div class="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-[63%]">
+      <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('#how-it-works');
+  const stage = section?.querySelector<HTMLElement>('[data-how-it-works-stage]');
+
+  if (section && stage) {
+    const cards = gsap.utils.toArray<HTMLElement>('[data-step-card]', section);
+    const layer = section.querySelector<HTMLElement>('[data-parallax-bg]');
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      if (!layer) return;
+
+      const syncParallax = () => {
+        gsap.set(layer, { y: -section.getBoundingClientRect().top });
+      };
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        refreshPriority: 1,
+        onUpdate: syncParallax,
+        onRefresh: syncParallax,
+      });
+    });
+
+    const hiddenY = (card: HTMLElement) => {
+      const currentY = Number(gsap.getProperty(card, 'y')) || 0;
+      const stageRect = stage.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+      return stageRect.bottom - (cardRect.top - currentY);
+    };
+
+    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'power1.out' },
+        scrollTrigger: {
+          trigger: section,
+          start: 'center center',
+          end: `+=${cards.length * 600}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      cards.forEach((card) => {
+        tl.fromTo(card, { y: () => hiddenY(card) }, { y: 0, duration: 1, immediateRender: true });
+      });
+    });
+
+    mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'power1.out' },
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 60%',
+          end: 'center 40%',
+          scrub: 1,
+        },
+      });
+
+      cards.forEach((card) => {
+        tl.from(card, { y: 400, duration: 1 });
+      });
+    });
+  }
+</script>

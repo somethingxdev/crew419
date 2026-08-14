@@ -1,0 +1,210 @@
+---
+import { Image, type LocalImageProps } from 'astro:assets';
+import polaroid1 from '@/assets/images/home/why-crew419/polaroid-1.jpg';
+import polaroid2 from '@/assets/images/home/why-crew419/polaroid-2.jpg';
+import polaroid3 from '@/assets/images/home/why-crew419/polaroid-3.jpg';
+import polaroid4 from '@/assets/images/home/why-crew419/polaroid-4.jpg';
+import polaroid5 from '@/assets/images/home/why-crew419/polaroid-5.jpg';
+
+interface Polaroid {
+  image: LocalImageProps['src'];
+  alt: string;
+  rotate: number;
+  left: number;
+  top: number;
+  wrapperW: number;
+  wrapperH: number;
+  z: number;
+}
+
+const polaroids: Polaroid[] = [
+  {
+    image: polaroid1,
+    alt: 'Students in uniforms sitting at desks in a classroom',
+    rotate: 3,
+    left: 0,
+    top: 0,
+    wrapperW: 343,
+    wrapperH: 388,
+    z: 2,
+  },
+  {
+    image: polaroid2,
+    alt: 'Empty chairs along a weathered school veranda',
+    rotate: -6,
+    left: 289,
+    top: 122,
+    wrapperW: 361,
+    wrapperH: 404,
+    z: 1,
+  },
+  {
+    image: polaroid3,
+    alt: 'People praying with heads bowed in church pews',
+    rotate: 0,
+    left: 590,
+    top: 67,
+    wrapperW: 324,
+    wrapperH: 372,
+    z: 3,
+  },
+  {
+    image: polaroid4,
+    alt: 'A community gathering in a circle outdoors',
+    rotate: 6,
+    left: 852,
+    top: 122,
+    wrapperW: 361,
+    wrapperH: 404,
+    z: 4,
+  },
+  {
+    image: polaroid5,
+    alt: 'A small group in discussion seated in a circle',
+    rotate: -3,
+    left: 1157,
+    top: 9,
+    wrapperW: 343,
+    wrapperH: 388,
+    z: 5,
+  },
+];
+---
+
+<section id="why-crew419" class="relative z-30 pt-15 pb-30" aria-labelledby="why-crew419-heading" data-why-crew419>
+  <div class="mx-auto flex max-w-4xl flex-col items-center gap-8 px-5 text-center md:px-12">
+    <div class="flex flex-col items-center gap-4" data-why-copy>
+      <p class="text-muted-foreground leading-none font-bold uppercase">Why Crew419 exists</p>
+      <h2 id="why-crew419-heading" class="max-w-154 text-3xl leading-none font-bold md:text-5xl">Some Callings Never Become Action</h2>
+    </div>
+    <div class="text-foreground flex max-w-130 flex-col gap-2.5 md:text-lg leading-tight" data-why-copy>
+      <p>Every year, churches, schools, and individuals feel called to serve.</p>
+      <p>Without trusted partners, preparation, and support, many of those opportunities are never realized.</p>
+      <p>Communities miss encouragement. Churches miss connection. Believers miss the chance to grow through serving.</p>
+    </div>
+  </div>
+
+  <div class="relative mt-0 h-75 sm:h-90 md:h-108 xl:h-132" data-why-gallery>
+    <div class="absolute top-0 left-1/2 h-132 w-375 origin-top -translate-x-1/2 scale-60 sm:scale-70 md:scale-80 lg:scale-90 xl:scale-100">
+      {
+        polaroids.map((card) => (
+          <div class="absolute flex items-center justify-center" style={`left:${card.left}px;top:${card.top}px;width:${card.wrapperW}px;height:${card.wrapperH}px;z-index:${card.z}`}>
+            <figure
+              data-polaroid
+              data-rotate={card.rotate}
+              class="bg-cream flex h-93 w-81 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_15px_rgba(0,0,0,0.2)] will-change-transform"
+              style={`transform: rotate(${card.rotate}deg)`}
+            >
+              <div class="relative h-full min-w-0 flex-1 overflow-hidden rounded-sm">
+                <Image src={card.image} alt={card.alt} width={600} height={600} class="size-full origin-center object-cover will-change-transform" data-polaroid-photo />
+              </div>
+            </figure>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('[data-why-crew419]');
+  if (section) {
+    const cards = gsap.utils.toArray<HTMLElement>('[data-polaroid]', section);
+    const photos = gsap.utils.toArray<HTMLElement>('[data-polaroid-photo]', section);
+    const copy = gsap.utils.toArray<HTMLElement>('[data-why-copy]', section);
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: reduce)', () => {
+      gsap.set(copy, { autoAlpha: 1, y: 0 });
+      gsap.set(cards, {
+        autoAlpha: 1,
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: (i, el) => Number((el as HTMLElement).dataset.rotate),
+      });
+      gsap.set(photos, { scale: 1 });
+    });
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const ctx = gsap.context(() => {
+        gsap.set(copy, { autoAlpha: 0, y: 28 });
+        gsap.set(cards, { autoAlpha: 0 });
+        gsap.set(photos, { scale: 1.22 });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power3.out' },
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 78%',
+            once: true,
+          },
+        });
+
+        tl.to(copy, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.12,
+        });
+
+        tl.fromTo(
+          cards,
+          {
+            autoAlpha: 0,
+            y: 160,
+            scale: 0.78,
+            x: (i) => (i - 2) * 70,
+            rotation: (i, el) => {
+              const rest = Number((el as HTMLElement).dataset.rotate);
+              return rest + (i % 2 === 0 ? -22 : 24);
+            },
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            x: 0,
+            scale: 1,
+            rotation: (i, el) => Number((el as HTMLElement).dataset.rotate),
+            duration: 1.25,
+            ease: 'back.out(1.15)',
+            stagger: { each: 0.13, from: 'center' },
+          },
+          '-=0.35',
+        );
+
+        tl.to(
+          photos,
+          {
+            scale: 1,
+            duration: 1.45,
+            ease: 'power2.out',
+            stagger: { each: 0.13, from: 'center' },
+          },
+          '<',
+        );
+      }, section);
+
+      return () => ctx.revert();
+    });
+  }
+</script>
+
+<style>
+  [data-why-copy],
+  [data-polaroid] {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-why-copy],
+    [data-polaroid] {
+      opacity: 1;
+    }
+  }
+</style>

@@ -1,0 +1,246 @@
+---
+import { Image, type LocalImageProps } from 'astro:assets';
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import { missionTripItems } from '@/components/base/nav';
+import { Button } from '@/shared/ui/button';
+import canada from '@/assets/images/trips/locations/canada.png';
+import caribbean from '@/assets/images/trips/locations/caribbean.png';
+import usa from '@/assets/images/trips/locations/usa.png';
+
+interface LocationPhoto {
+  image: LocalImageProps['src'];
+  alt: string;
+}
+
+const photos: LocationPhoto[] = [
+  { image: usa, alt: 'A river winding through pine-covered mountains at sunset' },
+  { image: canada, alt: 'A turquoise alpine lake surrounded by snow-dusted mountains' },
+  { image: caribbean, alt: 'A tropical beach at sunset with a palm tree on the shore' },
+];
+
+const locations = missionTripItems
+  .filter((item) => item.href !== '/trips' && item.href !== '/trips/custom')
+  .map((item, index) => ({
+    ...item,
+    ...photos[index % photos.length],
+  }));
+
+const last = locations.length - 1;
+const initial = locations[0];
+---
+
+<section id="destinations" class="relative z-20 overflow-x-clip pt-15 pb-15 md:pt-20 md:pb-20" aria-labelledby="locations-heading" data-locations>
+  <div class="flex flex-col items-center gap-4 px-5 text-center">
+    <p class="text-muted-foreground text-base leading-none font-bold uppercase">Locations</p>
+    <h2 id="locations-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Explore Mission Destinations</h2>
+  </div>
+
+  <div class="@container mx-auto mt-12.5 w-full max-w-200">
+    <div class="relative h-[min(400px,50cqi)]">
+      <div class="absolute top-0 left-0 h-100 w-200 origin-top-left" data-locations-canvas>
+        {
+          locations.map((location, index) => {
+            const pos = index === 0 ? 'selected' : index === 1 ? 'next' : index === last ? 'prev' : 'far';
+
+            return (
+              <div class="absolute flex items-center justify-center" data-locations-slide data-pos={pos} data-name={location.label} data-href={location.href}>
+                <article class="bg-cream flex items-center rounded-lg p-2.5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]" data-locations-card>
+                  <div class="relative size-full min-w-0 overflow-hidden rounded-lg">
+                    <Image src={location.image} alt={location.alt} widths={[800]} class="absolute inset-0 size-full object-cover" />
+                    <div class="absolute inset-0 bg-black/50" data-locations-dim />
+                  </div>
+                </article>
+              </div>
+            );
+          })
+        }
+
+        <div class="absolute inset-0 z-10" data-locations-viewport>
+          <div class="flex h-full">
+            {locations.map(() => <div class="h-full min-w-0 flex-[0_0_100%]" />)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-7.5 flex flex-col items-center gap-7.5">
+    <div class="flex flex-col items-center gap-5 text-center">
+      <h3 class="text-2xl leading-[1.1] font-bold" data-locations-title aria-live="polite">
+        {initial.label}
+      </h3>
+      <a
+        href={initial.href}
+        class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground border-b pb-2 text-base leading-none font-black uppercase transition-colors"
+        data-locations-link
+      >
+        Explore Region
+      </a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <Button type="button" variant="secondary" size="icon" aria-label="Previous destination" data-locations-prev>
+        <ArrowLeft />
+      </Button>
+      <Button type="button" variant="secondary" size="icon" aria-label="Next destination" data-locations-next>
+        <ArrowRight />
+      </Button>
+    </div>
+  </div>
+</section>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+
+  const section = document.querySelector<HTMLElement>('[data-locations]');
+  const viewport = section?.querySelector<HTMLElement>('[data-locations-viewport]');
+  const prev = section?.querySelector<HTMLButtonElement>('[data-locations-prev]');
+  const next = section?.querySelector<HTMLButtonElement>('[data-locations-next]');
+  const title = section?.querySelector<HTMLElement>('[data-locations-title]');
+  const link = section?.querySelector<HTMLAnchorElement>('[data-locations-link]');
+
+  if (section && viewport && prev && next && title && link) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const embla = EmblaCarousel(viewport, {
+      loop: true,
+      duration: reduced ? 0 : 25,
+      watchDrag: !reduced,
+    });
+
+    const slides = section.querySelectorAll<HTMLElement>('[data-locations-slide]');
+
+    const shortestDiff = (index: number, selected: number, count: number) => {
+      let diff = index - selected;
+      if (diff > count / 2) diff -= count;
+      if (diff < -count / 2) diff += count;
+      return diff;
+    };
+
+    const sync = () => {
+      const selected = embla.selectedScrollSnap();
+      const count = slides.length;
+
+      slides.forEach((slide, index) => {
+        const diff = shortestDiff(index, selected, count);
+        slide.dataset.pos = diff === 0 ? 'selected' : diff === -1 ? 'prev' : diff === 1 ? 'next' : 'far';
+      });
+
+      const active = slides[selected];
+      title.textContent = active.dataset.name ?? '';
+      link.href = active.dataset.href ?? '#';
+    };
+
+    let pointerX = 0;
+    let dragged = false;
+
+    viewport.addEventListener('pointerdown', (event) => {
+      pointerX = event.clientX;
+      dragged = false;
+    });
+
+    viewport.addEventListener('pointermove', (event) => {
+      if (Math.abs(event.clientX - pointerX) > 8) dragged = true;
+    });
+
+    viewport.addEventListener('click', (event) => {
+      if (dragged) return;
+      const rect = viewport.getBoundingClientRect();
+      const ratio = (event.clientX - rect.left) / rect.width;
+      if (ratio < 0.33) embla.scrollPrev();
+      else if (ratio > 0.67) embla.scrollNext();
+    });
+
+    prev.addEventListener('click', () => embla.scrollPrev());
+    next.addEventListener('click', () => embla.scrollNext());
+    embla.on('select', sync);
+    embla.on('reInit', sync);
+    sync();
+  }
+</script>
+
+<style>
+  [data-locations-canvas] {
+    transform: scale(min(1, 100cqi / 800));
+  }
+
+  [data-locations-slide] {
+    top: 50px;
+    left: 250px;
+    z-index: 0;
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [data-locations-slide][data-pos='prev'] {
+    top: 37px;
+    left: 0;
+    z-index: 1;
+    width: 325px;
+    height: 325px;
+    opacity: 1;
+  }
+
+  [data-locations-slide][data-pos='next'] {
+    top: 37px;
+    left: 475px;
+    z-index: 1;
+    width: 325px;
+    height: 325px;
+    opacity: 1;
+  }
+
+  [data-locations-slide][data-pos='selected'] {
+    top: 0;
+    left: 200px;
+    z-index: 3;
+    width: 400px;
+    height: 400px;
+    opacity: 1;
+  }
+
+  [data-locations-card] {
+    width: 300px;
+    height: 300px;
+  }
+
+  [data-locations-slide][data-pos='prev'] [data-locations-card] {
+    transform: rotate(-5deg);
+  }
+
+  [data-locations-slide][data-pos='next'] [data-locations-card] {
+    transform: rotate(5deg);
+  }
+
+  [data-locations-slide][data-pos='selected'] [data-locations-card] {
+    width: 400px;
+    height: 400px;
+    transform: none;
+  }
+
+  [data-locations-slide][data-pos='selected'] [data-locations-dim] {
+    opacity: 0;
+  }
+
+  [data-locations-slide],
+  [data-locations-card],
+  [data-locations-dim] {
+    transition:
+      left 0.45s ease,
+      top 0.45s ease,
+      width 0.45s ease,
+      height 0.45s ease,
+      transform 0.45s ease,
+      opacity 0.45s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-locations-slide],
+    [data-locations-card],
+    [data-locations-dim] {
+      transition: none;
+    }
+  }
+</style>

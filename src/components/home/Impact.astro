@@ -1,0 +1,221 @@
+---
+import { Image } from 'astro:assets';
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import PlayerPlay from '@tabler/icons/filled/player-play.svg';
+import storyPoster from '@/assets/images/home/impact/story-poster.png';
+
+const stats = [
+  { value: '20+', label: 'Countries Served' },
+  { value: '150+', label: 'Church Partners' },
+  { value: '400+', label: 'Mission Trips' },
+  { value: 'Thousands', label: 'Lives Reached' },
+];
+
+const stories = Array.from({ length: 5 }, () => ({
+  quote: 'What started as one week of serving completely changed the direction of my life.',
+  attribution: 'Sarah, Mission Team Member',
+}));
+
+const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90';
+---
+
+<section id="impact" class="overflow-x-hidden py-15 relative z-20" aria-labelledby="impact-heading" data-impact>
+  <div class="container">
+    <div class="flex flex-col items-center gap-4 mx-auto max-w-215 text-center mb-15">
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Impact & Stories</p>
+      <h2 id="impact-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Lives Changed. Communities Served. Faith Strengthened.</h2>
+    </div>
+
+    <div class="flex w-full flex-col items-center gap-10 md:gap-15">
+      <div class="grid w-full grid-cols-2 gap-8 md:flex md:items-center md:justify-center md:gap-25">
+        {
+          stats.map((stat, index) => (
+            <>
+              {index > 0 && <span class="bg-muted-foreground hidden w-px shrink-0 self-stretch md:block" aria-hidden="true" />}
+              <div class="flex flex-col items-center gap-2.5 text-center">
+                <p class="font-serif text-3xl leading-[1.1] font-bold md:text-5xl">{stat.value}</p>
+                <p class="text-muted-foreground text-lg leading-none">{stat.label}</p>
+              </div>
+            </>
+          ))
+        }
+      </div>
+
+      <div class="flex w-full max-w-218 flex-col items-center gap-8">
+        <div class="relative h-110 w-full md:h-175" data-impact-stack>
+          {
+            stories.map((story, index) => (
+              <button
+                type="button"
+                class="bg-cream absolute top-1/2 left-1/2 w-70 rounded-lg p-2.5 shadow-[0px_4px_15px_rgba(0,0,0,0.2)] will-change-transform md:w-117.5"
+                data-impact-card
+                data-quote={story.quote}
+                data-attribution={story.attribution}
+                aria-label={`Play story from ${story.attribution}`}
+                aria-current={index === 0 ? 'true' : undefined}
+              >
+                <span class="relative block aspect-45/65 overflow-hidden rounded-lg">
+                  <Image src={storyPoster} alt="" width={900} height={1300} class="size-full object-cover" />
+                  <span class="absolute inset-0 bg-black/20" data-impact-overlay aria-hidden="true" />
+                  <span class="absolute top-1/2 left-1/2 flex size-15 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 shadow-[inset_0_0_2px_rgba(0,0,0,0.25)] backdrop-blur-[10px]">
+                    <PlayerPlay class="size-5 text-white" aria-hidden="true" />
+                  </span>
+                </span>
+              </button>
+            ))
+          }
+        </div>
+
+        <blockquote class="flex max-w-140 flex-col items-center gap-6" data-impact-quote>
+          <p class="font-serif text-xl leading-[1.1] font-bold md:text-2xl" data-impact-quote-text>“{stories[0].quote}”</p>
+          <footer class="text-muted-foreground text-lg leading-none" data-impact-quote-attr>— {stories[0].attribution}</footer>
+        </blockquote>
+
+        <div class="flex items-center gap-4">
+          <button type="button" class={navButtonClass} aria-label="Previous story" data-impact-prev>
+            <ArrowLeft class="size-5" />
+          </button>
+          <button type="button" class={navButtonClass} aria-label="Next story" data-impact-next>
+            <ArrowRight class="size-5" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+
+  type Slot = {
+    x: number;
+    y: number;
+    rotation: number;
+    scale: number;
+    z: number;
+    overlay: number;
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-impact]').forEach((section) => {
+    const stack = section.querySelector<HTMLElement>('[data-impact-stack]');
+    const cards = gsap.utils.toArray<HTMLButtonElement>('[data-impact-card]', section);
+    const prev = section.querySelector<HTMLButtonElement>('[data-impact-prev]');
+    const next = section.querySelector<HTMLButtonElement>('[data-impact-next]');
+    const quoteText = section.querySelector<HTMLElement>('[data-impact-quote-text]');
+    const quoteAttr = section.querySelector<HTMLElement>('[data-impact-quote-attr]');
+    if (!stack || !prev || !next || cards.length === 0) return;
+
+    const count = cards.length;
+    let active = 0;
+    let tweening = false;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const duration = reduced ? 0 : 0.7;
+
+    const wrappedOffset = (index: number) => {
+      let offset = index - active;
+      const half = Math.floor(count / 2);
+      if (offset > half) offset -= count;
+      if (offset < -half) offset += count;
+      return offset;
+    };
+
+    const slots = (): Record<number, Slot> => {
+      const step = Math.min(stack.clientWidth * 0.12, 105);
+      return {
+        [-2]: { x: -step * 2, y: 22, rotation: -10, scale: 0.78, z: 1, overlay: 0.2 },
+        [-1]: { x: -step, y: 8, rotation: -5, scale: 0.89, z: 3, overlay: 0.2 },
+        [0]: { x: 0, y: 0, rotation: 0, scale: 1, z: 5, overlay: 0.1 },
+        [1]: { x: step, y: 8, rotation: 5, scale: 0.89, z: 4, overlay: 0.2 },
+        [2]: { x: step * 2, y: 22, rotation: 10, scale: 0.78, z: 2, overlay: 0.2 },
+      };
+    };
+
+    const hiddenSlot = (offset: number): Slot => {
+      const step = Math.min(stack.clientWidth * 0.12, 105);
+      const sign = offset < 0 ? -1 : 1;
+      return { x: sign * step * 2.4, y: 28, rotation: sign * 12, scale: 0.7, z: 0, overlay: 0.25 };
+    };
+
+    const apply = (animate: boolean) => {
+      const map = slots();
+      cards.forEach((card, index) => {
+        const offset = wrappedOffset(index);
+        const slot = map[offset] ?? hiddenSlot(offset);
+        const overlay = card.querySelector<HTMLElement>('[data-impact-overlay]');
+        const vars = {
+          xPercent: -50,
+          yPercent: -50,
+          x: slot.x,
+          y: slot.y,
+          rotation: slot.rotation,
+          scale: slot.scale,
+          autoAlpha: Math.abs(offset) > 2 ? 0 : 1,
+          duration: animate ? duration : 0,
+          ease: 'power3.out',
+          overwrite: 'auto' as const,
+        };
+
+        gsap.set(card, { zIndex: slot.z });
+        gsap.to(card, vars);
+        if (overlay) gsap.to(overlay, { backgroundColor: `rgba(0,0,0,${slot.overlay})`, duration: vars.duration, ease: vars.ease, overwrite: 'auto' });
+
+        if (offset === 0) card.setAttribute('aria-current', 'true');
+        else card.removeAttribute('aria-current');
+        card.tabIndex = offset === 0 ? 0 : -1;
+        card.style.pointerEvents = Math.abs(offset) > 2 ? 'none' : 'auto';
+      });
+    };
+
+    const setQuote = () => {
+      const card = cards[active];
+      if (!card || !quoteText || !quoteAttr) return;
+      const quote = card.dataset.quote ?? '';
+      const attribution = card.dataset.attribution ?? '';
+      const swap = () => {
+        quoteText.textContent = `“${quote}”`;
+        quoteAttr.textContent = `— ${attribution}`;
+      };
+
+      if (!duration) {
+        swap();
+        return;
+      }
+
+      gsap.to([quoteText, quoteAttr], {
+        autoAlpha: 0,
+        duration: 0.2,
+        overwrite: 'auto',
+        onComplete: () => {
+          swap();
+          gsap.to([quoteText, quoteAttr], { autoAlpha: 1, duration: 0.3, overwrite: 'auto' });
+        },
+      });
+    };
+
+    const goTo = (index: number) => {
+      if (tweening) return;
+      const nextIndex = ((index % count) + count) % count;
+      if (nextIndex === active) return;
+      tweening = true;
+      active = nextIndex;
+      apply(true);
+      setQuote();
+      window.setTimeout(() => {
+        tweening = false;
+      }, duration * 1000);
+    };
+
+    cards.forEach((card, index) => {
+      card.addEventListener('click', () => goTo(index));
+    });
+    prev.addEventListener('click', () => goTo(active - 1));
+    next.addEventListener('click', () => goTo(active + 1));
+
+    gsap.set(cards, { xPercent: -50, yPercent: -50 });
+    apply(false);
+
+    window.addEventListener('resize', () => apply(false));
+  });
+</script>

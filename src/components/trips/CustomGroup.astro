@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import church from '@/assets/images/trips/custom-group/church.jpg';
+import children from '@/assets/images/trips/custom-group/children.jpg';
+import { Button } from '@/shared/ui/button';
+---
+
+<section id="custom-group-trips" class="relative z-30 overflow-x-clip py-15 md:py-30" aria-labelledby="custom-group-heading">
+  <div class="container flex flex-col items-center gap-10 xl:flex-row xl:items-center xl:justify-between xl:gap-12">
+    <div class="@container relative aspect-610/515 w-full max-w-152.5 shrink-0">
+      <div class="absolute top-0 left-0 h-128.75 w-152.5 origin-top-left transform-[scale(calc(100cqw/610px))]">
+        <div class="absolute top-0 left-0 flex h-[422.6px] w-[383.7px] items-center justify-center">
+          <figure class="bg-cream -rotate-10 flex w-81 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
+            <div class="relative size-75 overflow-hidden rounded-sm">
+              <Image src={church} alt="A white country church with a steeple under an overcast sky" width={600} height={600} class="size-full object-cover" />
+            </div>
+          </figure>
+        </div>
+
+        <div class="absolute top-[111.4px] left-[249.3px] z-10 flex h-[403.8px] w-[361.1px] items-center justify-center">
+          <figure class="bg-cream rotate-6 flex w-81 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
+            <div class="relative size-75 overflow-hidden rounded-sm">
+              <Image src={children} alt="School children in uniforms running toward the camera on a dirt path" width={600} height={600} class="size-full object-cover" />
+            </div>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex w-full max-w-185 flex-col items-start gap-7.5">
+      <div class="flex w-full flex-col items-start gap-4">
+        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Custom Group trips</p>
+        <h2 id="custom-group-heading" class="max-w-158.25 text-3xl leading-[1.1] font-bold md:text-5xl">Leading a Church or School Group?</h2>
+      </div>
+
+      <div class="flex w-full max-w-138 flex-col items-start gap-7.5">
+        <div class="flex w-full flex-col items-start gap-4 text-foreground">
+          <p class="text-lg leading-none font-medium">We don’t believe every mission trip should look the same.</p>
+          <p class="text-base leading-none">
+            Crew419 designs custom mission experiences tailored to your ministry goals, group size, and calling. Rather than fitting your team into a pre-built itinerary, we build the trip around you.
+          </p>
+        </div>
+
+        <div class="flex w-full flex-col items-stretch gap-4 sm:flex-row sm:items-start">
+          <Button href="/contact" class="w-full sm:w-67">Plan a custom trip</Button>
+          <Button href="/trips/custom" variant="soft" class="w-full sm:w-67">Learn More</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

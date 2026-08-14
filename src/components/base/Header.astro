@@ -1,0 +1,169 @@
+---
+import { Image } from 'astro:assets';
+import Menu from '@tabler/icons/outline/menu-2.svg';
+import logo from '@/assets/images/logo.png';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
+import { Button } from '@/shared/ui/button';
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/shared/ui/navigation-menu';
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
+import { aboutItems, missionTripItems, resourceItems, simpleLinks } from './nav';
+---
+
+<header class="absolute top-0 left-0 z-20 w-full py-4">
+  <div class="container">
+    <div class="flex items-center justify-between">
+      <a href="/" class="shrink-0">
+        <Image src={logo} alt="Crew419" width={221} height={70} class="h-12.5 w-auto xl:h-18" />
+      </a>
+
+      <NavigationMenu class="header-nav hidden max-w-none flex-none xl:flex" align="start" sideOffset={16} aria-label="Main">
+        <NavigationMenuList class="h-12 flex-none gap-7.5 rounded-full border border-white/16 bg-white/40 px-6 backdrop-blur-3xl">
+          <NavigationMenuItem value="mission-trips">
+            <NavigationMenuTrigger> Mission Trips </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul class="flex flex-col w-45">
+                {
+                  missionTripItems.map((item) => (
+                    <li>
+                      <NavigationMenuLink href={item.href}>{item.label}</NavigationMenuLink>
+                    </li>
+                  ))
+                }
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem value="resources">
+            <NavigationMenuTrigger> Resources </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul class="flex flex-col w-50">
+                {
+                  resourceItems.map((item) => (
+                    <li>
+                      <NavigationMenuLink href={item.href}>{item.label}</NavigationMenuLink>
+                    </li>
+                  ))
+                }
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem value="about">
+            <NavigationMenuTrigger> About </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul class="flex flex-col w-50">
+                {
+                  aboutItems.map((item) => (
+                    <li>
+                      <NavigationMenuLink href={item.href}>{item.label}</NavigationMenuLink>
+                    </li>
+                  ))
+                }
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          {
+            simpleLinks.map((link) => (
+              <NavigationMenuItem>
+                <NavigationMenuLink class="text-base px-3 hover:bg-transparent hover:text-primary" href={link.href}>{link.label}</NavigationMenuLink>
+              </NavigationMenuItem>
+            ))
+          }
+        </NavigationMenuList>
+      </NavigationMenu>
+
+      <div class="hidden items-center gap-4 xl:flex">
+        <Button size="md" href="/donate" variant="secondary"> Donate </Button>
+        <Button size="md" href="/trips" variant="outline" class="bg-white/35"> Find your trip </Button>
+      </div>
+    </div>
+  </div>
+
+  <Sheet class="xl:hidden">
+    <SheetTrigger asChild>
+      <Button variant="ghost" size="icon" aria-label="Open menu" class="text-primary">
+        <Menu />
+      </Button>
+    </SheetTrigger>
+    <SheetContent side="right" class="bg-background text-primary">
+      <SheetHeader>
+        <SheetTitle class="font-sans text-primary">Menu</SheetTitle>
+        <SheetDescription class="sr-only">Site navigation</SheetDescription>
+      </SheetHeader>
+
+      <nav class="flex flex-col gap-1 overflow-y-auto px-4" aria-label="Mobile">
+        <Accordion type="multiple">
+          <AccordionItem value="mission-trips">
+            <AccordionTrigger class="text-lg text-primary hover:text-primary/70">Mission Trips</AccordionTrigger>
+            <AccordionContent>
+              <ul class="flex flex-col">
+                {
+                  missionTripItems.map((item) => (
+                    <li>
+                      <a href={item.href} class="text-primary/80 block py-2">
+                        {item.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="resources">
+            <AccordionTrigger class="text-lg text-primary hover:text-primary/70">Resources</AccordionTrigger>
+            <AccordionContent>
+              <ul class="flex flex-col">
+                {
+                  resourceItems.map((item) => (
+                    <li>
+                      <a href={item.href} class="text-primary/80 block py-2">
+                        {item.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="about">
+            <AccordionTrigger class="text-lg text-primary hover:text-primary/70">About</AccordionTrigger>
+            <AccordionContent>
+              <ul class="flex flex-col">
+                {
+                  aboutItems.map((item) => (
+                    <li>
+                      <a href={item.href} class="text-primary/80 block py-2">
+                        {item.label}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        {simpleLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+
+      <SheetFooter>
+        <Button href="/donate" variant="primary" class="w-full"> Donate </Button>
+        <Button href="/trips" variant="ghost"> Find your trip </Button>
+      </SheetFooter>
+    </SheetContent>
+  </Sheet>
+</header>
+
+<style>
+  .header-nav :global([data-slot='navigation-menu-popup']) {
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+    --tw-ring-shadow: 0 0 #0000;
+  }
+
+  .header-nav :global([data-slot='navigation-menu-content']) {
+    padding: 0;
+  }
+</style>
