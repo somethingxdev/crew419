@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import decor from '@/assets/images/decor-bottom.png';
+import bg from '@/assets/images/churches/hero-bg.png';
+import { Button } from '@/shared/ui/button';
+---
+
+<section class="relative" aria-labelledby="churches-hero-heading">
+  <div class="absolute inset-0 overflow-hidden">
+    <Image src={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover object-bottom" />
+    <div class="absolute inset-0 bg-black/15"></div>
+  </div>
+
+  <div class="relative container flex w-full flex-1 flex-col justify-between gap-20 py-60">
+    <div class="flex w-full max-w-297 flex-col items-center text-center xl:items-start xl:text-left">
+      <p class="leading-none font-bold text-cream/80 uppercase">Church mission trips</p>
+      <h1 id="churches-hero-heading" class="mt-3 text-4xl font-bold text-cream text-shadow-2xs md:text-6xl xl:text-[74px]">
+        Because the Church Was Meant to Go on Mission
+      </h1>
+      <p class="mt-7.5 max-w-121 text-lg leading-none font-medium text-cream">
+        Strengthen your congregation through a customized mission experience designed around your church’s vision, goals, and ministry.
+      </p>
+      <div class="mt-7.5 flex w-full max-w-137.5 flex-col gap-4 sm:flex-row">
+        <Button href="/contact" variant="cream" size="lg" class="flex-1">Book a 30–minute call</Button>
+        <Button href="#how-it-works" variant="glass" size="lg" class="flex-1">See how it works</Button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute -bottom-5 left-0 z-10 w-full translate-y-1/2">
+    <Image src={decor} alt="" widths={[1600, 3200]} class="h-auto w-full" />
+  </div>
+</section>

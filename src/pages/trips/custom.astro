@@ -1,0 +1,111 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import churches from '@/assets/images/custom/churches.png';
+import howItWorksBg from '@/assets/images/custom/how-it-works-bg.png';
+import schools from '@/assets/images/custom/schools.png';
+import sports from '@/assets/images/custom/sports.png';
+import Challenge from '@/components/custom/Challenge.astro';
+import Cta from '@/components/custom/Cta.astro';
+import Difference from '@/components/custom/Difference.astro';
+import Hero from '@/components/custom/Hero.astro';
+import Included from '@/components/custom/Included.astro';
+import PlanningChallenges from '@/components/custom/PlanningChallenges.astro';
+import Faq from '@/components/home/Faq.astro';
+import FindYourMissionPath from '@/components/home/FindYourMissionPath.astro';
+import HowItWorks from '@/components/home/HowItWorks.astro';
+import Impact from '@/components/home/Impact.astro';
+import LifeInMission from '@/components/home/LifeInMission.astro';
+
+const whoWeServeCards = [
+  {
+    title: 'Churches',
+    text: 'Equip your congregation to serve together through a customized mission experience designed around your ministry goals.',
+    href: '/contact',
+    cta: 'Plan a church trip',
+    image: churches,
+    alt: 'A congregation gathered outside a white country church',
+    rotate: '-rotate-2',
+  },
+  {
+    title: 'Christian Schools',
+    text: 'Provide students with a safe, meaningful, and life-changing mission experience that supports both spiritual and personal growth.',
+    href: '/contact',
+    cta: 'Plan a school trip',
+    image: schools,
+    alt: 'A volunteer talking with schoolgirls in uniform outside their school',
+    rotate: 'rotate-3',
+  },
+  {
+    title: 'Sport Teams',
+    text: 'Combine competition with purpose through a mission trip that develops teamwork, servant leadership, and a lasting impact both on and off the field.',
+    href: '/contact',
+    cta: 'Build Your Team Trip',
+    image: sports,
+    alt: 'A youth soccer team huddled together in prayer on the field',
+    rotate: '-rotate-3',
+  },
+];
+
+const impactStats = [
+  { value: '20+', label: 'Years of Experience' },
+  { value: '150+', label: 'Church Partnerships' },
+  { value: 'Thousands', label: 'Mission Participants' },
+];
+
+const faqItems = [
+  {
+    id: 'destination',
+    question: 'Can we choose our destination?',
+    answer: 'Yes. Every custom mission trip is planned around your goals, destination, and ministry focus.',
+  },
+  {
+    id: 'itinerary',
+    question: 'Can we customize the itinerary?',
+    answer: 'Absolutely. We design each trip specifically for your church or school instead of using a fixed schedule.',
+  },
+  {
+    id: 'participants',
+    question: 'How many participants do we need?',
+    answer: 'Group sizes vary by destination. We’ll help determine the best option during the planning process.',
+  },
+  {
+    id: 'planning',
+    question: 'How early should we start planning?',
+    answer: 'We recommend starting several months before your preferred travel dates.',
+  },
+  {
+    id: 'logistics',
+    question: 'Will Crew419 handle the logistics?',
+    answer: 'Yes. We help coordinate travel, accommodations, ministry partnerships, and preparation.',
+  },
+  {
+    id: 'fundraising',
+    question: 'Do you help with fundraising?',
+    answer: 'Yes. We provide fundraising resources and guidance for your team.',
+  },
+  {
+    id: 'ministry-focus',
+    question: 'Can our trip focus on a specific ministry?',
+    answer: 'Absolutely. We can build your trip around sports, construction, medical missions, evangelism, or other ministry goals.',
+  },
+  {
+    id: 'why-crew419',
+    question: 'Why choose Crew419 instead of planning it ourselves?',
+    answer: 'We combine trusted partnerships, logistical expertise, and discipleship to create a safe, meaningful mission experience.',
+  },
+];
+---
+
+<Layout title="Custom Mission Trips | Crew419">
+  <Hero />
+  <Challenge />
+  <PlanningChallenges />
+  <Difference />
+  <FindYourMissionPath eyebrow="Who We Build Trips For" heading="Designed for Churches & Christian Schools" cards={whoWeServeCards} />
+  <HowItWorks bg={howItWorksBg} />
+  <Included />
+  <Impact eyebrow="Impact & Stories" heading="Trusted by Churches Across Multiple Countries" stats={impactStats} />
+  <Faq items={faqItems} />
+  <Cta />
+  <LifeInMission />
+</Layout>

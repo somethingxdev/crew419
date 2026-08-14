@@ -1,0 +1,29 @@
+---
+const facts = [
+  { title: 'Visa', value: 'Visa information provided before departure' },
+  { title: 'Currency', value: 'Zambian Kwacha (ZMW)' },
+  { title: 'Languages', value: 'English' },
+  { title: 'Climate', value: 'Warm and dry' },
+  { title: 'Activity Level', value: 'Moderate' },
+];
+---
+
+<section class="pt-15 pb-15 md:pt-30" aria-labelledby="at-a-glance-heading">
+  <div class="container">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <p class="text-muted-foreground leading-none font-bold uppercase">At a glance</p>
+      <h2 id="at-a-glance-heading" class="text-3xl  font-bold md:text-5xl">Everything You Need to Know</h2>
+    </div>
+
+    <div class="mt-12.5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      {
+        facts.map((fact) => (
+          <article class="bg-cream flex h-45 flex-col justify-between rounded-lg p-7.5">
+            <h3 class="text-muted-foreground text-2xl  font-bold">{fact.title}</h3>
+            <p class="leading-tight">{fact.value}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

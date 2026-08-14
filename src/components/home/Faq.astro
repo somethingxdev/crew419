@@ -3,7 +3,17 @@ import ChevronDown from '@tabler/icons/outline/chevron-down.svg';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 import { Card } from '@/shared/ui/card';
 
-const items = [
+interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items?: FaqItem[];
+}
+
+const defaultItems: FaqItem[] = [
   {
     id: 'short-term',
     question: 'What is a short-term mission trip?',
@@ -36,6 +46,8 @@ const items = [
   },
 ];
 
+const { items = defaultItems } = Astro.props;
+
 const mid = Math.ceil(items.length / 2);
 const columns = [items.slice(0, mid), items.slice(mid)];
 ---
@@ -43,7 +55,7 @@ const columns = [items.slice(0, mid), items.slice(mid)];
 <section class="py-15" aria-labelledby="faq-heading">
   <div class="container">
     <div class="flex flex-col items-center gap-4 text-center mb-12">
-      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Everything you need to know</p>
+      <p class="text-muted-foreground leading-none font-bold uppercase">Everything you need to know</p>
       <h2 id="faq-heading" class="text-3xl font-bold xl:text-5xl">Frequently Asked Questions</h2>
     </div>
 
@@ -60,7 +72,7 @@ const columns = [items.slice(0, mid), items.slice(mid)];
                       <ChevronDown class="size-5 transition-transform duration-200" aria-hidden="true" />
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent class="text-base leading-tight">{item.answer}</AccordionContent>
+                  <AccordionContent class="leading-tight">{item.answer}</AccordionContent>
                 </AccordionItem>
               </Card>
             ))}

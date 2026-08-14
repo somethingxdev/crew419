@@ -11,10 +11,10 @@ const facts = [
   <div class="container">
     <div class="mx-auto flex max-w-122 flex-col items-center gap-7.5 text-center">
       <div class="flex flex-col gap-4">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">About the region</p>
-        <h2 id="about-region-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Why Africa?</h2>
+        <p class="text-muted-foreground leading-none font-bold uppercase">About the region</p>
+        <h2 id="about-region-heading" class="text-3xl  font-bold md:text-5xl">Why Africa?</h2>
       </div>
-      <p class="text-base leading-none">
+      <p class="leading-none">
         Africa is home to vibrant churches, rapidly growing churches, and communities with both physical and spiritual needs. Every mission trip is built in partnership with trusted local
         ministries, creating opportunities for lasting impact and meaningful relationships.
       </p>
@@ -24,7 +24,7 @@ const facts = [
       {
         facts.map((fact) => (
           <article class="bg-cream flex h-45 flex-col justify-between rounded-lg p-7.5">
-            <h3 class="text-muted-foreground text-2xl leading-[1.1] font-bold">{fact.title}</h3>
+            <h3 class="text-muted-foreground text-2xl  font-bold">{fact.title}</h3>
             <p class="text-lg leading-none font-medium">{fact.value}</p>
           </article>
         ))

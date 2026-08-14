@@ -1,0 +1,15 @@
+---
+const partners = Array.from({ length: 6 }, () => 'Partner’s logo');
+---
+
+<section class="overflow-x-clip pb-15" aria-label="Church partners">
+  <div class="flex justify-center gap-5">
+    {
+      partners.map((partner) => (
+        <div class="bg-cream flex h-40 w-75 shrink-0 items-center justify-center rounded-lg">
+          <p class="text-muted-foreground leading-none font-bold uppercase">{partner}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>

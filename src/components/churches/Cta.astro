@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/churches/cta-bg.png';
+import { Button } from '@/shared/ui/button';
+---
+
+<section class="py-15" aria-labelledby="churches-cta-heading">
+  <div class="container">
+    <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
+      <div class="absolute inset-0 overflow-hidden">
+        <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover" />
+        <div class="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      <div class="relative z-10 mx-auto flex w-full max-w-155 flex-col items-center justify-center gap-7.5 px-5 py-15 text-center text-cream md:py-0">
+        <div class="flex w-full flex-col items-center gap-6">
+          <h2 id="churches-cta-heading" class="text-3xl  font-bold md:text-5xl">Let’s Plan Your Church’s Next Mission</h2>
+          <p class="max-w-104 leading-none">We’ll help you build a mission experience that strengthens your church and impacts communities around the world.</p>
+        </div>
+        <div class="flex flex-col items-center gap-4 sm:flex-row">
+          <Button href="/contact" variant="cream" size="lg">Book a 30–minute call</Button>
+          <Button href="/contact" variant="glass" size="lg" class="w-62 max-w-full">Contact our team</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

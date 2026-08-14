@@ -65,10 +65,10 @@ const stories: Story[] = [
   <div class="relative container">
     <div class="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center">
       <div class="flex flex-col items-center gap-4">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Real lives. Real impact.</p>
-        <h2 id="stories-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Every Gift Has a Story</h2>
+        <p class="text-muted-foreground leading-none font-bold uppercase">Real lives. Real impact.</p>
+        <h2 id="stories-heading" class="text-3xl  font-bold md:text-5xl">Every Gift Has a Story</h2>
       </div>
-      <p class="text-foreground max-w-md text-base leading-none">
+      <p class="text-foreground max-w-md leading-none">
         Every mission is made possible by people who choose to give. Your generosity helps believers serve, churches grow, and communities experience the hope of the Gospel.
       </p>
     </div>
@@ -93,10 +93,10 @@ const stories: Story[] = [
                 <Quote class="h-24 w-28 shrink-0 text-cream md:h-35 md:w-40" aria-hidden="true" />
                 <div class="flex flex-col gap-4">
                   <div class="flex flex-col gap-2.5">
-                    <h3 class="text-2xl leading-[1.1] font-bold">{story.name}</h3>
-                    <p class="text-base leading-none font-bold uppercase opacity-60">{story.role}</p>
+                    <h3 class="text-2xl  font-bold">{story.name}</h3>
+                    <p class="leading-none font-bold uppercase opacity-60">{story.role}</p>
                   </div>
-                  <p class="text-base leading-none">{story.quote}</p>
+                  <p class="leading-none">{story.quote}</p>
                 </div>
               </div>
               <Image src={story.image} alt={story.alt} widths={[500]} class="h-60 w-full rounded-lg object-cover md:h-75 md:w-62.5 md:shrink-0" />

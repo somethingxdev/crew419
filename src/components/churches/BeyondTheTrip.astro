@@ -1,0 +1,108 @@
+---
+// Geometry mirrors the Figma frame (1600x353): the path vector fills the top 326px,
+// each column sits so its dot center (65px + 10px from column top) lands on the curve.
+const phases = [
+  {
+    title: 'Before',
+    text: 'Devotionals, team meetings, fundraising guides.',
+    class: 'left-[7.5%] top-[58.64%] w-61 items-start text-left',
+    stop: 0.081,
+  },
+  {
+    title: 'During',
+    text: 'Daily reflections, discussion questions, team devotionals.',
+    class: 'left-[42.31%] top-[41.08%] w-61 items-center text-center',
+    stop: 0.5,
+  },
+  {
+    title: 'After',
+    text: 'Follow-up studies, testimonies, and next steps for continued ministry.',
+    class: 'left-[81.63%] top-[2.83%] w-56 items-start text-left',
+    stop: 0.822,
+  },
+];
+---
+
+<section class="relative z-20 overflow-x-clip py-15" aria-labelledby="beyond-the-trip-heading">
+  <div class="container flex flex-col items-center">
+    <div class="flex max-w-195 flex-col items-center gap-7.5 text-center">
+      <div class="flex flex-col items-center gap-4">
+        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Beyond the trip</p>
+        <h2 id="beyond-the-trip-heading" class="text-3xl  font-bold md:text-5xl">A Mission That Continues After You Return Home</h2>
+      </div>
+      <p class="max-w-124 text-base leading-none">
+        A mission trip is more than one week of service. Our discipleship resources help your team prepare before departure, grow during the trip, and continue living missionally after returning home.
+      </p>
+    </div>
+  </div>
+
+  <div class="relative mt-10 hidden aspect-1600/353 w-full xl:block" data-beyond-stage>
+    <svg class="absolute inset-0 size-full" viewBox="0 0 1600 353" fill="none" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <clipPath id="beyond-the-trip-reveal">
+          <rect data-beyond-reveal x="0" y="0" width="1600" height="353"></rect>
+        </clipPath>
+      </defs>
+      <path
+        d="M0.295416 324.992C149.596 278.826 418.336 174.99 725.397 213.49C1187.84 271.471 1232.52 46.9917 1600.3 0.992269"
+        stroke="#827D73"
+        stroke-width="2"
+        stroke-dasharray="20 20"
+        clip-path="url(#beyond-the-trip-reveal)"></path>
+    </svg>
+    {
+      phases.map((phase) => (
+        <div class:list={['absolute flex flex-col gap-6.25', phase.class]} data-beyond-item data-stop={phase.stop}>
+          <h3 class="text-muted-foreground text-4xl font-bold">{phase.title}</h3>
+          <span class="bg-primary size-5 rounded-full" aria-hidden="true"></span>
+          <p class="text-lg leading-none font-medium">{phase.text}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="container mt-10 flex flex-col gap-10 xl:hidden">
+    {
+      phases.map((phase) => (
+        <div class="flex flex-col items-center gap-5 text-center">
+          <h3 class="text-muted-foreground text-3xl  font-bold">{phase.title}</h3>
+          <span class="bg-primary size-5 rounded-full" aria-hidden="true"></span>
+          <p class="max-w-80 text-lg leading-none font-medium">{phase.text}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const stage = document.querySelector<HTMLElement>('[data-beyond-stage]');
+
+  if (stage) {
+    const reveal = stage.querySelector<SVGRectElement>('[data-beyond-reveal]');
+    const items = gsap.utils.toArray<HTMLElement>('[data-beyond-item]', stage);
+    const mm = gsap.matchMedia();
+
+    mm.add('(min-width: 1280px) and (prefers-reduced-motion: no-preference)', () => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: stage,
+          start: 'top 85%',
+          end: 'bottom 40%',
+          scrub: 1,
+        },
+      });
+
+      tl.fromTo(reveal, { attr: { width: 0 } }, { attr: { width: 1600 }, duration: 1 }, 0);
+
+      items.forEach((item) => {
+        tl.from(item, { autoAlpha: 0, y: 30, duration: 0.12, ease: 'power2.out' }, Number(item.dataset.stop));
+      });
+    });
+  }
+</script>

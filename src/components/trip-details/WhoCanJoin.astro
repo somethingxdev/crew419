@@ -1,0 +1,41 @@
+---
+import church from '@/assets/images/trip-details/icons/church.png';
+import compass from '@/assets/images/trip-details/icons/compass.png';
+import family from '@/assets/images/trip-details/icons/family.png';
+import handshake from '@/assets/images/trip-details/icons/handshake.png';
+import individual from '@/assets/images/trip-details/icons/individual.png';
+import school from '@/assets/images/trip-details/icons/school.png';
+
+const groups = [
+  { icon: individual, title: 'Individuals' },
+  { icon: church, title: 'Church Groups' },
+  { icon: school, title: 'Christian Schools' },
+  { icon: family, title: 'Families with teenagers (16+)' },
+  { icon: compass, title: 'First-time participants' },
+  { icon: handshake, title: 'No previous mission experience required' },
+];
+---
+
+<section class="py-15 md:py-20" aria-labelledby="who-can-join-heading">
+  <div class="container">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <p class="text-muted-foreground leading-none font-bold uppercase">Who can join</p>
+      <h2 id="who-can-join-heading" class="text-3xl font-bold md:text-5xl">Everyone Has a Place to Serve</h2>
+    </div>
+
+    <div class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {
+        groups.map((group) => (
+          <article class="bg-cream flex h-50 flex-col justify-between rounded-lg p-7.5">
+            <span
+              class="bg-muted-foreground block size-10"
+              style={`-webkit-mask:url("${group.icon.src}") center/contain no-repeat;mask:url("${group.icon.src}") center/contain no-repeat`}
+              aria-hidden="true"
+            />
+            <h3 class="text-2xl font-bold">{group.title}</h3>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
