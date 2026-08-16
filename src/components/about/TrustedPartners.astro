@@ -1,0 +1,54 @@
+---
+const partners = Array.from({ length: 6 }, () => 'Partner’s logo');
+---
+
+<section class="overflow-x-clip py-15 md:py-30" aria-labelledby="partners-heading">
+  <div class="container">
+    <div class="mx-auto flex max-w-228.5 flex-col items-center gap-7.5 text-center">
+      <div class="flex w-full flex-col items-center gap-3.75">
+        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Trusted partners</p>
+        <h2 id="partners-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Serving Together Around the World</h2>
+      </div>
+      <p class="max-w-120.5 text-base leading-none">
+        Crew419 partners with local churches, Christian schools, ministries, and community leaders to create mission experiences that are sustainable, culturally respectful, and centered on
+        long-term relationships rather than short-term projects.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-12.5 overflow-hidden" data-partners-marquee>
+    <ul class="flex w-max gap-5" data-partners-track>
+      {
+        [...partners, ...partners].map((partner, index) => (
+          <li
+            class="bg-cream flex h-40 w-75 shrink-0 items-center justify-center rounded-lg"
+            aria-hidden={index >= partners.length ? 'true' : undefined}
+          >
+            <span class="text-muted-foreground text-base leading-none font-bold uppercase">{partner}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  @keyframes about-partners-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-50% - 0.625rem));
+    }
+  }
+
+  [data-partners-track] {
+    animation: about-partners-marquee 30s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-partners-track] {
+      animation: none;
+    }
+  }
+</style>

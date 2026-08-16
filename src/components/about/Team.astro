@@ -1,0 +1,91 @@
+---
+import { Image, type LocalImageProps } from 'astro:assets';
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import member1 from '@/assets/images/about/team/member-1.png';
+import member2 from '@/assets/images/about/team/member-2.png';
+import member3 from '@/assets/images/about/team/member-3.png';
+import member4 from '@/assets/images/about/team/member-4.png';
+import member5 from '@/assets/images/about/team/member-5.png';
+import { Button } from '@/shared/ui/button';
+
+interface Member {
+  name: string;
+  role: string;
+  image: LocalImageProps['src'];
+  alt: string;
+  class: string;
+}
+
+const members: Member[] = [
+  { name: 'Name', role: 'Role', image: member1, alt: 'Crew419 team member portrait', class: '-rotate-4' },
+  { name: 'Name', role: 'Role', image: member2, alt: 'Crew419 team member portrait', class: 'rotate-3' },
+  { name: 'Name', role: 'Role', image: member3, alt: 'Crew419 team member portrait', class: 'rotate-0' },
+  { name: 'Name', role: 'Role', image: member4, alt: 'Crew419 team member portrait', class: '-rotate-4' },
+  { name: 'Name', role: 'Role', image: member5, alt: 'Crew419 team member portrait', class: 'rotate-3' },
+];
+---
+
+<section class="overflow-x-hidden py-15 md:py-30" aria-labelledby="team-heading" data-team>
+  <div class="relative container">
+    <div class="mx-auto flex max-w-146.75 flex-col items-center gap-3.75 text-center">
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Our team</p>
+      <h2 id="team-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Meet the Crew</h2>
+    </div>
+
+    <div class="mt-6 flex justify-center gap-4 lg:absolute lg:top-0 lg:right-12 lg:mt-0">
+      <Button type="button" variant="secondary" size="icon" aria-label="Previous team member" data-team-prev>
+        <ArrowLeft />
+      </Button>
+      <Button type="button" variant="secondary" size="icon" aria-label="Next team member" data-team-next>
+        <ArrowRight />
+      </Button>
+    </div>
+  </div>
+
+  <div class="mt-10 overflow-hidden py-6" data-team-viewport>
+    <ul class="flex touch-pan-y items-center gap-5 pl-5 md:pl-12" data-team-container>
+      {
+        members.map((member) => (
+          <li class:list={['bg-cream flex w-81 shrink-0 flex-col gap-3.75 rounded-sm p-3 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]', member.class]}>
+            <Image src={member.image} alt={member.alt} width={600} height={600} class="aspect-square w-full rounded-sm object-cover" />
+            <div class="flex flex-col gap-2.5">
+              <p class="text-lg leading-none font-medium">{member.name}</p>
+              <p class="text-muted-foreground text-base leading-none">{member.role}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+
+  const section = document.querySelector<HTMLElement>('[data-team]');
+  const viewport = section?.querySelector<HTMLElement>('[data-team-viewport]');
+  const prev = section?.querySelector<HTMLButtonElement>('[data-team-prev]');
+  const next = section?.querySelector<HTMLButtonElement>('[data-team-next]');
+
+  if (section && viewport && prev && next) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const embla = EmblaCarousel(viewport, {
+      align: 'start',
+      containScroll: 'trimSnaps',
+      duration: reduced ? 0 : 25,
+      watchDrag: !reduced,
+    });
+
+    const toggleButtons = () => {
+      prev.disabled = !embla.canScrollPrev();
+      next.disabled = !embla.canScrollNext();
+    };
+
+    prev.addEventListener('click', () => embla.scrollPrev());
+    next.addEventListener('click', () => embla.scrollNext());
+    embla.on('select', toggleButtons);
+    embla.on('reInit', toggleButtons);
+    toggleButtons();
+  }
+</script>

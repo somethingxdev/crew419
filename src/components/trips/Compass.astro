@@ -5,6 +5,12 @@ import decorTop from '@/assets/images/decor-top.png';
 import bg from '@/assets/images/trips/compass/bg.png';
 import compass from '@/assets/images/trips/compass/compass.png';
 import { Button } from '@/shared/ui/button';
+
+interface Props {
+  href?: string;
+}
+
+const { href = '#destinations' } = Astro.props;
 ---
 
 <section id="compass" class="relative overflow-x-clip" aria-labelledby="compass-heading">
@@ -26,7 +32,7 @@ import { Button } from '@/shared/ui/button';
         <span class="block text-4xl md:text-5xl">Is Calling You?</span>
       </p>
       <p class="max-w-85 text-base leading-none" aria-hidden="true">Use the compass to explore mission opportunities around the world and discover a destination you may have never considered.</p>
-      <Button href="#destinations" variant="primary" size="lg">Follow the compass</Button>
+      <Button href={href} variant="primary" size="lg">Follow the compass</Button>
       <figure class="w-64 md:w-80">
         <Image src={compass} alt="A gold antique compass" widths={[540, 1080]} class="h-auto w-full" />
       </figure>
@@ -43,7 +49,7 @@ import { Button } from '@/shared/ui/button';
           Use the compass to explore mission opportunities around the world and discover a destination you may have never considered.
         </p>
         <div class="col-1 row-1 mt-66.25 ml-55.75">
-          <Button href="#destinations" variant="primary" size="lg" class="w-82.5">Follow the compass</Button>
+          <Button href={href} variant="primary" size="lg" class="w-82.5">Follow the compass</Button>
         </div>
       </div>
 

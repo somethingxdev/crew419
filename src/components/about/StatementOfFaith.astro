@@ -1,0 +1,51 @@
+---
+import creation from '@/assets/images/about/beliefs/creation.png';
+import scripture from '@/assets/images/about/beliefs/scripture.png';
+import trinity from '@/assets/images/about/beliefs/trinity.png';
+import { Button } from '@/shared/ui/button';
+
+const beliefs = [
+  {
+    icon: trinity,
+    title: 'The Trinity',
+    text: 'We believe in one God who exists eternally in three persons: Father, Son, and Holy Spirit.',
+  },
+  {
+    icon: scripture,
+    title: 'The Authority of Scripture',
+    text: 'We believe the Bible is the inspired and authoritative Word of God and the foundation of our faith.',
+  },
+  {
+    icon: creation,
+    title: 'Creation and the Fall',
+    text: 'We believe Jesus Christ is the only mediator between God and humanity.',
+  },
+];
+---
+
+<section class="py-15 md:py-30" aria-labelledby="statement-of-faith-heading">
+  <div class="container">
+    <div class="mx-auto flex max-w-217.75 flex-col items-center gap-7.5 text-center">
+      <div class="flex w-full flex-col items-center gap-3.75">
+        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Our beliefs</p>
+        <h2 id="statement-of-faith-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Statement of Faith</h2>
+      </div>
+      <p class="max-w-107.25 text-base leading-none">
+        Our faith shapes everything we do. Crew419 is committed to biblical teaching and Gospel-centered ministry. Read our complete Statement of Faith below.
+      </p>
+      <Button href="/about/statement-of-faith" size="lg" class="w-82.5 max-w-full">Read Full Statement of Faith</Button>
+    </div>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {
+        beliefs.map((belief) => (
+          <article class="bg-cream flex flex-col gap-7.5 rounded-lg p-7.5">
+            <span class="bg-muted-foreground block size-10 shrink-0" style={`mask: url(${belief.icon.src}) center / contain no-repeat`} aria-hidden="true" />
+            <h3 class="text-2xl leading-[1.1] font-bold">{belief.title}</h3>
+            <p class="text-muted-foreground text-base leading-none">{belief.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

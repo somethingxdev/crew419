@@ -1,0 +1,151 @@
+---
+import { Image } from 'astro:assets';
+import hero from '@/assets/images/stories/kenya/hero.png';
+import photo1 from '@/assets/images/stories/kenya/photo-1.png';
+import photo2 from '@/assets/images/stories/kenya/photo-2.png';
+import week from '@/assets/images/stories/kenya/week.png';
+
+const schedule = [
+  { time: '7:00 AM', activity: 'Morning devotion and breakfast' },
+  { time: '8:30 AM', activity: 'Travel to the ministry location' },
+  { time: '9:30 AM – 3:00 PM', activity: 'Community outreach, children’s ministry, and service projects' },
+  { time: '4:00 PM', activity: 'Time with local church leaders' },
+  { time: '6:00 PM', activity: 'Dinner together' },
+  { time: '7:30 PM', activity: 'Team debrief, worship, and prayer' },
+];
+
+const activities = ['Children’s Bible programs', 'Community outreach and home visits', 'Sports activities for local youth', 'Worship services with partner churches', 'Construction projects for community facilities'];
+
+const outcomes = [
+  'Relationships were built between local churches and visiting teams.',
+  'Children heard the Gospel through Bible lessons and games.',
+  'Families invited church leaders back into their homes.',
+  'Our own team returned with a deeper understanding of servant leadership.',
+];
+
+const numbers = ['620+ people participated in outreach activities', '180 children attended Vacation Bible School', '4 local churches partnered with Crew419', '12 home visits completed', '1 community construction project finished'];
+
+const lessons = [
+  'Real ministry begins with listening.',
+  'The Gospel is shared through both words and actions.',
+  'Local churches are the heroes of every mission—we simply come alongside them.',
+  'Short-term missions can create long-term Kingdom impact when they are built on partnership.',
+];
+---
+
+<article class="pt-32 pb-15 md:pb-20 xl:pt-52" aria-labelledby="story-heading">
+  <div class="container">
+    <header class="flex flex-col items-center gap-7.5">
+      <div class="flex w-full max-w-200 flex-col items-center gap-7.5 text-center">
+        <h1 id="story-heading" class="text-4xl leading-[1.1] font-bold md:text-5xl xl:text-[52px]">Kenya Community Outreach</h1>
+        <div class="text-muted-foreground flex items-center justify-center gap-2.5 text-base leading-none">
+          <p class="font-bold uppercase">Trip recap</p>
+          <span class="bg-muted-foreground size-1.5 shrink-0 rounded-full" aria-hidden="true"></span>
+          <time datetime="2025-01">January 2025</time>
+        </div>
+        <p class="max-w-145 text-lg leading-none font-medium opacity-80">
+          For one unforgettable week, our Crew Members partnered with local churches across Kenya to serve children, encourage families, and share the hope of the Gospel. What began as a mission trip
+          quickly became a story of faith, friendship, and lasting transformation.
+        </p>
+      </div>
+
+      <div class="bg-cream h-64 w-full rounded-lg p-1.25 sm:h-96 xl:h-150">
+        <Image src={hero} alt="A volunteer high-fiving children gathered around her in Kenya" widths={[800, 1600, 2400]} loading="eager" class="size-full rounded-lg object-cover" />
+      </div>
+    </header>
+
+    <div class="mx-auto mt-15 flex w-full max-w-200 flex-col gap-15 text-base leading-none md:mt-20 md:gap-20">
+      <section class="flex flex-col gap-7.5">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">Arriving With Open Hands</h2>
+          <h3 class="text-2xl leading-[1.1] font-bold">Every mission begins long before the plane lands.</h3>
+        </div>
+        <p>
+          Months of prayer, preparation, and discipleship equipped our team not only with practical knowledge but also with hearts ready to serve. Upon arriving in Kenya, we were welcomed by local pastors
+          and ministry leaders who have faithfully served their communities for many years.
+        </p>
+        <div class="flex flex-col gap-6">
+          <p>After an evening of worship and orientation, we gathered together with one shared purpose:</p>
+          <blockquote class="border-primary text-primary border-l-2 pt-0.75 pl-5 text-lg leading-none font-bold italic">
+            “Lord, help us serve with humility, love people well, and point every conversation back to You.”
+          </blockquote>
+        </div>
+      </section>
+
+      <section class="flex flex-col gap-7.5">
+        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">What We Did Throughout the Week</h2>
+        <p>Each day followed a rhythm of prayer, ministry, and reflection. Although every location was different, our focus remained the same – building relationships and sharing the Gospel.</p>
+        <div class="flex flex-col gap-4">
+          <p>Our team participated in:</p>
+          <ul class="list-disc pl-6">
+            {activities.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <p>Every evening ended with group discussions where team members reflected on what God had taught them throughout the day.</p>
+      </section>
+
+      <div class="bg-cream h-60 w-full rounded-lg p-1.25 sm:h-115">
+        <Image src={week} alt="Kenyan schoolchildren in green uniforms sitting together at desks" widths={[800, 1600]} class="size-full rounded-lg object-cover" />
+      </div>
+
+      <section class="flex flex-col gap-7.5">
+        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">A Typical Day on the Mission Field</h2>
+        <ul class="flex flex-col gap-4">
+          {
+            schedule.map((item) => (
+              <li>
+                <time>{item.time}</time> — {item.activity}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="flex flex-col gap-7.5">
+        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">More Than a Service Project</h2>
+        <p>It would be easy to measure success by the number of projects completed—but that’s not how God works.</p>
+        <div class="flex flex-col gap-4">
+          <p>Instead, we witnessed something much greater:</p>
+          <ol class="list-decimal pl-6">
+            {outcomes.map((item) => <li>{item}</li>)}
+          </ol>
+        </div>
+      </section>
+
+      <section class="flex flex-col gap-7.5">
+        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">By the Numbers</h2>
+        <ul class="list-disc pl-6">
+          {numbers.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div class="bg-cream aspect-square w-full rounded-lg p-1.25">
+          <Image src={photo1} alt="Volunteers and local children hauling a bucket of water together" widths={[600, 1200]} class="size-full rounded-sm object-cover" />
+        </div>
+        <div class="bg-cream aspect-square w-full rounded-lg p-1.25">
+          <Image src={photo2} alt="A volunteer painting a wall while a child watches" widths={[600, 1200]} class="size-full rounded-sm object-cover" />
+        </div>
+      </div>
+
+      <section class="flex flex-col gap-7.5">
+        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">One Moment We’ll Never Forget</h2>
+        <p>On the final evening, a local pastor gathered both teams together before everyone returned home.</p>
+        <blockquote class="border-primary text-primary border-l-2 pt-0.75 pl-5 text-lg leading-none font-bold italic">
+          “You didn’t come here simply to build a project. You came to remind our church that we are not serving alone. Thank you for becoming part of our family.”
+        </blockquote>
+        <p>Those words captured the heart of the entire week.</p>
+      </section>
+
+      <section class="flex flex-col gap-7.5">
+        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">What We Learned</h2>
+        <div class="flex flex-col gap-4">
+          <p>Every mission teaches something different, but this trip reminded us that:</p>
+          <ul class="list-disc pl-6">
+            {lessons.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</article>

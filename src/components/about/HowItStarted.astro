@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import photo1 from '@/assets/images/about/how-it-started/photo-1.png';
+import photo2 from '@/assets/images/about/how-it-started/photo-2.png';
+---
+
+<section class="relative overflow-x-clip py-15 md:py-30" aria-labelledby="how-it-started-heading">
+  <div class="container flex flex-col items-center gap-10 xl:flex-row xl:items-center xl:justify-between xl:gap-27.5">
+    <div class="@container relative aspect-610/515 w-full max-w-152.5 shrink-0">
+      <div class="absolute top-0 left-0 h-128.75 w-152.5 origin-top-left transform-[scale(calc(100cqw/610px))]">
+        <div class="absolute top-0 left-0 flex h-[422.6px] w-[383.7px] items-center justify-center">
+          <figure class="bg-cream -rotate-10 flex w-81 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
+            <div class="relative size-75 overflow-hidden rounded-sm">
+              <Image src={photo1} alt="An early Crew419 mission team standing together with local children" width={600} height={600} class="size-full object-cover" />
+            </div>
+          </figure>
+        </div>
+
+        <div class="absolute top-[111.4px] left-[249.3px] z-10 flex h-[403.8px] w-[361.1px] items-center justify-center">
+          <figure class="bg-cream rotate-6 flex w-81 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
+            <div class="relative size-75 overflow-hidden rounded-sm">
+              <Image src={photo2} alt="Kevin Grubinski with fellow missionaries in the Dominican Republic" width={600} height={600} class="size-full object-cover" />
+            </div>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex w-full max-w-169 flex-col items-start gap-10">
+      <div class="flex w-full flex-col items-start gap-3.75">
+        <p class="text-muted-foreground text-base leading-none font-bold uppercase">How it started</p>
+        <h2 id="how-it-started-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">The Beginning of Crew419</h2>
+      </div>
+
+      <div class="flex w-full max-w-137.5 flex-col items-start gap-7.5 text-foreground">
+        <p class="text-base leading-none">
+          Crew419 was founded with one simple conviction: every believer is called to live on mission. After years of serving internationally and leading mission teams, Kevin Grubinski saw the need
+          for an organization that would do more than organize trips. He wanted to prepare people spiritually, connect them with trusted local ministries, and help them continue living on mission long
+          after returning home.
+        </p>
+        <p class="text-lg leading-none font-medium">
+          Today, Crew419 partners with churches, schools, and ministry leaders to create meaningful short-term mission experiences that are centered on discipleship, service, and lasting Kingdom
+          impact.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

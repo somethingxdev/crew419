@@ -1,0 +1,69 @@
+---
+interface SitemapLink {
+  label: string;
+  href: string;
+  path: string;
+}
+
+interface SitemapGroup {
+  title: string;
+  links: SitemapLink[];
+}
+
+const groups: SitemapGroup[] = [
+  {
+    title: 'Main',
+    links: [{ label: 'Home', href: '/', path: '/' }],
+  },
+  {
+    title: 'Mission Trips',
+    links: [
+      { label: 'All Trips', href: '/trips', path: '/trips' },
+      { label: 'Africa', href: '/trips/africa', path: '/trips/africa' },
+    ],
+  },
+  {
+    title: 'Stories',
+    links: [
+      { label: 'All Stories', href: '/stories', path: '/stories' },
+      { label: 'Kenya Community Outreach', href: '/stories/kenya-community-outreach', path: '/stories/kenya-community-outreach' },
+    ],
+  },
+  {
+    title: 'Other',
+    links: [{ label: 'Thank You', href: '/thank-you', path: '/thank-you' }],
+  },
+];
+---
+
+<section class="relative pt-32 pb-24 md:pt-40 xl:pt-52 xl:pb-30" aria-labelledby="sitemap-heading">
+  <div class="container">
+    <div class="mx-auto flex w-full max-w-222.5 flex-col items-center gap-4 text-center">
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Site map</p>
+      <h1 id="sitemap-heading" class="text-4xl leading-[1.1] font-bold text-foreground md:text-6xl xl:text-7xl">All Pages</h1>
+      <p class="mt-4 max-w-132 text-lg leading-none font-medium text-foreground/80">A complete list of pages currently live on Crew419.</p>
+    </div>
+
+    <div class="mx-auto mt-12.5 grid w-full max-w-250 grid-cols-1 gap-5 sm:grid-cols-2">
+      {
+        groups.map((group) => (
+          <section class="bg-cream rounded-lg px-6 py-7.5" aria-labelledby={`${group.title.toLowerCase().replace(/\s+/g, '-')}-pages`}>
+            <h2 id={`${group.title.toLowerCase().replace(/\s+/g, '-')}-pages`} class="text-muted-foreground text-base leading-none font-bold uppercase">
+              {group.title}
+            </h2>
+            <ul class="mt-6 space-y-4">
+              {group.links.map((link) => (
+                <li>
+                  <a href={link.href} class="group flex flex-col gap-1.5">
+                    <span class="text-2xl leading-[1.1] font-bold transition-colors group-hover:text-primary">{link.label}</span>
+                    <span class="text-muted-foreground text-base leading-none">{link.path}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+---
+const values = [
+  { title: 'Christ-Centered', text: 'Jesus is at the center of every mission, partnership, and decision.' },
+  { title: 'Biblical Truth', text: 'Scripture guides how we serve, teach, and lead.' },
+  { title: 'Discipleship', text: 'We prepare people before, during, and after every mission trip.' },
+  { title: 'Partnership', text: 'We serve alongside trusted local churches – not independently of them.' },
+  { title: 'Compassion', text: 'We meet practical needs while sharing the hope of the Gospel.' },
+  { title: 'Integrity', text: 'We lead with transparency, humility, and excellence.' },
+];
+---
+
+<section class="py-15 md:py-30" aria-labelledby="what-we-believe-heading">
+  <div class="container">
+    <div class="mx-auto flex max-w-169 flex-col items-center gap-3.75 text-center">
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">What we believe</p>
+      <h2 id="what-we-believe-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">The Values That Guide Everything We Do</h2>
+    </div>
+
+    <div class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {
+        values.map((value) => (
+          <article class="bg-cream flex flex-col justify-between gap-7.5 rounded-lg p-7.5 xl:h-44.5">
+            <h3 class="text-muted-foreground text-2xl leading-[1.1] font-bold">{value.title}</h3>
+            <p class="text-lg leading-none font-medium">{value.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
