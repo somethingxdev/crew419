@@ -5,7 +5,6 @@ import Partners from '@/components/churches/Partners.astro';
 import Faq from '@/components/home/Faq.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
 import Impact from '@/components/home/Impact.astro';
-import LifeInMission from '@/components/home/LifeInMission.astro';
 import BeyondTheTrip from '@/components/school/BeyondTheTrip.astro';
 import SchoolCta from '@/components/school/Cta.astro';
 import Hero from '@/components/school/Hero.astro';
@@ -68,9 +67,8 @@ const faqItems = [
   <WhyCrew419 />
   <BeyondTheTrip />
   <HowItWorks bg={howItWorksBg} />
-  <Impact heading="Trusted by Churches Across Multiple Countries" stats={stats} />
+  <Impact class="py-30" heading="Trusted by Churches Across Multiple Countries" stats={stats} />
   <Partners />
   <Faq items={faqItems} />
   <SchoolCta />
-  <LifeInMission />
 </Layout>

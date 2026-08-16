@@ -45,17 +45,24 @@ const defaultCards = [
   },
 ];
 
-const { eyebrow = 'Find your mission path', heading = "Everyone Has a Place in God's Mission", cards: pathCards = defaultCards } = Astro.props;
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  cards?: (typeof defaultCards)[number][];
+  class?: string;
+}
+
+const { eyebrow = 'Find your mission path', heading = "Everyone Has a Place in God's Mission", cards: pathCards = defaultCards, class: className = 'py-15' } = Astro.props;
 
 const cards = [...pathCards, ...pathCards];
 ---
 
-<section id="find-your-mission-path" class="group/path relative overflow-x-clip py-15 md:pb-30" aria-labelledby="find-your-mission-path-heading" data-mission-path>
+<section id="find-your-mission-path" class:list={['group/path relative overflow-x-clip', className]} aria-labelledby="find-your-mission-path-heading" data-mission-path>
   <div
     class="relative z-0 mx-auto flex max-w-[63.7rem] flex-col items-center gap-4 px-5 text-center group-data-scroll-active/path:absolute group-data-scroll-active/path:inset-0 group-data-scroll-active/path:z-0 group-data-scroll-active/path:justify-center"
   >
     <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-    <h2 id="find-your-mission-path-heading" class="text-foreground text-3xl  font-bold md:text-5xl xl:text-[4.625rem]">{heading}</h2>
+    <h2 id="find-your-mission-path-heading" class="text-foreground text-3xl font-bold md:text-5xl xl:text-[4.625rem]">{heading}</h2>
   </div>
 
   <div class="relative z-10 mt-10 w-full group-data-scroll-active/path:mt-0 group-data-scroll-active/path:overflow-x-clip" data-mission-path-viewport>

@@ -4,6 +4,7 @@ import hero from '@/assets/images/stories/kenya/hero.png';
 import photo1 from '@/assets/images/stories/kenya/photo-1.png';
 import photo2 from '@/assets/images/stories/kenya/photo-2.png';
 import week from '@/assets/images/stories/kenya/week.png';
+import { Prose } from '@/shared/ui/prose';
 
 const schedule = [
   { time: '7:00 AM', activity: 'Morning devotion and breakfast' },
@@ -37,7 +38,7 @@ const lessons = [
   <div class="container">
     <header class="flex flex-col items-center gap-7.5">
       <div class="flex w-full max-w-200 flex-col items-center gap-7.5 text-center">
-        <h1 id="story-heading" class="text-4xl leading-[1.1] font-bold md:text-5xl xl:text-[52px]">Kenya Community Outreach</h1>
+        <h1 id="story-heading" class="text-4xl font-bold md:text-5xl xl:text-[52px]">Kenya Community Outreach</h1>
         <div class="text-muted-foreground flex items-center justify-center gap-2.5 text-base leading-none">
           <p class="font-bold uppercase">Trip recap</p>
           <span class="bg-muted-foreground size-1.5 shrink-0 rounded-full" aria-hidden="true"></span>
@@ -54,72 +55,54 @@ const lessons = [
       </div>
     </header>
 
-    <div class="mx-auto mt-15 flex w-full max-w-200 flex-col gap-15 text-base leading-none md:mt-20 md:gap-20">
-      <section class="flex flex-col gap-7.5">
-        <div class="flex flex-col gap-6">
-          <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">Arriving With Open Hands</h2>
-          <h3 class="text-2xl leading-[1.1] font-bold">Every mission begins long before the plane lands.</h3>
-        </div>
-        <p>
-          Months of prayer, preparation, and discipleship equipped our team not only with practical knowledge but also with hearts ready to serve. Upon arriving in Kenya, we were welcomed by local pastors
-          and ministry leaders who have faithfully served their communities for many years.
-        </p>
-        <div class="flex flex-col gap-6">
-          <p>After an evening of worship and orientation, we gathered together with one shared purpose:</p>
-          <blockquote class="border-primary text-primary border-l-2 pt-0.75 pl-5 text-lg leading-none font-bold italic">
-            “Lord, help us serve with humility, love people well, and point every conversation back to You.”
-          </blockquote>
-        </div>
-      </section>
+    <Prose class="mx-auto mt-15 w-full max-w-200 md:mt-20">
+      <h2>Arriving With Open Hands</h2>
+      <h3>Every mission begins long before the plane lands.</h3>
+      <p>
+        Months of prayer, preparation, and discipleship equipped our team not only with practical knowledge but also with hearts ready to serve. Upon arriving in Kenya, we were welcomed by local pastors
+        and ministry leaders who have faithfully served their communities for many years.
+      </p>
+      <p>After an evening of worship and orientation, we gathered together with one shared purpose:</p>
+      <blockquote>
+        <p>Lord, help us serve with humility, love people well, and point every conversation back to You.</p>
+      </blockquote>
 
-      <section class="flex flex-col gap-7.5">
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">What We Did Throughout the Week</h2>
-        <p>Each day followed a rhythm of prayer, ministry, and reflection. Although every location was different, our focus remained the same – building relationships and sharing the Gospel.</p>
-        <div class="flex flex-col gap-4">
-          <p>Our team participated in:</p>
-          <ul class="list-disc pl-6">
-            {activities.map((item) => <li>{item}</li>)}
-          </ul>
-        </div>
-        <p>Every evening ended with group discussions where team members reflected on what God had taught them throughout the day.</p>
-      </section>
+      <h2>What We Did Throughout the Week</h2>
+      <p>Each day followed a rhythm of prayer, ministry, and reflection. Although every location was different, our focus remained the same – building relationships and sharing the Gospel.</p>
+      <p>Our team participated in:</p>
+      <ul>
+        {activities.map((item) => <li>{item}</li>)}
+      </ul>
+      <p>Every evening ended with group discussions where team members reflected on what God had taught them throughout the day.</p>
 
-      <div class="bg-cream h-60 w-full rounded-lg p-1.25 sm:h-115">
+      <div class="not-sw-prose bg-cream h-60 w-full rounded-lg p-1.25 sm:h-115">
         <Image src={week} alt="Kenyan schoolchildren in green uniforms sitting together at desks" widths={[800, 1600]} class="size-full rounded-lg object-cover" />
       </div>
 
-      <section class="flex flex-col gap-7.5">
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">A Typical Day on the Mission Field</h2>
-        <ul class="flex flex-col gap-4">
-          {
-            schedule.map((item) => (
-              <li>
-                <time>{item.time}</time> — {item.activity}
-              </li>
-            ))
-          }
-        </ul>
-      </section>
+      <h2>A Typical Day on the Mission Field</h2>
+      <ul>
+        {
+          schedule.map((item) => (
+            <li>
+              <time>{item.time}</time> — {item.activity}
+            </li>
+          ))
+        }
+      </ul>
 
-      <section class="flex flex-col gap-7.5">
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">More Than a Service Project</h2>
-        <p>It would be easy to measure success by the number of projects completed—but that’s not how God works.</p>
-        <div class="flex flex-col gap-4">
-          <p>Instead, we witnessed something much greater:</p>
-          <ol class="list-decimal pl-6">
-            {outcomes.map((item) => <li>{item}</li>)}
-          </ol>
-        </div>
-      </section>
+      <h2>More Than a Service Project</h2>
+      <p>It would be easy to measure success by the number of projects completed—but that’s not how God works.</p>
+      <p>Instead, we witnessed something much greater:</p>
+      <ol>
+        {outcomes.map((item) => <li>{item}</li>)}
+      </ol>
 
-      <section class="flex flex-col gap-7.5">
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">By the Numbers</h2>
-        <ul class="list-disc pl-6">
-          {numbers.map((item) => <li>{item}</li>)}
-        </ul>
-      </section>
+      <h2>By the Numbers</h2>
+      <ul>
+        {numbers.map((item) => <li>{item}</li>)}
+      </ul>
 
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div class="not-sw-prose grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div class="bg-cream aspect-square w-full rounded-lg p-1.25">
           <Image src={photo1} alt="Volunteers and local children hauling a bucket of water together" widths={[600, 1200]} class="size-full rounded-sm object-cover" />
         </div>
@@ -128,24 +111,18 @@ const lessons = [
         </div>
       </div>
 
-      <section class="flex flex-col gap-7.5">
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">One Moment We’ll Never Forget</h2>
-        <p>On the final evening, a local pastor gathered both teams together before everyone returned home.</p>
-        <blockquote class="border-primary text-primary border-l-2 pt-0.75 pl-5 text-lg leading-none font-bold italic">
-          “You didn’t come here simply to build a project. You came to remind our church that we are not serving alone. Thank you for becoming part of our family.”
-        </blockquote>
-        <p>Those words captured the heart of the entire week.</p>
-      </section>
+      <h2>One Moment We’ll Never Forget</h2>
+      <p>On the final evening, a local pastor gathered both teams together before everyone returned home.</p>
+      <blockquote>
+        <p>You didn’t come here simply to build a project. You came to remind our church that we are not serving alone. Thank you for becoming part of our family.</p>
+      </blockquote>
+      <p>Those words captured the heart of the entire week.</p>
 
-      <section class="flex flex-col gap-7.5">
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">What We Learned</h2>
-        <div class="flex flex-col gap-4">
-          <p>Every mission teaches something different, but this trip reminded us that:</p>
-          <ul class="list-disc pl-6">
-            {lessons.map((item) => <li>{item}</li>)}
-          </ul>
-        </div>
-      </section>
-    </div>
+      <h2>What We Learned</h2>
+      <p>Every mission teaches something different, but this trip reminded us that:</p>
+      <ul>
+        {lessons.map((item) => <li>{item}</li>)}
+      </ul>
+    </Prose>
   </div>
 </article>

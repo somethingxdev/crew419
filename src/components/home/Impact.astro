@@ -14,6 +14,8 @@ interface Props {
   eyebrow?: string;
   heading?: string;
   stats?: Stat[];
+  class?: string;
+  showMedia?: boolean;
 }
 
 const defaultStats: Stat[] = [
@@ -23,7 +25,7 @@ const defaultStats: Stat[] = [
   { value: 'Thousands', label: 'Lives Reached' },
 ];
 
-const { eyebrow = 'Impact & Stories', heading = 'Lives Changed. Communities Served. Faith Strengthened.', stats = defaultStats } = Astro.props;
+const { eyebrow = 'Impact & Stories', heading = 'Lives Changed. Communities Served. Faith Strengthened.', stats = defaultStats, class: className = 'py-15', showMedia = true } = Astro.props;
 
 const stories = Array.from({ length: 5 }, () => ({
   quote: 'What started as one week of serving completely changed the direction of my life.',
@@ -33,7 +35,7 @@ const stories = Array.from({ length: 5 }, () => ({
 const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90';
 ---
 
-<section id="impact" class="overflow-x-hidden py-15 relative z-20" aria-labelledby="impact-heading" data-impact>
+<section id="impact" class:list={['overflow-x-hidden relative z-20', className]} aria-labelledby="impact-heading" data-impact>
   <div class="container">
     <div class="flex flex-col items-center gap-4 mx-auto max-w-215 text-center mb-15">
       <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
@@ -55,45 +57,49 @@ const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg
         }
       </div>
 
-      <div class="flex w-full max-w-218 flex-col items-center gap-8">
-        <div class="relative h-110 w-full md:h-175" data-impact-stack>
-          {
-            stories.map((story, index) => (
-              <button
-                type="button"
-                class="bg-cream absolute top-1/2 left-1/2 w-70 rounded-lg p-2.5 shadow-[0px_4px_15px_rgba(0,0,0,0.2)] will-change-transform md:w-117.5"
-                data-impact-card
-                data-quote={story.quote}
-                data-attribution={story.attribution}
-                aria-label={`Play story from ${story.attribution}`}
-                aria-current={index === 0 ? 'true' : undefined}
-              >
-                <span class="relative block aspect-45/65 overflow-hidden rounded-lg">
-                  <Image src={storyPoster} alt="" width={900} height={1300} class="size-full object-cover" />
-                  <span class="absolute inset-0 bg-black/20" data-impact-overlay aria-hidden="true" />
-                  <span class="absolute top-1/2 left-1/2 flex size-15 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 shadow-[inset_0_0_2px_rgba(0,0,0,0.25)] backdrop-blur-[10px]">
-                    <PlayerPlay class="size-5 text-white" aria-hidden="true" />
-                  </span>
-                </span>
+      {
+        showMedia && (
+          <div class="flex w-full max-w-218 flex-col items-center gap-8">
+            <div class="relative h-110 w-full md:h-175" data-impact-stack>
+              {
+                stories.map((story, index) => (
+                  <button
+                    type="button"
+                    class="bg-cream absolute top-1/2 left-1/2 w-70 rounded-lg p-2.5 shadow-[0px_4px_15px_rgba(0,0,0,0.2)] will-change-transform md:w-117.5"
+                    data-impact-card
+                    data-quote={story.quote}
+                    data-attribution={story.attribution}
+                    aria-label={`Play story from ${story.attribution}`}
+                    aria-current={index === 0 ? 'true' : undefined}
+                  >
+                    <span class="relative block aspect-45/65 overflow-hidden rounded-lg">
+                      <Image src={storyPoster} alt="" width={900} height={1300} class="size-full object-cover" />
+                      <span class="absolute inset-0 bg-black/20" data-impact-overlay aria-hidden="true" />
+                      <span class="absolute top-1/2 left-1/2 flex size-15 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 shadow-[inset_0_0_2px_rgba(0,0,0,0.25)] backdrop-blur-[10px]">
+                        <PlayerPlay class="size-5 text-white" aria-hidden="true" />
+                      </span>
+                    </span>
+                  </button>
+                ))
+              }
+            </div>
+
+            <blockquote class="flex max-w-140 flex-col items-center gap-6" data-impact-quote>
+              <p class="font-serif text-xl  font-bold md:text-2xl" data-impact-quote-text>“{stories[0].quote}”</p>
+              <footer class="text-muted-foreground text-lg leading-none" data-impact-quote-attr>— {stories[0].attribution}</footer>
+            </blockquote>
+
+            <div class="flex items-center gap-4">
+              <button type="button" class={navButtonClass} aria-label="Previous story" data-impact-prev>
+                <ArrowLeft class="size-5" />
               </button>
-            ))
-          }
-        </div>
-
-        <blockquote class="flex max-w-140 flex-col items-center gap-6" data-impact-quote>
-          <p class="font-serif text-xl  font-bold md:text-2xl" data-impact-quote-text>“{stories[0].quote}”</p>
-          <footer class="text-muted-foreground text-lg leading-none" data-impact-quote-attr>— {stories[0].attribution}</footer>
-        </blockquote>
-
-        <div class="flex items-center gap-4">
-          <button type="button" class={navButtonClass} aria-label="Previous story" data-impact-prev>
-            <ArrowLeft class="size-5" />
-          </button>
-          <button type="button" class={navButtonClass} aria-label="Next story" data-impact-next>
-            <ArrowRight class="size-5" />
-          </button>
-        </div>
-      </div>
+              <button type="button" class={navButtonClass} aria-label="Next story" data-impact-next>
+                <ArrowRight class="size-5" />
+              </button>
+            </div>
+          </div>
+        )
+      }
     </div>
   </div>
 </section>

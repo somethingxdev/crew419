@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '@/assets/images/logo.png';
+import LifeInMission from '@/components/home/LifeInMission.astro';
 import Facebook from '@/icons/facebook.svg';
 import Instagram from '@/icons/instragram.svg';
 import Youtube from '@/icons/youtube.svg';
@@ -50,11 +51,13 @@ const columns = [
 ];
 
 const legal = [
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Terms of Service', href: '/terms' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Terms of Service', href: '/terms-of-service' },
   { label: 'Refund Policy', href: '/refund-policy' },
 ];
 ---
+
+<LifeInMission />
 
 <footer class="pb-10 pt-15">
   <div class="container">

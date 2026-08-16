@@ -6,12 +6,13 @@ import { Button } from '@/shared/ui/button';
 interface Props {
   secondaryLabel: string;
   secondaryHref: string;
+  class?: string;
 }
 
-const { secondaryLabel, secondaryHref } = Astro.props;
+const { secondaryLabel, secondaryHref, class: className = 'py-15' } = Astro.props;
 ---
 
-<section class="py-15" aria-labelledby="resources-cta-heading">
+<section class={className} aria-labelledby="resources-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">

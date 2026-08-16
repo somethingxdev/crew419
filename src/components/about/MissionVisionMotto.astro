@@ -1,75 +1,60 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, type LocalImageProps } from 'astro:assets';
 import missionImg from '@/assets/images/about/mission/mission.png';
 import mottoImg from '@/assets/images/about/mission/motto-poster.png';
 import visionImg from '@/assets/images/about/mission/vision.png';
+import MissionVisionCopy from '@/components/about/MissionVisionCopy.astro';
 
-const verses = ['Matthew 4:19', 'Luke 5:4–6', 'John 21:6–8', 'Matthew 24:14'];
+interface Block {
+  eyebrow: string;
+  title: string;
+  image: LocalImageProps['src'];
+  alt: string;
+  kind: 'mission' | 'vision' | 'motto';
+}
 
-const rowClass = 'flex flex-col border-t border-cream xl:flex-row xl:items-stretch';
-const textClass = 'flex flex-1 flex-col items-center gap-7.5 px-5 py-15 text-center md:px-12 xl:min-h-150 xl:justify-center xl:px-25 xl:py-0';
-const imageClass = 'h-75 w-full shrink-0 object-cover md:h-100 xl:h-150 xl:w-197.5';
+const blocks: Block[] = [
+  {
+    kind: 'mission',
+    eyebrow: 'Mission',
+    title: 'Equipping Believers for God’s Mission',
+    image: missionImg,
+    alt: 'A child watching the sunrise over a village at dawn',
+  },
+  {
+    kind: 'vision',
+    eyebrow: 'Vision',
+    title: 'A World Reached Through Faithful Servants',
+    image: visionImg,
+    alt: 'Mission team members praying with a local family over an open Bible',
+  },
+  {
+    kind: 'motto',
+    eyebrow: 'Our motto',
+    title: 'Serving Until the Nets Are Full',
+    image: mottoImg,
+    alt: 'Children lining up outside a village home to meet a mission team',
+  },
+];
 ---
 
-<section aria-label="Mission, vision and motto">
-  <div class={rowClass}>
-    <div class={textClass}>
-      <div class="flex w-full flex-col items-center gap-3.75">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Mission</p>
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-5xl">Equipping Believers for God’s Mission</h2>
-      </div>
-      <p class="max-w-126.25 text-base leading-none">
-        Crew419 equips and mobilizes believers for short-term mission trips to spread the Gospel, serving <span class="text-primary">“Til the Nets Are Full”.</span> Through partnerships with
-        local churches and ministries, we prepare participants before they go, support them while they serve, and encourage them to continue living on mission after they return home.
-      </p>
-    </div>
-    <Image src={missionImg} alt="A child watching the sunrise over a village at dawn" widths={[800, 1600]} class={imageClass} />
-  </div>
-
-  <div class={rowClass}>
-    <div class={textClass}>
-      <div class="flex w-full flex-col items-center gap-3.75">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Vision</p>
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-5xl">A World Reached Through Faithful Servants</h2>
-      </div>
-      <p class="max-w-135.5 text-base leading-none">
-        We believe every church can become a sending church and every believer can become an active participant in God’s mission. Our vision is to see lives transformed through Gospel-centered
-        mission experiences that strengthen local ministries and inspire lifelong discipleship.
-      </p>
-    </div>
-    <Image src={visionImg} alt="Mission team members praying with a local family over an open Bible" widths={[800, 1600]} class={imageClass} />
-  </div>
-
-  <div class={rowClass}>
-    <div class={textClass}>
-      <div class="flex w-full flex-col items-center gap-3.75">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Our motto</p>
-        <h2 class="text-3xl leading-[1.1] font-bold md:text-5xl">Serving Until the Nets Are Full</h2>
-      </div>
-
-      <div class="flex max-w-152.5 flex-col gap-2.5 text-base leading-none">
-        <p>
-          Our motto reflects our commitment to faithfully follow where God leads and continue sharing the Gospel until His mission is complete. Inspired by Jesus’ call to His disciples to cast
-          their nets in faith (Luke 5:4–6; John 21:6–8), <span class="text-primary">“Til the Nets Are Full”</span> reminds us that every person matters and every opportunity to serve has eternal
-          significance.
-        </p>
-        <p>
-          The phrase also honors the legacy of <span class="text-primary">Ron Bishop</span>, founder of SCORE International, whose words encouraged generations of believers to stay committed to
-          the Great Commission. Our mission continues until the Gospel is proclaimed among all nations.
-        </p>
-      </div>
-
-      <ul class="flex flex-wrap items-center justify-center gap-3.75 text-lg leading-none font-medium">
-        {
-          verses.map((verse, index) => (
-            <li class="flex items-center gap-3.75">
-              {index > 0 && <span class="bg-foreground size-1.5 rounded-full" aria-hidden="true" />}
-              {verse}
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-    <Image src={mottoImg} alt="Children lining up outside a village home to meet a mission team" widths={[800, 1600]} class={imageClass} />
+<section class="overflow-x-clip border-t border-cream pb-15" aria-label="Mission, vision and motto">
+  <div class="container">
+    {
+      blocks.map((block, index) => (
+        <div class:list={['flex flex-col xl:flex-row xl:items-center xl:gap-25', index > 0 && 'border-t border-cream']}>
+          <div class="min-w-0 flex-1">
+            <MissionVisionCopy eyebrow={block.eyebrow} title={block.title} kind={block.kind} />
+          </div>
+          <Image
+            src={block.image}
+            alt={block.alt}
+            widths={[800, 1600, 2400]}
+            sizes="(min-width: 1280px) min(50vw, 790px), calc(100vw - 2.5rem + 60px)"
+            class="-mr-15 h-75 w-[calc(100%+3.75rem)] object-cover md:h-100 xl:h-150 xl:w-197.5 xl:max-w-197.5 xl:shrink-0"
+          />
+        </div>
+      ))
+    }
   </div>
 </section>

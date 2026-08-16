@@ -6,6 +6,14 @@ import photo1 from '@/assets/images/regions/africa/stories/photo-1.png';
 import photo2 from '@/assets/images/regions/africa/stories/photo-2.png';
 import { Button } from '@/shared/ui/button';
 
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  class?: string;
+}
+
+const { eyebrow = 'Real Stories', heading = 'Featured Stories from This Region', class: className = 'py-30' } = Astro.props;
+
 const stories = [
   {
     label: 'Testimony',
@@ -32,12 +40,12 @@ const stories = [
 ];
 ---
 
-<section class="py-15 md:py-30" aria-labelledby="region-stories-heading" data-region-stories>
+<section class:list={['relative z-20', className]} aria-labelledby="region-stories-heading" data-region-stories>
   <div class="container max-w-[1520px]">
     <div class="relative">
       <div class="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
-        <p class="text-muted-foreground leading-none font-bold uppercase">Real Stories</p>
-        <h2 id="region-stories-heading" class="text-3xl  font-bold md:text-5xl">Featured Stories from This Region</h2>
+        <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+        <h2 id="region-stories-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
       </div>
 
       <div class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0">

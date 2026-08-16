@@ -14,7 +14,6 @@ import Faq from '@/components/home/Faq.astro';
 import FindYourMissionPath from '@/components/home/FindYourMissionPath.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
 import Impact from '@/components/home/Impact.astro';
-import LifeInMission from '@/components/home/LifeInMission.astro';
 
 const whoWeServeCards = [
   {
@@ -101,11 +100,10 @@ const faqItems = [
   <Challenge />
   <PlanningChallenges />
   <Difference />
-  <FindYourMissionPath eyebrow="Who We Build Trips For" heading="Designed for Churches & Christian Schools" cards={whoWeServeCards} />
+  <FindYourMissionPath class="py-30" eyebrow="Who We Build Trips For" heading="Designed for Churches & Christian Schools" cards={whoWeServeCards} />
   <HowItWorks bg={howItWorksBg} />
   <Included />
   <Impact eyebrow="Impact & Stories" heading="Trusted by Churches Across Multiple Countries" stats={impactStats} />
   <Faq items={faqItems} />
   <Cta />
-  <LifeInMission />
 </Layout>

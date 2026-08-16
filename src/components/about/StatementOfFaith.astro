@@ -3,6 +3,7 @@ import creation from '@/assets/images/about/beliefs/creation.png';
 import scripture from '@/assets/images/about/beliefs/scripture.png';
 import trinity from '@/assets/images/about/beliefs/trinity.png';
 import { Button } from '@/shared/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
 
 const beliefs = [
   {
@@ -21,19 +22,76 @@ const beliefs = [
     text: 'We believe Jesus Christ is the only mediator between God and humanity.',
   },
 ];
+
+const statements = [
+  {
+    title: 'The Trinity',
+    text: 'We believe that there is one God, eternally existent in three persons: Father, Son and Holy Spirit.',
+  },
+  {
+    title: 'The Authority of Scripture',
+    text: 'We believe the Bible to be the inspired, the only infallible, authoritative Word of God.',
+  },
+  {
+    title: 'Creation and the Fall',
+    text: 'We believe by His word and for His glory, God freely created everything. He made man and woman in his own image and they sinned against God and, apart from grace, are incapable of returning to right relationship with God.',
+  },
+  {
+    title: 'Jesus Christ',
+    text: 'We believe in the deity of our Lord Jesus Christ, in His virgin birth, in His sinless life, in His miracles, in His vicarious and atoning death through His shed blood, in His bodily resurrection, in His ascension to the right hand of the Father, and in His personal return in power and glory.',
+  },
+  {
+    title: 'Salvation Through Christ',
+    text: 'We believe Jesus Christ is the only mediator between God and humankind and by His death and resurrection, the penalty of human sin can be removed and we can be reconciled to God.',
+  },
+  {
+    title: 'The Holy Spirit',
+    text: 'We believe the Holy Spirit is the divine agent of sanctification. By the ministry of the Holy Spirit, people are enabled to know God’s grace, experience God’s love in Christ, and live a Christ-centered life.',
+  },
+  {
+    title: 'Resurrection and Eternal Destiny',
+    text: 'We believe in the resurrection of both the saved and the lost; they that are saved unto eternal life with God and they that are lost unto eternal separation from God.',
+  },
+  {
+    title: 'Unity in Believers',
+    text: 'We believe in the spiritual unity of believers in our Lord Jesus Christ, with equality across racial, gender, and class differences.',
+  },
+];
 ---
 
-<section class="py-15 md:py-30" aria-labelledby="statement-of-faith-heading">
+<section class="py-15" aria-labelledby="statement-of-faith-heading">
   <div class="container">
     <div class="mx-auto flex max-w-217.75 flex-col items-center gap-7.5 text-center">
       <div class="flex w-full flex-col items-center gap-3.75">
         <p class="text-muted-foreground text-base leading-none font-bold uppercase">Our beliefs</p>
-        <h2 id="statement-of-faith-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Statement of Faith</h2>
+        <h2 id="statement-of-faith-heading" class="text-3xl font-bold md:text-5xl">Statement of Faith</h2>
       </div>
       <p class="max-w-107.25 text-base leading-none">
         Our faith shapes everything we do. Crew419 is committed to biblical teaching and Gospel-centered ministry. Read our complete Statement of Faith below.
       </p>
-      <Button href="/about/statement-of-faith" size="lg" class="w-82.5 max-w-full">Read Full Statement of Faith</Button>
+      <Dialog id="statement-of-faith-dialog">
+        <DialogTrigger asChild class="w-82.5 max-w-full">
+          <Button size="lg" class="w-full">Read Full Statement of Faith</Button>
+        </DialogTrigger>
+        <DialogContent class="sm:max-w-[865px] p-12.5">
+          <div class="flex flex-col gap-12.5">
+            <DialogHeader class="text-center sm:text-center">
+              <DialogTitle class="text-3xl font-bold tracking-normal sm:text-5xl">Statement of Faith</DialogTitle>
+              <DialogDescription class="sr-only">Crew419’s complete statement of faith.</DialogDescription>
+            </DialogHeader>
+            <div class="flex flex-col gap-7.5 text-center">
+              {
+                statements.map((statement) => (
+                  <article class="flex flex-col gap-5 border-b border-muted-foreground/50 pb-7.5 last:border-b-0 last:pb-0">
+                    <h3 class="text-2xl  font-bold">{statement.title}</h3>
+                    <p class="max-w-md mx-auto text-center leading-none">{statement.text}</p>
+                  </article>
+                ))
+              }
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
 
     <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -41,7 +99,7 @@ const beliefs = [
         beliefs.map((belief) => (
           <article class="bg-cream flex flex-col gap-7.5 rounded-lg p-7.5">
             <span class="bg-muted-foreground block size-10 shrink-0" style={`mask: url(${belief.icon.src}) center / contain no-repeat`} aria-hidden="true" />
-            <h3 class="text-2xl leading-[1.1] font-bold">{belief.title}</h3>
+            <h3 class="text-2xl  font-bold">{belief.title}</h3>
             <p class="text-muted-foreground text-base leading-none">{belief.text}</p>
           </article>
         ))

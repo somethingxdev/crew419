@@ -2,29 +2,20 @@
 import { Image } from 'astro:assets';
 import photo1 from '@/assets/images/trip-details/about/photo-1.png';
 import photo2 from '@/assets/images/trip-details/about/photo-2.png';
+import PhotoPairSection from '@/components/shared/PhotoPairSection.astro';
 ---
 
-<section class="py-15 md:py-20" aria-labelledby="about-mission-heading">
-  <div class="container flex flex-col items-center gap-12.5 xl:flex-row xl:items-center xl:gap-25">
-    <div class="flex shrink-0 items-center justify-center">
-      <figure class="bg-cream w-60 shrink-0 -rotate-6 rounded-sm p-3 pb-12 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] sm:w-87.5 sm:pb-15">
-        <Image src={photo1} alt="Volunteers moving building materials with a wheelbarrow" widths={[800]} class="aspect-square size-full rounded-sm object-cover" />
-      </figure>
-      <figure class="bg-cream -ml-10 w-60 shrink-0 translate-y-10 rotate-3 rounded-sm p-3 pb-12 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] sm:-ml-14 sm:w-82.5 sm:pb-15">
-        <Image src={photo2} alt="A volunteer teaching a classroom of local schoolchildren" widths={[800]} class="aspect-square size-full rounded-sm object-cover" />
-      </figure>
-    </div>
+<PhotoPairSection labelledBy="about-mission-heading">
+  <Image slot="image-left" src={photo1} alt="Volunteers moving building materials with a wheelbarrow" width={600} height={600} />
+  <Image slot="image-right" src={photo2} alt="A volunteer teaching a classroom of local schoolchildren" width={600} height={600} />
 
-    <div class="flex max-w-164 flex-col gap-7.5 text-center xl:text-left">
-      <div class="flex flex-col gap-3">
-        <p class="text-muted-foreground leading-none font-bold uppercase">About the mission</p>
-        <h2 id="about-mission-heading" class="text-3xl  font-bold md:text-5xl">Serve Local Communities with Purpose</h2>
-      </div>
-      <p class="max-w-129.25 leading-tight">
-        Partner with trusted local churches as you support outreach programs designed to strengthen communities and share the love of Christ. Throughout the week you’ll participate in
-        children’s ministry, community visits, evangelism, prayer, and practical service projects while building lasting relationships with local believers. No previous mission experience
-        is required – just a willing heart and a desire to serve.
-      </p>
-    </div>
+  <div class="flex w-full flex-col items-start gap-4">
+    <p class="text-muted-foreground leading-none font-bold uppercase">About the mission</p>
+    <h2 id="about-mission-heading" class="text-3xl font-bold md:text-5xl">Serve Local Communities with Purpose</h2>
   </div>
-</section>
+  <p class="max-w-129.25 leading-tight">
+    Partner with trusted local churches as you support outreach programs designed to strengthen communities and share the love of Christ. Throughout the week you’ll participate in children’s ministry,
+    community visits, evangelism, prayer, and practical service projects while building lasting relationships with local believers. No previous mission experience is required – just a willing heart
+    and a desire to serve.
+  </p>
+</PhotoPairSection>

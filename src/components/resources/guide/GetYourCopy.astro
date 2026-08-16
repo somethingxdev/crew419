@@ -17,12 +17,14 @@ const fields = [
   { name: 'lastName', placeholder: 'Last Name', type: 'text', required: true },
   { name: 'email', placeholder: 'Email', type: 'email', required: true },
   { name: 'organization', placeholder: 'Church / Organization (optional)', type: 'text', required: false },
-];
+] as const;
 ---
 
 <section id="get-your-copy" class="relative my-15 py-25 md:py-40" aria-labelledby="get-your-copy-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover" />
+    <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
+      <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover object-center" />
+    </div>
   </div>
 
   <div class="relative container">
@@ -70,3 +72,32 @@ const fields = [
     <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
   </div>
 </section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('#get-your-copy');
+  const layer = section?.querySelector<HTMLElement>('[data-parallax-bg]');
+
+  if (section && layer) {
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const syncParallax = () => {
+        gsap.set(layer, { y: -section.getBoundingClientRect().top });
+      };
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        refreshPriority: 1,
+        onUpdate: syncParallax,
+        onRefresh: syncParallax,
+      });
+    });
+  }
+</script>

@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import video from '@/assets/images/donate/video.png';
+---
+
+<section id="join-mission" class="relative z-20 py-15 xl:py-20" aria-labelledby="join-mission-heading">
+  <div class="container flex flex-col items-stretch gap-10 xl:flex-row xl:items-center xl:justify-between">
+    <div class="flex w-full max-w-185 flex-col gap-7.5">
+      <div class="flex max-w-151 flex-col gap-7.5">
+        <div class="flex flex-col gap-4">
+          <p class="text-muted-foreground leading-none font-bold uppercase">Join the mission</p>
+          <h2 id="join-mission-heading" class="text-3xl font-bold md:text-5xl">Help More People Answer God’s Call</h2>
+        </div>
+        <p class="max-w-90 leading-none">Every donation helps remove barriers so more people can serve, grow, and share the Gospel.</p>
+      </div>
+
+      <Image src={video} alt="A Crew419 team member speaking from a home office" widths={[800, 1600]} class="aspect-740/428 h-auto w-full rounded-lg object-cover" />
+    </div>
+
+    <div class="bg-secondary flex min-h-125 w-full max-w-185 items-center justify-center rounded-lg xl:min-h-164">
+      <p class="text-cream leading-none font-bold uppercase">Givebutter Embed</p>
+    </div>
+  </div>
+</section>

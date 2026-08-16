@@ -17,6 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
+server/
+docs/
+.railway/
+
 # macOS-specific files
 .DS_Store
 

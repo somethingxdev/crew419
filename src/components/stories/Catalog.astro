@@ -160,7 +160,7 @@ const pages = [1, 2, 3];
 const currentPage = 1;
 ---
 
-<section class="pt-20 pb-15 md:pb-30 xl:pt-30" aria-labelledby="stories-catalog-heading" data-stories-catalog>
+<section class="pt-20 pb-15 xl:pt-30" aria-labelledby="stories-catalog-heading" data-stories-catalog>
   <div class="container">
     <h2 id="stories-catalog-heading" class="sr-only">All stories</h2>
 
@@ -196,7 +196,7 @@ const currentPage = 1;
               </a>
               <div class="mt-5 flex flex-1 flex-col">
                 <p class="text-muted-foreground text-base leading-none font-bold uppercase">{typeLabels[story.type]}</p>
-                <h3 class="mt-2.5 line-clamp-2 min-h-13 text-2xl leading-[1.1] font-bold">
+                <h3 class="mt-2.5 line-clamp-2 min-h-13 text-2xl  font-bold">
                   <a href={`/stories/${story.slug}`} class="hover:text-primary transition-colors">
                     {story.title}
                   </a>

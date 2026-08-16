@@ -71,7 +71,7 @@ const polaroids: Polaroid[] = [
 ];
 ---
 
-<section id="why-crew419" class="relative z-30 pt-15 pb-30" aria-labelledby="why-crew419-heading" data-why-crew419>
+<section id="why-crew419" class="relative z-30 py-30" aria-labelledby="why-crew419-heading" data-why-crew419>
   <div class="mx-auto flex max-w-4xl flex-col items-center gap-8 px-5 text-center md:px-12">
     <div class="flex flex-col items-center gap-4" data-why-copy>
       <p class="text-muted-foreground leading-none font-bold uppercase">Why Crew419 exists</p>
@@ -117,6 +117,7 @@ const polaroids: Polaroid[] = [
     const cards = gsap.utils.toArray<HTMLElement>('[data-polaroid]', section);
     const photos = gsap.utils.toArray<HTMLElement>('[data-polaroid-photo]', section);
     const copy = gsap.utils.toArray<HTMLElement>('[data-why-copy]', section);
+    const gallery = section.querySelector<HTMLElement>('[data-why-gallery]');
     const mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: reduce)', () => {
@@ -132,65 +133,68 @@ const polaroids: Polaroid[] = [
     });
 
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const ctx = gsap.context(() => {
-        gsap.set(copy, { autoAlpha: 0, y: 28 });
-        gsap.set(cards, { autoAlpha: 0 });
-        gsap.set(photos, { scale: 1.22 });
+      gsap.set(copy, { autoAlpha: 0, y: 28 });
+      gsap.set(cards, { autoAlpha: 0 });
+      gsap.set(photos, { scale: 1.22 });
 
-        const tl = gsap.timeline({
-          defaults: { ease: 'power3.out' },
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 78%',
-            once: true,
+      gsap.to(copy, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: copy[0] ?? section,
+          start: 'top 78%',
+          once: true,
+        },
+      });
+
+      if (!gallery) return;
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        scrollTrigger: {
+          trigger: gallery,
+          start: 'top 82%',
+          once: true,
+        },
+      });
+
+      tl.fromTo(
+        cards,
+        {
+          autoAlpha: 0,
+          y: 160,
+          scale: 0.78,
+          x: (i) => (i - 2) * 70,
+          rotation: (i, el) => {
+            const rest = Number((el as HTMLElement).dataset.rotate);
+            return rest + (i % 2 === 0 ? -22 : 24);
           },
-        });
-
-        tl.to(copy, {
+        },
+        {
           autoAlpha: 1,
           y: 0,
-          duration: 0.7,
-          stagger: 0.12,
-        });
+          x: 0,
+          scale: 1,
+          rotation: (i, el) => Number((el as HTMLElement).dataset.rotate),
+          duration: 1.25,
+          ease: 'back.out(1.15)',
+          stagger: { each: 0.13, from: 'center' },
+        },
+      );
 
-        tl.fromTo(
-          cards,
-          {
-            autoAlpha: 0,
-            y: 160,
-            scale: 0.78,
-            x: (i) => (i - 2) * 70,
-            rotation: (i, el) => {
-              const rest = Number((el as HTMLElement).dataset.rotate);
-              return rest + (i % 2 === 0 ? -22 : 24);
-            },
-          },
-          {
-            autoAlpha: 1,
-            y: 0,
-            x: 0,
-            scale: 1,
-            rotation: (i, el) => Number((el as HTMLElement).dataset.rotate),
-            duration: 1.25,
-            ease: 'back.out(1.15)',
-            stagger: { each: 0.13, from: 'center' },
-          },
-          '-=0.35',
-        );
-
-        tl.to(
-          photos,
-          {
-            scale: 1,
-            duration: 1.45,
-            ease: 'power2.out',
-            stagger: { each: 0.13, from: 'center' },
-          },
-          '<',
-        );
-      }, section);
-
-      return () => ctx.revert();
+      tl.to(
+        photos,
+        {
+          scale: 1,
+          duration: 1.45,
+          ease: 'power2.out',
+          stagger: { each: 0.13, from: 'center' },
+        },
+        '<',
+      );
     });
   }
 </script>

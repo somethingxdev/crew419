@@ -1,0 +1,115 @@
+---
+interface Props {
+  id?: string;
+  labelledBy: string;
+  class?: string;
+}
+
+const { id, labelledBy, class: className = 'py-15' } = Astro.props;
+---
+
+<section {id} class:list={['relative z-30 overflow-x-clip', className]} aria-labelledby={labelledBy} data-photo-pair>
+  <div class="container flex flex-col items-center gap-10 xl:flex-row xl:items-center xl:justify-between xl:gap-12">
+    <div class="relative aspect-[610/515] w-full min-w-0 max-w-152.5">
+      <div class="absolute top-0 left-0 flex h-[82.06%] w-[62.9%] items-center justify-center will-change-transform" data-photo-pair-card>
+        <figure class="bg-cream flex w-[84.44%] -rotate-10 items-center rounded-sm px-[3.7%] pt-[3.7%] pb-[18.52%] shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
+          <div class="relative aspect-square w-full overflow-hidden rounded-sm [&_img]:size-full [&_img]:origin-center [&_img]:object-cover" data-photo-pair-photo>
+            <slot name="image-left" />
+          </div>
+        </figure>
+      </div>
+
+      <div class="absolute top-[21.63%] left-[40.87%] z-10 flex h-[78.41%] w-[59.2%] items-center justify-center will-change-transform" data-photo-pair-card>
+        <figure class="bg-cream flex w-[89.73%] rotate-6 items-center rounded-sm px-[3.7%] pt-[3.7%] pb-[18.52%] shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
+          <div class="relative aspect-square w-full overflow-hidden rounded-sm [&_img]:size-full [&_img]:origin-center [&_img]:object-cover" data-photo-pair-photo>
+            <slot name="image-right" />
+          </div>
+        </figure>
+      </div>
+    </div>
+
+    <div class="flex w-full min-w-0 max-w-185 flex-col items-start gap-7.5">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll<HTMLElement>('[data-photo-pair]').forEach((section) => {
+    const cards = gsap.utils.toArray<HTMLElement>('[data-photo-pair-card]', section);
+    const photos = gsap.utils.toArray<HTMLElement>('[data-photo-pair-photo]', section);
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: reduce)', () => {
+      gsap.set(cards, { autoAlpha: 1, xPercent: 0, yPercent: 0, rotation: 0, scale: 1 });
+      gsap.set(photos, { scale: 1 });
+    });
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const ctx = gsap.context(() => {
+        gsap.set(cards, { autoAlpha: 0 });
+        gsap.set(photos, { scale: 1.18 });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power3.out' },
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 68%',
+            once: true,
+          },
+        });
+
+        tl.fromTo(
+          cards,
+          {
+            autoAlpha: 0,
+            xPercent: (i) => (i === 0 ? -80 : -105),
+            yPercent: (i) => (i === 0 ? 10 : -8),
+            rotation: (i) => (i === 0 ? -14 : 16),
+            scale: 0.84,
+          },
+          {
+            autoAlpha: 1,
+            xPercent: 0,
+            yPercent: 0,
+            rotation: 0,
+            scale: 1,
+            duration: 1.15,
+            ease: 'back.out(1.18)',
+            stagger: 0.2,
+          },
+        );
+
+        tl.to(
+          photos,
+          {
+            scale: 1,
+            duration: 1.35,
+            ease: 'power2.out',
+            stagger: 0.2,
+          },
+          '<',
+        );
+      }, section);
+
+      return () => ctx.revert();
+    });
+  });
+</script>
+
+<style>
+  [data-photo-pair-card] {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-photo-pair-card] {
+      opacity: 1;
+    }
+  }
+</style>

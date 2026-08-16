@@ -13,13 +13,32 @@ interface SitemapGroup {
 const groups: SitemapGroup[] = [
   {
     title: 'Main',
-    links: [{ label: 'Home', href: '/', path: '/' }],
+    links: [
+      { label: 'Home', href: '/', path: '/' },
+      { label: 'About', href: '/about', path: '/about' },
+      { label: 'Churches', href: '/churches', path: '/churches' },
+      { label: 'Schools', href: '/school', path: '/school' },
+      { label: 'Sports', href: '/sports', path: '/sports' },
+      { label: 'Individuals', href: '/individuals', path: '/individuals' },
+      { label: 'Donate', href: '/donate', path: '/donate' },
+    ],
   },
   {
     title: 'Mission Trips',
     links: [
       { label: 'All Trips', href: '/trips', path: '/trips' },
+      { label: 'Custom Trips', href: '/trips/custom', path: '/trips/custom' },
       { label: 'Africa', href: '/trips/africa', path: '/trips/africa' },
+      { label: 'Zambia Community Outreach', href: '/trips/zambia-community-outreach', path: '/trips/zambia-community-outreach' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Discipleship Guide', href: '/resources/discipleship-guide', path: '/resources/discipleship-guide' },
+      { label: 'Fundraising Guide', href: '/resources/fundraising-guide', path: '/resources/fundraising-guide' },
+      { label: 'Travel Guides', href: '/resources/travel-guides', path: '/resources/travel-guides' },
+      { label: 'Kenya Travel Guide', href: '/resources/travel-guides/kenya', path: '/resources/travel-guides/kenya' },
     ],
   },
   {
@@ -31,7 +50,12 @@ const groups: SitemapGroup[] = [
   },
   {
     title: 'Other',
-    links: [{ label: 'Thank You', href: '/thank-you', path: '/thank-you' }],
+    links: [
+      { label: 'Thank You', href: '/thank-you', path: '/thank-you' },
+      { label: 'Privacy Policy', href: '/privacy-policy', path: '/privacy-policy' },
+      { label: 'Terms of Service', href: '/terms-of-service', path: '/terms-of-service' },
+      { label: 'Refund Policy', href: '/refund-policy', path: '/refund-policy' },
+    ],
   },
 ];
 ---
@@ -40,7 +64,7 @@ const groups: SitemapGroup[] = [
   <div class="container">
     <div class="mx-auto flex w-full max-w-222.5 flex-col items-center gap-4 text-center">
       <p class="text-muted-foreground text-base leading-none font-bold uppercase">Site map</p>
-      <h1 id="sitemap-heading" class="text-4xl leading-[1.1] font-bold text-foreground md:text-6xl xl:text-7xl">All Pages</h1>
+      <h1 id="sitemap-heading" class="text-4xl  font-bold text-foreground md:text-6xl xl:text-7xl">All Pages</h1>
       <p class="mt-4 max-w-132 text-lg leading-none font-medium text-foreground/80">A complete list of pages currently live on Crew419.</p>
     </div>
 
@@ -54,8 +78,8 @@ const groups: SitemapGroup[] = [
             <ul class="mt-6 space-y-4">
               {group.links.map((link) => (
                 <li>
-                  <a href={link.href} class="group flex flex-col gap-1.5">
-                    <span class="text-2xl leading-[1.1] font-bold transition-colors group-hover:text-primary">{link.label}</span>
+                  <a href={link.href} target="_blank" class="group flex flex-col gap-1.5">
+                    <span class="text-2xl  font-bold transition-colors group-hover:text-primary">{link.label}</span>
                     <span class="text-muted-foreground text-base leading-none">{link.path}</span>
                   </a>
                 </li>

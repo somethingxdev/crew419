@@ -42,6 +42,24 @@
       "version": "3.1.1",
       "framework": "astro",
       "registry": "default"
+    },
+    {
+      "name": "dialog",
+      "version": "2.0.2",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "prose",
+      "version": "1.1.0",
+      "framework": "astro",
+      "registry": "default"
+    },
+    {
+      "name": "progress",
+      "version": "2.0.3",
+      "framework": "astro",
+      "registry": "default"
     }
   ],
   "tailwind": {

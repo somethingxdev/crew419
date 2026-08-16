@@ -2,7 +2,6 @@
 import getYourCopyBg from '@/assets/images/resources/discipleship/get-your-copy-bg.png';
 import heroBg from '@/assets/images/resources/discipleship/hero-bg.png';
 import Layout from '@/layouts/Layout.astro';
-import LifeInMission from '@/components/home/LifeInMission.astro';
 import ResourcesCta from '@/components/resources/Cta.astro';
 import GuideCards from '@/components/resources/guide/Cards.astro';
 import GetYourCopy from '@/components/resources/guide/GetYourCopy.astro';
@@ -44,6 +43,5 @@ const cards = [
     text="Planning a mission trip can feel overwhelming. Our free guide gives you practical steps, helpful resources, and proven strategies to prepare your team, raise support, and create a meaningful mission experience from start to finish."
   />
   <GetYourCopy bg={getYourCopyBg} />
-  <ResourcesCta secondaryLabel="Find your destination" secondaryHref="/trips" />
-  <LifeInMission />
+  <ResourcesCta class="py-30" secondaryLabel="Find your destination" secondaryHref="/trips" />
 </Layout>

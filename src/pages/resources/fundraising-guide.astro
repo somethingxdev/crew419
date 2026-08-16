@@ -2,7 +2,6 @@
 import getYourCopyBg from '@/assets/images/resources/fundraising/get-your-copy-bg.png';
 import heroBg from '@/assets/images/resources/fundraising/hero-bg.png';
 import Layout from '@/layouts/Layout.astro';
-import LifeInMission from '@/components/home/LifeInMission.astro';
 import ResourcesCta from '@/components/resources/Cta.astro';
 import GuideCards from '@/components/resources/guide/Cards.astro';
 import GetYourCopy from '@/components/resources/guide/GetYourCopy.astro';
@@ -44,6 +43,5 @@ const cards = [
     text="Whether you’re leading a team or joining a trip, this guide will help you prepare spiritually, organize your plans, and confidently invite others to be part of your mission."
   />
   <GetYourCopy bg={getYourCopyBg} />
-  <ResourcesCta secondaryLabel="Find your destination" secondaryHref="/trips" />
-  <LifeInMission />
+  <ResourcesCta class="py-30" secondaryLabel="Find your destination" secondaryHref="/trips" />
 </Layout>
