@@ -1,0 +1,30 @@
+---
+const cards = [
+  'Teams need purpose beyond winning',
+  'International travel is difficult to organize',
+  'Coaches need trusted partners',
+  'Players want meaningful experiences',
+];
+---
+
+<section class="relative z-20 py-15 md:py-30" aria-labelledby="more-than-the-game-heading">
+  <div class="container flex flex-col items-center gap-12.5">
+    <div class="flex max-w-170 flex-col items-center gap-7.5 text-center">
+      <div class="flex flex-col items-center gap-4">
+        <p class="text-muted-foreground leading-none font-bold uppercase">More than the game</p>
+        <h2 id="more-than-the-game-heading" class="text-3xl font-bold md:text-5xl">Your Team Was Made for More Than Competition</h2>
+      </div>
+      <p class="leading-none">Sports build character – but mission trips build faith, unity, and eternal impact.</p>
+    </div>
+
+    <div class="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-4">
+      {
+        cards.map((title) => (
+          <article class="bg-cream flex min-h-45 items-center justify-center rounded-lg p-7.5">
+            <h3 class="text-center text-2xl font-bold">{title}</h3>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

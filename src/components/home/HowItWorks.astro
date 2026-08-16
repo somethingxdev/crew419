@@ -1,9 +1,15 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, type LocalImageProps } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import bg from '@/assets/images/home/how-it-works/bg.png';
+import defaultBg from '@/assets/images/home/how-it-works/bg.png';
 import { Button } from '@/shared/ui/button';
+
+interface Props {
+  bg?: LocalImageProps['src'];
+}
+
+const { bg = defaultBg } = Astro.props;
 
 const steps = [
   {
@@ -29,9 +35,7 @@ const steps = [
 
 <section id="how-it-works" class="relative py-15 md:py-0" aria-labelledby="how-it-works-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
-      <Image src={bg} alt="" widths={[1600]} class="size-full object-cover object-bottom" />
-    </div>
+    <Image src={bg} alt="" class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/20"></div>
   </div>
   <div class="container">
@@ -39,10 +43,10 @@ const steps = [
       <div class="relative mx-auto flex flex-col items-center gap-10">
         <div class="flex flex-col gap-8 text-center text-cream">
           <div class="flex flex-col gap-4">
-            <p class="text-base leading-none font-bold uppercase opacity-65">How it works</p>
+            <p class="leading-none font-bold uppercase opacity-65">How it works</p>
             <h2 id="how-it-works-heading" class="text-3xl leading-none font-bold md:text-5xl">Mission Trips Done Right</h2>
           </div>
-          <p class="text-base leading-none">A simple process that helps you serve with confidence.</p>
+          <p class="leading-none">A simple process that helps you serve with confidence.</p>
         </div>
 
         <div class="flex w-full flex-col items-center gap-5 md:relative md:block md:h-105 md:w-115">
@@ -56,10 +60,10 @@ const steps = [
                 ]}
               >
                 <div class="flex flex-col gap-5">
-                  <p class="text-base leading-none font-bold uppercase opacity-50">{item.step}</p>
+                  <p class="leading-none font-bold uppercase opacity-50">{item.step}</p>
                   <h3 class="text-2xl leading-none font-bold">{item.title}</h3>
                 </div>
-                <p class="text-base leading-none">{item.text}</p>
+                <p class="leading-none">{item.text}</p>
               </article>
             ))
           }
@@ -89,25 +93,7 @@ const steps = [
 
   if (section && stage) {
     const cards = gsap.utils.toArray<HTMLElement>('[data-step-card]', section);
-    const layer = section.querySelector<HTMLElement>('[data-parallax-bg]');
     const mm = gsap.matchMedia();
-
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      if (!layer) return;
-
-      const syncParallax = () => {
-        gsap.set(layer, { y: -section.getBoundingClientRect().top });
-      };
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top bottom',
-        end: 'bottom top',
-        refreshPriority: 1,
-        onUpdate: syncParallax,
-        onRefresh: syncParallax,
-      });
-    });
 
     const hiddenY = (card: HTMLElement) => {
       const currentY = Number(gsap.getProperty(card, 'y')) || 0;

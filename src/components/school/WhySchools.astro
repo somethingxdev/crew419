@@ -1,0 +1,46 @@
+---
+const cards = [
+  {
+    title: 'Finding age-appropriate opportunities',
+    text: 'Every student group is different. We help design mission experiences that match your students’ age, maturity, and abilities.',
+  },
+  {
+    title: 'Balancing education and ministry',
+    text: 'Our trips combine meaningful service with cultural learning, leadership development, and spiritual growth.',
+  },
+  {
+    title: 'Managing travel logistics',
+    text: 'From flights and accommodations to transportation and scheduling, we coordinate every detail for your group.',
+  },
+  {
+    title: 'Keeping students safe',
+    text: 'We work with trusted ministry partners and provide guidance, preparation, and support throughout the trip.',
+  },
+];
+---
+
+<section class="relative z-20 py-15 md:py-30" aria-labelledby="why-schools-heading">
+  <div class="container flex flex-col items-center gap-12.5">
+    <div class="flex max-w-195 flex-col items-center gap-7.5 text-center">
+      <div class="flex flex-col items-center gap-4">
+        <p class="text-muted-foreground leading-none font-bold uppercase">Why schools choose crew419</p>
+        <h2 id="why-schools-heading" class="text-3xl font-bold md:text-5xl">Education Doesn’t End in the Classroom</h2>
+      </div>
+      <p class="max-w-130 leading-none">
+        The most meaningful lessons aren’t always taught behind a desk. Mission trips give students the opportunity to grow in faith, develop leadership skills, and experience another culture while
+        serving others together.
+      </p>
+    </div>
+
+    <div class="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-4">
+      {
+        cards.map((item) => (
+          <article class="bg-cream flex min-h-60 flex-col justify-between gap-7.5 rounded-lg p-7.5">
+            <h3 class="text-2xl font-bold">{item.title}</h3>
+            <p class="text-lg leading-none font-medium">{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

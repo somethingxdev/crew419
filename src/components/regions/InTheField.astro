@@ -1,5 +1,5 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
+import { Image } from 'astro:assets';
 import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
 import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import decorBottom from '@/assets/images/decor-bottom.png';
@@ -13,13 +13,7 @@ import photo5 from '@/assets/images/regions/africa/in-field/photo-5.png';
 import photo6 from '@/assets/images/regions/africa/in-field/photo-6.png';
 import { Button } from '@/shared/ui/button';
 
-interface Photo {
-  image: LocalImageProps['src'];
-  alt: string;
-  class: string;
-}
-
-const photos: Photo[] = [
+const photos = [
   { image: photo1, alt: 'A mission team praying with a local family', class: 'h-93 -rotate-6' },
   { image: photo5, alt: 'Volunteers handing out supplies in a village', class: 'h-65 rotate-6' },
   { image: photo6, alt: 'A volunteer laughing with local children', class: 'h-93 -rotate-3' },
@@ -37,8 +31,8 @@ const photos: Photo[] = [
 
   <div class="relative container z-10">
     <div class="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center text-cream">
-      <p class="text-base leading-none font-bold uppercase opacity-80">In the field</p>
-      <h2 id="in-field-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">See the Mission in Action</h2>
+      <p class="leading-none font-bold uppercase opacity-80">In the field</p>
+      <h2 id="in-field-heading" class="text-3xl  font-bold md:text-5xl">See the Mission in Action</h2>
     </div>
 
     <div class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0">

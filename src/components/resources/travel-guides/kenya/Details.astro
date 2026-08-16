@@ -1,0 +1,169 @@
+---
+const textSections = [
+  {
+    title: 'Travel & Arrival',
+    text: 'Your journey begins long before you arrive at your destination. Crew419 will provide detailed flight information, recommended arrival times, airport meeting instructions, and transportation details before departure. Once you land, our local team will guide you through the arrival process and ensure you safely reach your accommodations, allowing you to begin your mission with confidence and peace of mind.',
+  },
+  {
+    title: 'Entry Requirements',
+    text: 'Every destination has its own entry requirements, so it’s important to review them well before your departure. Depending on the country, you may need a tourist visa, additional entry forms, or proof of vaccinations. Crew419 will provide destination-specific guidance and help you understand exactly which documents are required for your trip.',
+  },
+  {
+    title: 'Passport',
+    text: 'Your passport should remain valid for at least six months beyond your planned return date. We also recommend carrying both printed and digital copies of your passport in case of emergencies. If your passport is close to expiring, renew it before registering for an international mission trip.',
+  },
+];
+
+const packingColumns = [
+  {
+    label: 'Clothing',
+    items: ['Lightweight shirts', 'Long pants', 'Comfortable walking shoes', 'Church-appropriate clothing', 'Rain jacket', 'Hat'],
+  },
+  {
+    label: 'Toiletries',
+    items: ['Toothbrush & toothpaste', 'Shampoo', 'Sunscreen', 'Insect repellent', 'Hand sanitizer', 'Personal medications'],
+  },
+  {
+    label: 'Other Essentials',
+    items: ['Bible', 'Notebook', 'Reusable water bottle', 'Phone charge', 'Travel adapter', 'Small backpack'],
+  },
+];
+
+const whatNotToPack = ['Expensive jewelry', 'Valuable electronics', 'Large amounts of cash', 'Revealing clothing', 'Weapons or prohibited items'];
+
+const middleSections = [
+  {
+    title: 'Money',
+    text: 'The local currency for this destination is the Kenyan Shilling (KES). While credit and debit cards are accepted in larger cities, cash is recommended for smaller purchases and rural areas. Before traveling, notify your bank of your international trip and consider exchanging a small amount of local currency before arrival.',
+  },
+  {
+    title: 'Immunizations & COVID Policy',
+    text: 'Your health and safety are important to us. Please consult your healthcare provider about recommended vaccinations and any destination-specific medical advice before traveling. Entry requirements related to COVID-19 or other health regulations may change, so Crew419 will provide the latest updates before your departure.',
+  },
+  {
+    title: 'Communication',
+    text: 'Internet access is available in most accommodations, although connection speeds may vary depending on the location. Local SIM cards can usually be purchased upon arrival if needed. Throughout the trip, Crew419 leaders remain available to assist participants and maintain communication with the entire team.',
+  },
+  {
+    title: 'Important Phone Numbers',
+    text: 'Before traveling, save all important contact information both on your phone and in a printed copy. This should include your Crew419 trip leader, local ministry coordinator, emergency services, your country’s embassy, and your travel insurance emergency hotline. Having quick access to these numbers can be invaluable during your trip.',
+  },
+];
+
+const dosAndDonts = [
+  {
+    label: 'Do',
+    items: ['Dress modestly', 'Respect local customs and traditions', 'Ask permission before taking photos', 'Support local churches and leaders', 'Learn a few local greetings'],
+  },
+  {
+    label: 'Don’t',
+    items: ['Give money directly to children', 'Criticize local culture', 'Photograph people without permission', 'Travel alone without informing your leader', 'Display expensive valuables'],
+  },
+];
+
+const closingSections = [
+  {
+    title: 'Ministry Information',
+    text: 'Every Crew419 mission is designed in partnership with trusted local churches and ministries. Depending on the destination, your team may participate in children’s ministry, community outreach, evangelism, construction projects, sports ministry, or leadership development. Every activity is intended to support long-term local ministry rather than provide short-term solutions.',
+  },
+  {
+    title: 'Lodging & Meals',
+    text: 'Participants stay in safe, clean accommodations arranged by our trusted ministry partners. Rooms are typically shared with other team members, creating opportunities for fellowship throughout the week. Three daily meals are generally provided, with menus reflecting local cuisine whenever possible while accommodating reasonable dietary needs.',
+  },
+  {
+    title: 'Insurance Information',
+    text: 'Travel insurance is required for all international mission trips and should include medical coverage, emergency evacuation, and trip interruption protection. Crew419 will provide additional recommendations before departure to help you choose appropriate coverage and travel with confidence.',
+  },
+];
+---
+
+<section class="pt-40 pb-15" aria-label="Kenya travel guide details">
+  <div class="container flex flex-col gap-20">
+    {
+      textSections.map((section) => (
+        <div class="border-muted-foreground grid gap-5 border-b pb-20 md:grid-cols-2">
+          <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">{section.title}</h2>
+          <p class="leading-none">{section.text}</p>
+        </div>
+      ))
+    }
+
+    <div class="border-muted-foreground grid gap-5 border-b pb-20 md:grid-cols-2">
+      <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">Packing List</h2>
+      <div class="flex flex-col gap-15">
+        <div class="flex flex-col gap-7.5">
+          <h3 class="text-2xl font-bold">What to Pack</h3>
+          <div class="grid gap-10 sm:grid-cols-3">
+            {
+              packingColumns.map((column) => (
+                <div class="flex flex-col gap-5">
+                  <p class="text-lg leading-none font-medium">{column.label}</p>
+                  <ul class="flex flex-col gap-3.75">
+                    {column.items.map((item) => (
+                      <li class="text-muted-foreground flex items-center gap-2.5 text-lg leading-none font-medium">
+                        <span class="bg-primary size-2 shrink-0 rounded-full" aria-hidden="true"></span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+        <div class="flex flex-col gap-5">
+          <h3 class="text-2xl font-bold">What Not to Pack</h3>
+          <ul class="flex flex-col gap-3.75">
+            {
+              whatNotToPack.map((item) => (
+                <li class="text-muted-foreground flex items-center gap-2.5 text-lg leading-none font-medium">
+                  <span class="bg-primary size-2 shrink-0 rounded-full" aria-hidden="true"></span>
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {
+      middleSections.map((section) => (
+        <div class="border-muted-foreground grid gap-5 border-b pb-20 md:grid-cols-2">
+          <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">{section.title}</h2>
+          <p class="leading-none">{section.text}</p>
+        </div>
+      ))
+    }
+
+    <div class="border-muted-foreground grid gap-5 border-b pb-20 md:grid-cols-2">
+      <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">Do’s & Don’ts</h2>
+      <div class="grid gap-10 sm:grid-cols-2">
+        {
+          dosAndDonts.map((column) => (
+            <div class="flex flex-col gap-5">
+              <h3 class="text-2xl font-bold">{column.label}</h3>
+              <ul class="flex flex-col gap-3.75">
+                {column.items.map((item) => (
+                  <li class="text-muted-foreground flex items-center gap-2.5 text-lg leading-none font-medium">
+                    <span class="bg-primary size-2 shrink-0 rounded-full" aria-hidden="true"></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    {
+      closingSections.map((section) => (
+        <div class="border-muted-foreground grid gap-5 border-b pb-20 md:grid-cols-2">
+          <h2 class="text-3xl leading-[1.1] font-bold md:text-4xl">{section.title}</h2>
+          <p class="leading-none">{section.text}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -5,12 +5,25 @@ import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import PlayerPlay from '@tabler/icons/filled/player-play.svg';
 import storyPoster from '@/assets/images/home/impact/story-poster.png';
 
-const stats = [
+interface Stat {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  stats?: Stat[];
+}
+
+const defaultStats: Stat[] = [
   { value: '20+', label: 'Countries Served' },
   { value: '150+', label: 'Church Partners' },
   { value: '400+', label: 'Mission Trips' },
   { value: 'Thousands', label: 'Lives Reached' },
 ];
+
+const { eyebrow = 'Impact & Stories', heading = 'Lives Changed. Communities Served. Faith Strengthened.', stats = defaultStats } = Astro.props;
 
 const stories = Array.from({ length: 5 }, () => ({
   quote: 'What started as one week of serving completely changed the direction of my life.',
@@ -23,8 +36,8 @@ const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg
 <section id="impact" class="overflow-x-hidden py-15 relative z-20" aria-labelledby="impact-heading" data-impact>
   <div class="container">
     <div class="flex flex-col items-center gap-4 mx-auto max-w-215 text-center mb-15">
-      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Impact & Stories</p>
-      <h2 id="impact-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">Lives Changed. Communities Served. Faith Strengthened.</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="impact-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <div class="flex w-full flex-col items-center gap-10 md:gap-15">
@@ -34,7 +47,7 @@ const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg
             <>
               {index > 0 && <span class="bg-muted-foreground hidden w-px shrink-0 self-stretch md:block" aria-hidden="true" />}
               <div class="flex flex-col items-center gap-2.5 text-center">
-                <p class="font-serif text-3xl leading-[1.1] font-bold md:text-5xl">{stat.value}</p>
+                <p class="font-serif text-3xl  font-bold md:text-5xl">{stat.value}</p>
                 <p class="text-muted-foreground text-lg leading-none">{stat.label}</p>
               </div>
             </>
@@ -68,7 +81,7 @@ const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg
         </div>
 
         <blockquote class="flex max-w-140 flex-col items-center gap-6" data-impact-quote>
-          <p class="font-serif text-xl leading-[1.1] font-bold md:text-2xl" data-impact-quote-text>“{stories[0].quote}”</p>
+          <p class="font-serif text-xl  font-bold md:text-2xl" data-impact-quote-text>“{stories[0].quote}”</p>
           <footer class="text-muted-foreground text-lg leading-none" data-impact-quote-attr>— {stories[0].attribution}</footer>
         </blockquote>
 

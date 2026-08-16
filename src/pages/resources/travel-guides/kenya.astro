@@ -1,0 +1,26 @@
+---
+import heroBg from '@/assets/images/resources/travel-guides/kenya/hero-bg.png';
+import Layout from '@/layouts/Layout.astro';
+import LifeInMission from '@/components/home/LifeInMission.astro';
+import ResourcesCta from '@/components/resources/Cta.astro';
+import GuideHero from '@/components/resources/guide/Hero.astro';
+import Details from '@/components/resources/travel-guides/kenya/Details.astro';
+import MissionSlider from '@/components/resources/travel-guides/kenya/MissionSlider.astro';
+---
+
+<Layout title="Kenya Travel Guide | Crew419">
+  <GuideHero
+    bg={heroBg}
+    eyebrow="Travel guide"
+    title="Kenya"
+    description="Everything you need to know before traveling to Kenya with Crew419."
+    primaryLabel="Download PDF"
+    primaryHref="#"
+    secondaryLabel="View Mission Trips"
+    secondaryHref="/trips/africa"
+  />
+  <Details />
+  <MissionSlider />
+  <ResourcesCta secondaryLabel="View Kenya Mission Trips" secondaryHref="/trips/africa" />
+  <LifeInMission />
+</Layout>

@@ -1,0 +1,14 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import LifeInMission from '@/components/home/LifeInMission.astro';
+import ResourcesCta from '@/components/resources/Cta.astro';
+import Destinations from '@/components/resources/travel-guides/Destinations.astro';
+import Hero from '@/components/resources/travel-guides/Hero.astro';
+---
+
+<Layout title="Travel Guides | Crew419">
+  <Hero />
+  <Destinations />
+  <ResourcesCta secondaryLabel="Explore mission Trips" secondaryHref="/trips" />
+  <LifeInMission />
+</Layout>

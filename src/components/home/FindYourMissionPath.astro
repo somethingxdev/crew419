@@ -1,22 +1,12 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
+import { Image } from 'astro:assets';
 import christianSchools from '@/assets/images/home/find-your-mission-path/christian-schools.png';
 import churches from '@/assets/images/home/find-your-mission-path/churches.png';
 import individuals from '@/assets/images/home/find-your-mission-path/individuals.png';
 import sportTeams from '@/assets/images/home/find-your-mission-path/sport-teams.png';
 import { Button } from '@/shared/ui/button';
 
-interface PathCard {
-  title: string;
-  text: string;
-  href: string;
-  cta: string;
-  image: LocalImageProps['src'];
-  alt: string;
-  rotate: string;
-}
-
-const pathCards: PathCard[] = [
+const defaultCards = [
   {
     title: 'Churches',
     text: 'Equip your congregation to serve together through a customized mission experience designed around your ministry goals.',
@@ -55,13 +45,17 @@ const pathCards: PathCard[] = [
   },
 ];
 
-const cards: PathCard[] = [...pathCards, ...pathCards];
+const { eyebrow = 'Find your mission path', heading = "Everyone Has a Place in God's Mission", cards: pathCards = defaultCards } = Astro.props;
+
+const cards = [...pathCards, ...pathCards];
 ---
 
-<section id="find-your-mission-path" class="group/path relative overflow-x-clip py-15" aria-labelledby="find-your-mission-path-heading" data-mission-path>
-  <div  class="relative z-0 mx-auto flex max-w-[63.7rem] flex-col items-center gap-4 px-5 text-center group-data-scroll-active/path:absolute group-data-scroll-active/path:inset-0 group-data-scroll-active/path:z-0 group-data-scroll-active/path:justify-center">
-    <p class="text-muted-foreground text-base leading-none font-bold uppercase">Find your mission path</p>
-    <h2 id="find-your-mission-path-heading" class="text-foreground text-3xl leading-[1.1] font-bold md:text-5xl xl:text-[4.625rem]">Everyone Has a Place in God's Mission</h2>
+<section id="find-your-mission-path" class="group/path relative overflow-x-clip py-15 md:pb-30" aria-labelledby="find-your-mission-path-heading" data-mission-path>
+  <div
+    class="relative z-0 mx-auto flex max-w-[63.7rem] flex-col items-center gap-4 px-5 text-center group-data-scroll-active/path:absolute group-data-scroll-active/path:inset-0 group-data-scroll-active/path:z-0 group-data-scroll-active/path:justify-center"
+  >
+    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+    <h2 id="find-your-mission-path-heading" class="text-foreground text-3xl  font-bold md:text-5xl xl:text-[4.625rem]">{heading}</h2>
   </div>
 
   <div class="relative z-10 mt-10 w-full group-data-scroll-active/path:mt-0 group-data-scroll-active/path:overflow-x-clip" data-mission-path-viewport>
@@ -75,8 +69,8 @@ const cards: PathCard[] = [...pathCards, ...pathCards];
             <div class="flex flex-col gap-5">
               <Image src={card.image} alt={card.alt} widths={[680]} class="h-65 w-full rounded-lg object-cover" />
               <div class="text-foreground flex flex-col gap-5">
-                <h3 class="text-2xl leading-[1.1] font-bold">{card.title}</h3>
-                <p class="text-base leading-none">{card.text}</p>
+                <h3 class="text-2xl  font-bold">{card.title}</h3>
+                <p class="leading-none">{card.text}</p>
               </div>
             </div>
             <Button href={card.href} class="w-full">

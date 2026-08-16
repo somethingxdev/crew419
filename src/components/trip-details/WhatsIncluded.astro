@@ -1,0 +1,47 @@
+---
+const lists = [
+  {
+    title: 'Included',
+    items: [
+      'Accommodation',
+      'Meals during the trip',
+      'In-country transportation',
+      'Travel insurance (if required)',
+      'Daily discipleship',
+      'Team leadership and support',
+      'Local ministry coordination',
+    ],
+  },
+  {
+    title: 'Not Included',
+    items: ['Airfare (available upon request)', 'Passport and visa fees', 'Personal expenses', 'Checked baggage fees', 'Ministry materials'],
+  },
+];
+---
+
+<section class="py-15 md:pt-20 md:pb-40" aria-labelledby="whats-included-heading">
+  <div class="container flex flex-col gap-12.5 xl:flex-row xl:justify-between xl:gap-20">
+    <div class="flex flex-col gap-4">
+      <p class="text-muted-foreground leading-none font-bold uppercase">What’s included</p>
+      <h2 id="whats-included-heading" class="text-3xl  font-bold md:text-5xl">What’s Covered</h2>
+    </div>
+
+    <div class="grid gap-12.5 sm:grid-cols-2 sm:gap-25 xl:w-full xl:max-w-185">
+      {
+        lists.map((list) => (
+          <div class="flex flex-col gap-5.75">
+            <h3 class="text-2xl  font-bold">{list.title}</h3>
+            <ul class="flex flex-col gap-3.75">
+              {list.items.map((item) => (
+                <li class="flex items-center gap-2.5 leading-tight">
+                  <span class="bg-primary size-2 shrink-0 rounded-full" aria-hidden="true" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

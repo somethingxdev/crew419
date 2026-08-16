@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import video from '@/assets/images/trip-details/week-video.png';
+
+const days = [
+  { title: 'Day 1', text: 'Arrive in Zambia, meet your team, orientation, welcome dinner, and evening devotion.' },
+  {
+    title: 'Day 2–9',
+    text: 'Morning devotion, community outreach, children’s ministry, home visits, local church partnership, evening team reflection and worship.',
+  },
+  { title: 'Day 10', text: 'Closing celebration, church service, team debrief, and departure.' },
+];
+---
+
+<section class="py-15 md:py-20" aria-labelledby="your-week-heading">
+  <div class="container">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <p class="text-muted-foreground leading-none font-bold uppercase">Your week</p>
+      <h2 id="your-week-heading" class="max-w-164 text-3xl font-bold md:text-5xl">What Your Mission Week Could Look Like</h2>
+    </div>
+
+    <div class="mt-12.5 flex flex-col gap-12.5 lg:flex-row lg:items-start lg:gap-20">
+      <ul class="flex w-full flex-col max-w-[485px]">
+        {
+          days.map((day) => (
+            <li class="flex flex-col gap-4 py-12.5 first:pt-0 border-b border-muted-foreground">
+              <h3 class="text-2xl font-bold">{day.title}</h3>
+              <p class="text-lg leading-tight">{day.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <Image src={video} alt="A volunteer greeting children outside a village home" widths={[800, 1600]} class="h-auto w-full rounded-lg object-cover lg:h-134.5 lg:flex-1" />
+    </div>
+  </div>
+</section>

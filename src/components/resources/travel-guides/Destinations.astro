@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import costaRica from '@/assets/images/resources/travel-guides/costa-rica.png';
+import dominicanRepublic from '@/assets/images/resources/travel-guides/dominican-republic.png';
+import guatemala from '@/assets/images/resources/travel-guides/guatemala.png';
+import jamaica from '@/assets/images/resources/travel-guides/jamaica.png';
+import kenya from '@/assets/images/resources/travel-guides/kenya.png';
+import peru from '@/assets/images/resources/travel-guides/peru.png';
+import southAfrica from '@/assets/images/resources/travel-guides/south-africa.png';
+import uganda from '@/assets/images/resources/travel-guides/uganda.png';
+
+const destinations = [
+  { name: 'Kenya', slug: 'kenya', image: kenya, alt: 'Elephants grazing on a Kenyan savanna with Mount Kilimanjaro in the distance' },
+  { name: 'Guatemala', slug: 'guatemala', image: guatemala, alt: 'Street of a Guatemalan town leading toward a towering volcano' },
+  { name: 'Dominican Republic', slug: 'dominican-republic', image: dominicanRepublic, alt: 'Colorful houses along a palm-lined dirt road in the Dominican Republic' },
+  { name: 'Uganda', slug: 'uganda', image: uganda, alt: 'Thatched-roof homes in a Ugandan village at golden hour' },
+  { name: 'South Africa', slug: 'south-africa', image: southAfrica, alt: 'Community members gathered in a South African village' },
+  { name: 'Peru', slug: 'peru', image: peru, alt: 'River winding through a deep green Peruvian canyon' },
+  { name: 'Jamaica', slug: 'jamaica', image: jamaica, alt: 'Turquoise water along a forested Jamaican shoreline' },
+  { name: 'Costa Rica', slug: 'costa-rica', image: costaRica, alt: 'Houses nestled in the green mountains of Costa Rica' },
+];
+---
+
+<section id="destinations" class="pt-40 pb-15" aria-labelledby="destinations-heading">
+  <div class="container">
+    <h2 id="destinations-heading" class="text-center text-3xl leading-none font-bold md:text-5xl">Browse by Destination</h2>
+
+    <ul class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      {
+        destinations.map((destination) => (
+          <li class="bg-cream flex flex-col items-start gap-5 rounded-lg p-4 pb-5">
+            <Image src={destination.image} alt={destination.alt} width={800} height={580} class="h-65 w-full rounded-lg object-cover" />
+            <h3 class="text-2xl font-bold">{destination.name}</h3>
+            <a
+              href={`/resources/travel-guides/${destination.slug}`}
+              class="border-muted-foreground text-muted-foreground hover:text-foreground hover:border-foreground border-b pb-2 leading-none font-black uppercase transition-colors"
+              aria-label={`View the ${destination.name} travel guide`}
+            >
+              View Guide
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
