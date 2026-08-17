@@ -1,29 +1,18 @@
 ---
-const challenges = [
-  {
-    title: 'Generic Itineraries',
-    text: 'Your team adapts to someone else’s schedule instead of serving where your gifts are needed most.',
-  },
-  {
-    title: 'Planning Overload',
-    text: 'Travel coordination, insurance, housing, transportation, and communication quickly become overwhelming.',
-  },
-  {
-    title: 'Limited Local Connections',
-    text: 'Without trusted ministry partners, it’s difficult to create a lasting impact.',
-  },
-  {
-    title: 'Little Spiritual Preparation',
-    text: 'Many trips focus on logistics but overlook discipleship before, during, and after the mission.',
-  },
-];
+import { getSingleton } from '@/lib/content';
+
+const {
+  custom_features_eyebrow: eyebrow,
+  custom_features_heading: heading,
+  custom_challenge_cards: challenges,
+} = await getSingleton('website_content');
 ---
 
 <section class="py-30" aria-labelledby="planning-challenges-heading">
   <div class="container">
     <div class="mx-auto flex max-w-177 flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">The challenge of mission planning</p>
-      <h2 id="planning-challenges-heading" class="text-3xl  font-bold md:text-5xl">Turning a Calling Into Action Isn’t Always Easy</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="planning-challenges-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <div class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">

@@ -1,20 +1,24 @@
 ---
-import { Image } from 'astro:assets';
-import photo1 from '@/assets/images/individuals/why-join-1.png';
-import photo2 from '@/assets/images/individuals/why-join-2.png';
+import CmsImage from '@/components/base/CmsImage.astro';
 import PhotoPairSection from '@/components/shared/PhotoPairSection.astro';
+import { getSingleton } from '@/lib/content';
+
+const {
+  individuals_intro_eyebrow: eyebrow,
+  individuals_intro_heading: heading,
+  individuals_intro_text: text,
+  individuals_intro_photo_left: photoLeft,
+  individuals_intro_photo_right: photoRight,
+} = await getSingleton('website_content');
 ---
 
 <PhotoPairSection labelledBy="why-join-heading" class="py-30">
-  <Image slot="image-left" src={photo1} alt="A mission team member smiling with local kids" width={600} height={600} />
-  <Image slot="image-right" src={photo2} alt="Volunteers posing together in the field" width={600} height={600} />
+  <CmsImage slot="image-left" image={photoLeft} alt="A mission team member smiling with local kids" widths={[600, 1200]} />
+  <CmsImage slot="image-right" image={photoRight} alt="Volunteers posing together in the field" widths={[600, 1200]} />
 
   <div class="flex w-full flex-col items-start gap-4">
-    <p class="text-muted-foreground leading-none font-bold uppercase">Why Join?</p>
-    <h2 id="why-join-heading" class="text-3xl font-bold md:text-5xl">Find Your Place on the Team</h2>
+    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+    <h2 id="why-join-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
   </div>
-  <p class="max-w-130 leading-none">
-    Mission isn’t only for groups. Crew419 gives individuals the opportunity to step into meaningful service, build lifelong connections, and use their gifts to share hope through sports and
-    ministry.
-  </p>
+  <p class="max-w-130 leading-none">{text}</p>
 </PhotoPairSection>

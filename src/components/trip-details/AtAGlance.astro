@@ -1,11 +1,11 @@
 ---
-const facts = [
-  { title: 'Visa', value: 'Visa information provided before departure' },
-  { title: 'Currency', value: 'Zambian Kwacha (ZMW)' },
-  { title: 'Languages', value: 'English' },
-  { title: 'Climate', value: 'Warm and dry' },
-  { title: 'Activity Level', value: 'Moderate' },
-];
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  trip: CollectionEntry<'trips'>;
+}
+
+const { glance_facts: facts } = Astro.props.trip.data;
 ---
 
 <section class="py-30" aria-labelledby="at-a-glance-heading">

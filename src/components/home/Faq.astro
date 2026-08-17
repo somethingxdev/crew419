@@ -1,52 +1,21 @@
 ---
 import ChevronDown from '@tabler/icons/outline/chevron-down.svg';
+import { getCollection } from 'astro:content';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 import { Card } from '@/shared/ui/card';
 
-interface FaqItem {
-  id: string;
-  question: string;
-  answer: string;
-}
+type FaqPage = 'default' | 'churches' | 'individuals' | 'school' | 'sports' | 'custom';
 
 interface Props {
-  items?: FaqItem[];
+  /** Which FAQ set to show — matches `faqs.pages` in Directus. */
+  page?: FaqPage;
 }
 
-const defaultItems: FaqItem[] = [
-  {
-    id: 'short-term',
-    question: 'What is a short-term mission trip?',
-    answer: 'A short-term mission trip is an opportunity to serve alongside local churches while growing in your faith. Every trip combines practical ministry, discipleship, and sharing the Gospel.',
-  },
-  {
-    id: 'who-can-join',
-    question: 'Who can join a mission trip?',
-    answer: 'Individuals, families, churches, Christian schools, and university groups are all welcome. Some trips may have age requirements depending on the destination.',
-  },
-  {
-    id: 'experience',
-    question: 'Do I need previous mission experience?',
-    answer: 'No. Many participants join their very first mission trip with Crew419. We’ll prepare and support you every step of the way.',
-  },
-  {
-    id: 'prepared',
-    question: 'How are participants prepared?',
-    answer: 'Every participant receives pre-trip training, daily encouragement during the trip, and post-trip discipleship resources.',
-  },
-  {
-    id: 'individual',
-    question: 'Can I join as an individual?',
-    answer: 'Absolutely. Individuals can join scheduled mission trips and become part of an existing team.',
-  },
-  {
-    id: 'get-started',
-    question: 'How do I get started?',
-    answer: 'Browse upcoming trips or book a 30-minute discovery call. We’ll help you find the best next step.',
-  },
-];
+const { page = 'default' } = Astro.props;
 
-const { items = defaultItems } = Astro.props;
+const items = (await getCollection('faqs', ({ data }) => data.pages.includes(page)))
+  .map(({ data }) => data)
+  .sort((a, b) => a.sort - b.sort);
 
 const mid = Math.ceil(items.length / 2);
 const columns = [items.slice(0, mid), items.slice(mid)];
@@ -59,13 +28,13 @@ const columns = [items.slice(0, mid), items.slice(mid)];
       <h2 id="faq-heading" class="text-3xl font-bold xl:text-5xl">Frequently Asked Questions</h2>
     </div>
 
-    <Accordion type="multiple" defaultValue={items.map((item) => item.id)} class="flex flex-col gap-5 xl:flex-row xl:items-start">
+    <Accordion type="multiple" defaultValue={items.map((item) => item.key)} class="flex flex-col gap-5 xl:flex-row xl:items-start">
       {
         columns.map((column) => (
           <div class="flex flex-1 flex-col gap-5">
             {column.map((item) => (
               <Card class="px-7.5">
-                <AccordionItem value={item.id}>
+                <AccordionItem value={item.key}>
                   <AccordionTrigger class="items-center gap-5 rounded-lg font-serif text-2xl font-bold hover:text-foreground [&[data-state=open]_svg]:rotate-180">
                     {item.question}
                     <span slot="icon" class="bg-secondary text-primary-foreground flex size-10 shrink-0 items-center justify-center rounded-full">

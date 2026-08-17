@@ -1,16 +1,10 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import ChevronDown from '@tabler/icons/outline/chevron-down.svg';
-import dominicanPartnership from '@/assets/images/stories/cards/dominican-partnership.png';
-import guatemalaHeart from '@/assets/images/stories/cards/guatemala-heart.png';
-import guatemalaHomes from '@/assets/images/stories/cards/guatemala-homes.png';
-import kenyaOutreach from '@/assets/images/stories/cards/kenya-outreach.png';
-import localChurches from '@/assets/images/stories/cards/local-churches.png';
-import oneWeek from '@/assets/images/stories/cards/one-week.png';
-import summerSeason from '@/assets/images/stories/cards/summer-season.png';
-import youthGroup from '@/assets/images/stories/cards/youth-group.png';
+import CmsImage from '@/components/base/CmsImage.astro';
 import { Dropdown, DropdownContent, DropdownRadioGroup, DropdownRadioItem, DropdownTrigger } from '@/shared/ui/dropdown';
 
+type StoryData = CollectionEntry<'stories'>['data'];
 type FilterOption = { label: string; value: string };
 
 interface Filter {
@@ -19,142 +13,47 @@ interface Filter {
   options: FilterOption[];
 }
 
+const typeLabels: Record<StoryData['type'], string> = {
+  'trip-recap': 'Trip Recap',
+  testimony: 'Testimony',
+  'ministry-update': 'Ministry Update',
+};
+
+const ministryLabels: Record<StoryData['ministry'], string> = {
+  children: 'Children',
+  construction: 'Construction',
+  evangelism: 'Evangelism',
+  medical: 'Medical',
+  sports: 'Sports',
+};
+
+const regions = await getCollection('regions');
+
 const filters: Filter[] = [
   {
     key: 'type',
     label: 'Story Type',
-    options: [
-      { label: 'All Types', value: 'all' },
-      { label: 'Trip Recap', value: 'trip-recap' },
-      { label: 'Testimony', value: 'testimony' },
-      { label: 'Ministry Update', value: 'ministry-update' },
-    ],
+    options: [{ label: 'All Types', value: 'all' }, ...Object.entries(typeLabels).map(([value, label]) => ({ label, value }))],
   },
   {
     key: 'region',
     label: 'Region',
-    options: [
-      { label: 'All Regions', value: 'all' },
-      { label: 'USA', value: 'usa' },
-      { label: 'Canada', value: 'canada' },
-      { label: 'Caribbean', value: 'caribbean' },
-      { label: 'Central America', value: 'central-america' },
-      { label: 'South America', value: 'south-america' },
-      { label: 'Africa', value: 'africa' },
-      { label: 'Europe', value: 'europe' },
-      { label: 'Middle East', value: 'middle-east' },
-      { label: 'Asia', value: 'asia' },
-    ],
+    options: [{ label: 'All Regions', value: 'all' }, ...regions.map(({ data }) => ({ label: data.name, value: data.slug }))],
   },
   {
     key: 'ministry',
     label: 'Ministry',
-    options: [
-      { label: 'All Ministries', value: 'all' },
-      { label: 'Children', value: 'children' },
-      { label: 'Construction', value: 'construction' },
-      { label: 'Evangelism', value: 'evangelism' },
-      { label: 'Medical', value: 'medical' },
-      { label: 'Sports', value: 'sports' },
-    ],
+    options: [{ label: 'All Ministries', value: 'all' }, ...Object.entries(ministryLabels).map(([value, label]) => ({ label, value }))],
   },
 ];
 
-interface Story {
-  slug: string;
-  type: string;
-  region: string;
-  ministry: string;
-  title: string;
-  date: string;
-  image: LocalImageProps['src'];
-  alt: string;
-}
-
-const typeLabels: Record<string, string> = Object.fromEntries(filters[0].options.map((option) => [option.value, option.label]));
-
-const stories: Story[] = [
-  {
-    slug: 'kenya-community-outreach',
-    type: 'trip-recap',
-    region: 'africa',
-    ministry: 'children',
-    title: 'Kenya Community Outreach',
-    date: 'January 2025',
-    image: kenyaOutreach,
-    alt: 'Volunteers and children raising their hands together in a village',
-  },
-  {
-    slug: 'god-changed-my-heart-in-guatemala',
-    type: 'testimony',
-    region: 'central-america',
-    ministry: 'evangelism',
-    title: '“God Changed My Heart in Guatemala”',
-    date: 'January 2025',
-    image: guatemalaHeart,
-    alt: 'A volunteer in a khaki shirt seen from behind, greeting a local family',
-  },
-  {
-    slug: 'new-church-partnership-in-the-dominican-republic',
-    type: 'ministry-update',
-    region: 'caribbean',
-    ministry: 'evangelism',
-    title: 'New Church Partnership in the Dominican Republic',
-    date: 'January 2025',
-    image: dominicanPartnership,
-    alt: 'Three men smiling together in front of a church building',
-  },
-  {
-    slug: 'building-homes-in-guatemala',
-    type: 'trip-recap',
-    region: 'central-america',
-    ministry: 'construction',
-    title: 'Building Homes in Guatemala',
-    date: 'January 2025',
-    image: guatemalaHomes,
-    alt: 'A volunteer laying bricks with a volcano in the background',
-  },
-  {
-    slug: 'our-youth-group-came-home-different',
-    type: 'testimony',
-    region: 'usa',
-    ministry: 'sports',
-    title: '“Our Youth Group Came Home Different”',
-    date: 'January 2025',
-    image: youthGroup,
-    alt: 'A youth group posing together in front of a colorful house',
-  },
-  {
-    slug: 'preparing-for-summer-mission-season',
-    type: 'ministry-update',
-    region: 'africa',
-    ministry: 'medical',
-    title: 'Preparing for Summer Mission Season',
-    date: 'January 2025',
-    image: summerSeason,
-    alt: 'A woman reading a book on a hillside overlooking a mountain lake',
-  },
-  {
-    slug: 'one-week-that-changed-my-life',
-    type: 'testimony',
-    region: 'africa',
-    ministry: 'children',
-    title: '“One Week That Changed My Life”',
-    date: 'January 2025',
-    image: oneWeek,
-    alt: 'A volunteer standing in front of a village home',
-  },
-  {
-    slug: 'serving-alongside-local-churches',
-    type: 'trip-recap',
-    region: 'south-america',
-    ministry: 'construction',
-    title: 'Serving alongside local churches',
-    date: 'January 2025',
-    image: localChurches,
-    alt: 'A mission team gathered outside a local church',
-  },
-];
+const stories = await Promise.all(
+  (await getCollection('stories')).map(async ({ data }) => ({
+    ...data,
+    href: `/stories/${data.slug}`,
+    regionSlug: (await getEntry(data.region))?.data.slug,
+  })),
+);
 
 const pages = [1, 2, 3];
 const currentPage = 1;
@@ -189,22 +88,22 @@ const currentPage = 1;
     <ul class="mt-7.5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4" data-stories-grid>
       {
         stories.map((story) => (
-          <li data-story data-type={story.type} data-region={story.region} data-ministry={story.ministry}>
+          <li data-story data-type={story.type} data-region={story.regionSlug} data-ministry={story.ministry}>
             <article class="bg-cream flex h-full flex-col rounded-lg px-4 pt-4 pb-5">
-              <a href={`/stories/${story.slug}`} class="block overflow-hidden rounded-lg" tabindex="-1" aria-hidden="true">
-                <Image src={story.image} alt={story.alt} widths={[400, 800]} class="h-65 w-full object-cover transition-transform duration-500 hover:scale-105" />
+              <a href={story.href} class="block overflow-hidden rounded-lg" tabindex="-1" aria-hidden="true">
+                <CmsImage image={story.card_image} alt={story.card_image_alt} widths={[400, 800]} class="h-65 w-full object-cover transition-transform duration-500 hover:scale-105" />
               </a>
               <div class="mt-5 flex flex-1 flex-col">
                 <p class="text-muted-foreground text-base leading-none font-bold uppercase">{typeLabels[story.type]}</p>
                 <h3 class="mt-2.5 line-clamp-2 min-h-13 text-2xl  font-bold">
-                  <a href={`/stories/${story.slug}`} class="hover:text-primary transition-colors">
+                  <a href={story.href} class="hover:text-primary transition-colors">
                     {story.title}
                   </a>
                 </h3>
-                <p class="text-muted-foreground mt-5 text-base leading-none">{story.date}</p>
+                <p class="text-muted-foreground mt-5 text-base leading-none">{story.date_label}</p>
               </div>
               <a
-                href={`/stories/${story.slug}`}
+                href={story.href}
                 class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground mt-5 self-start border-b pb-2 text-base leading-none font-black uppercase transition-colors"
               >
                 Read Story<span class="sr-only">: {story.title}</span>

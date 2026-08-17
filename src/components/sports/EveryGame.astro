@@ -1,29 +1,14 @@
 ---
-const cards = [
-  {
-    title: 'Play',
-    text: 'Compete against international teams and lead sports clinics.',
-  },
-  {
-    title: 'Serve',
-    text: 'Support local churches, schools, and communities through hands-on ministry.',
-  },
-  {
-    title: 'Share',
-    text: 'Use your sport to build relationships and share the life-changing message of Jesus Christ.',
-  },
-  {
-    title: 'Build',
-    text: 'Grow closer as teammates while serving together throughout the week.',
-  },
-];
+import { getSingleton } from '@/lib/content';
+
+const { sports_more_eyebrow: eyebrow, sports_more_heading: heading, sports_more_cards: cards } = await getSingleton('website_content');
 ---
 
 <section class="relative z-20 py-30" aria-labelledby="every-game-heading">
   <div class="container flex flex-col items-center gap-12.5">
     <div class="flex max-w-195 flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">Play. Serve. Share. Build.</p>
-      <h2 id="every-game-heading" class="text-3xl font-bold md:text-5xl">Every Game Creates an Opportunity</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="every-game-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <div class="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-4">

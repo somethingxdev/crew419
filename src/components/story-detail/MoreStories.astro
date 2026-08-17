@@ -1,85 +1,57 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
-import localChurches from '@/assets/images/stories/cards/local-churches.png';
-import oneWeek from '@/assets/images/stories/cards/one-week.png';
-import summerSeason from '@/assets/images/stories/cards/summer-season.png';
-import youthGroup from '@/assets/images/stories/cards/youth-group.png';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
 
-interface Story {
-  label: string;
-  title: string;
-  date: string;
-  href: string;
-  image: LocalImageProps['src'];
-  alt: string;
+interface Props {
+  entry: CollectionEntry<'stories'>;
 }
 
-const stories: Story[] = [
-  {
-    label: 'Testimony',
-    title: '“Our Youth Group Came Home Different”',
-    date: 'January 2025',
-    href: '/stories',
-    image: youthGroup,
-    alt: 'A youth group posing together outdoors',
-  },
-  {
-    label: 'Ministry Update',
-    title: 'Preparing for Summer Mission Season',
-    date: 'January 2025',
-    href: '/stories',
-    image: summerSeason,
-    alt: 'A volunteer sitting with a child on a bench',
-  },
-  {
-    label: 'Testimony',
-    title: '“One Week That Changed My Life”',
-    date: 'January 2025',
-    href: '/stories',
-    image: oneWeek,
-    alt: 'A volunteer smiling in front of a village home',
-  },
-  {
-    label: 'Trip Recap',
-    title: 'Serving alongside local churches',
-    date: 'January 2025',
-    href: '/stories',
-    image: localChurches,
-    alt: 'A mission team gathered outside a local church',
-  },
-];
+type StoryData = CollectionEntry<'stories'>['data'];
+
+const typeLabels: Record<StoryData['type'], string> = {
+  'trip-recap': 'Trip Recap',
+  testimony: 'Testimony',
+  'ministry-update': 'Ministry Update',
+};
+
+const { entry } = Astro.props;
+const stories = await getCollection('stories', ({ id }) => id !== entry.id);
 ---
 
-<section class="py-15" aria-labelledby="more-stories-heading">
-  <div class="container">
-    <div class="mx-auto flex max-w-222.5 flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground text-base leading-none font-bold uppercase">More from the mission field</p>
-      <h2 id="more-stories-heading" class="text-3xl  font-bold md:text-5xl">Discover More Stories of Transformation</h2>
-    </div>
+{
+  stories.length > 0 && (
+    <section class="py-15" aria-labelledby="more-stories-heading">
+      <div class="container">
+        <div class="mx-auto flex max-w-222.5 flex-col items-center gap-4 text-center">
+          <p class="text-muted-foreground text-base leading-none font-bold uppercase">More from the mission field</p>
+          <h2 id="more-stories-heading" class="text-3xl  font-bold md:text-5xl">
+            Discover More Stories of Transformation
+          </h2>
+        </div>
 
-    <ul class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-      {
-        stories.map((story) => (
-          <li>
-            <article class="bg-cream flex h-full flex-col gap-5 rounded-lg px-4 pt-4 pb-5">
-              <Image src={story.image} alt={story.alt} widths={[400, 800]} class="h-65 w-full shrink-0 rounded-lg object-cover" />
-              <div class="flex flex-1 flex-col gap-5">
-                <div class="flex flex-col gap-2.5">
-                  <p class="text-muted-foreground text-base leading-none font-bold uppercase">{story.label}</p>
-                  <h3 class="line-clamp-2 text-2xl  font-bold">{story.title}</h3>
+        <ul class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          {stories.map(({ data: story }) => (
+            <li>
+              <article class="bg-cream flex h-full flex-col gap-5 rounded-lg px-4 pt-4 pb-5">
+                <CmsImage image={story.card_image} alt={story.card_image_alt} widths={[400, 800]} class="h-65 w-full shrink-0 rounded-lg object-cover" />
+                <div class="flex flex-1 flex-col gap-5">
+                  <div class="flex flex-col gap-2.5">
+                    <p class="text-muted-foreground text-base leading-none font-bold uppercase">{typeLabels[story.type]}</p>
+                    <h3 class="line-clamp-2 text-2xl  font-bold">{story.title}</h3>
+                  </div>
+                  <p class="text-muted-foreground text-base leading-none">{story.date_label}</p>
                 </div>
-                <p class="text-muted-foreground text-base leading-none">{story.date}</p>
-              </div>
-              <a
-                href={story.href}
-                class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground self-start border-b pb-2 text-base leading-none font-black uppercase transition-colors"
-              >
-                Read story
-              </a>
-            </article>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</section>
+                <a
+                  href={`/stories/${story.slug}`}
+                  class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground self-start border-b pb-2 text-base leading-none font-black uppercase transition-colors"
+                >
+                  Read story
+                </a>
+              </article>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

@@ -1,24 +1,32 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
-  eyebrow: string;
-  heading: string;
-  text: string;
+  resource: CollectionEntry<'resources'>;
 }
 
-const { eyebrow, heading, text } = Astro.props;
+// Only guides (discipleship / fundraising) have an intro section — travel guides leave these fields empty.
+const { intro_eyebrow: eyebrow, intro_heading: heading, intro_text: text } = Astro.props.resource.data;
 ---
 
-<section class="py-30" aria-labelledby="guide-intro-heading">
-  <div class="container">
-    <div class="mx-auto flex max-w-[870px] flex-col items-center gap-7.5 text-center">
-      <div class="flex flex-col gap-4">
-        <p class="leading-none font-bold text-muted-foreground uppercase">{eyebrow}</p>
-        <h2 id="guide-intro-heading" class="text-3xl leading-none font-bold md:text-5xl">{heading}</h2>
+{
+  eyebrow && heading && text && (
+    <section class="py-30" aria-labelledby="guide-intro-heading">
+      <div class="container">
+        <div class="mx-auto flex max-w-[870px] flex-col items-center gap-7.5 text-center">
+          <div class="flex flex-col gap-4">
+            <p class="leading-none font-bold text-muted-foreground uppercase">{eyebrow}</p>
+            <h2 id="guide-intro-heading" class="text-3xl leading-none font-bold md:text-5xl">
+              {heading}
+            </h2>
+          </div>
+          <p class="max-w-[470px] leading-none">{text}</p>
+          <Button href="#get-your-copy" size="lg" class="w-82.5 max-w-full">
+            Download Guide
+          </Button>
+        </div>
       </div>
-      <p class="max-w-[470px] leading-none">{text}</p>
-      <Button href="#get-your-copy" size="lg" class="w-82.5 max-w-full">Download Guide</Button>
-    </div>
-  </div>
-</section>
+    </section>
+  )
+}

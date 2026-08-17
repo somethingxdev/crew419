@@ -2,35 +2,23 @@
 import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import bg from '@/assets/images/custom/difference-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-const features = [
-  {
-    num: '01',
-    title: 'Customized Mission Planning',
-    text: 'Every itinerary is built around your group’s goals.',
-  },
-  {
-    num: '02',
-    title: 'Trusted Local Ministry Partners',
-    text: 'Serve alongside churches and ministries already making an impact.',
-  },
-  {
-    num: '03',
-    title: 'Logistics & Travel Management',
-    text: 'Flights, accommodations, transportation, insurance guidance, and scheduling – all coordinated together.',
-  },
-  {
-    num: '04',
-    title: 'Discipleship Every Step of the Way',
-    text: 'Pre-trip preparation, daily devotionals in the field, and post-trip follow-up help turn a mission trip into lifelong growth.',
-  },
-];
+const {
+  custom_more_eyebrow: eyebrow,
+  custom_more_heading: heading,
+  custom_more_text: text,
+  custom_more_cards: features,
+  custom_features_bg: bg,
+} = await getSingleton('website_content');
+
+const paragraphs = text.split(/\n\s*\n/);
 ---
 
 <section id="difference" class="relative z-20 py-15 md:py-30 lg:py-40" aria-labelledby="difference-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
     <div class="absolute inset-0 bg-black/15"></div>
   </div>
 
@@ -38,12 +26,11 @@ const features = [
     <div class="relative z-10 flex w-full flex-col justify-between gap-10 xl:flex-row xl:items-start">
       <div class="flex max-w-135 flex-col gap-7.5 text-cream">
         <div class="flex flex-col gap-3.75">
-          <p class="leading-none font-bold uppercase opacity-80">The Crew419 difference</p>
-          <h2 id="difference-heading" class="text-3xl  font-bold text-shadow-2xs md:text-5xl">We Build the Mission Around You</h2>
+          <p class="leading-none font-bold uppercase opacity-80">{eyebrow}</p>
+          <h2 id="difference-heading" class="text-3xl  font-bold text-shadow-2xs md:text-5xl">{heading}</h2>
         </div>
         <div class="flex flex-col gap-2.5 text-lg leading-none font-medium">
-          <p>Many organizations offer the same itinerary to every group, regardless of their size, ministry goals, or experience.</p>
-          <p>Others expect churches to organize everything themselves – finding ministry partners, booking travel, managing logistics, and preparing participants.</p>
+          {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
         </div>
       </div>
 

@@ -2,35 +2,21 @@
 import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import bg from '@/assets/images/sports/details-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-const features = [
-  {
-    num: '01',
-    title: 'Custom itineraries',
-    text: 'Every team is different. We create a mission experience tailored to your goals, group size, interests, and ministry vision.',
-  },
-  {
-    num: '02',
-    title: 'International sports partnerships',
-    text: 'Connect with local athletes, coaches, and communities through trusted partnerships built around sports and service.',
-  },
-  {
-    num: '03',
-    title: 'Travel logistics',
-    text: 'From transportation and accommodations to schedules and on-the-ground support, we handle the details from start to finish.',
-  },
-  {
-    num: '04',
-    title: 'Spiritual preparation',
-    text: 'Prepare your team before the trip with resources and guidance that help you serve with purpose and unity.',
-  },
-];
+const {
+  sports_features_eyebrow: eyebrow,
+  sports_features_heading: heading,
+  sports_features_text: text,
+  sports_features_bg: bg,
+  sports_feature_cards: features,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-10 py-15 md:py-30 lg:py-37.5" aria-labelledby="sports-details-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 
@@ -38,13 +24,10 @@ const features = [
     <div class="relative z-10 flex w-full flex-col justify-between gap-10 xl:flex-row xl:items-start">
       <div class="flex max-w-198 flex-col gap-7.5 text-cream">
         <div class="flex flex-col gap-3.75">
-          <p class="leading-none font-bold uppercase opacity-80">We handle the details</p>
-          <h2 id="sports-details-heading" class="max-w-155 text-3xl font-bold text-shadow-2xs md:text-5xl">Focus on Your Team. We’ll Handle the Rest.</h2>
+          <p class="leading-none font-bold uppercase opacity-80">{eyebrow}</p>
+          <h2 id="sports-details-heading" class="max-w-155 text-3xl font-bold text-shadow-2xs md:text-5xl">{heading}</h2>
         </div>
-        <p class="max-w-146 text-lg leading-none font-medium">
-          Planning an international mission trip takes time, experience, and trusted connections. Crew419 manages the logistics, partnerships, and preparation so your team can focus on what matters
-          most — serving others, growing together, and sharing the Gospel through sports.
-        </p>
+        <p class="max-w-146 text-lg leading-none font-medium">{text}</p>
       </div>
 
       <div class="flex w-full max-w-130 shrink-0 flex-col gap-5">

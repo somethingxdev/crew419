@@ -1,16 +1,17 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import photo1 from '@/assets/images/resources/photo-1.png';
-import photo2 from '@/assets/images/resources/photo-2.png';
+import CmsImage from '@/components/base/CmsImage.astro';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
-  bg: LocalImageProps['src'];
+  resource: CollectionEntry<'resources'>;
 }
 
-const { bg } = Astro.props;
+// Only guides (discipleship / fundraising) have the download form — travel guides leave these fields empty.
+const { form_bg: bg, form_eyebrow: eyebrow, form_heading: heading, form_photo_1: photo1, form_photo_2: photo2 } = Astro.props.resource.data;
 
 const fields = [
   { name: 'firstName', placeholder: 'First Name', type: 'text', required: true },
@@ -20,58 +21,64 @@ const fields = [
 ] as const;
 ---
 
-<section id="get-your-copy" class="relative my-15 py-25 md:py-40" aria-labelledby="get-your-copy-heading">
-  <div class="absolute inset-0 overflow-hidden">
-    <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
-      <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover object-center" />
-    </div>
-  </div>
-
-  <div class="relative container">
-    <div class="flex flex-col items-start gap-15 lg:flex-row lg:justify-between">
-      <div class="flex w-full max-w-145 flex-col gap-10">
-        <div class="flex flex-col gap-4">
-          <p class="leading-none font-bold text-muted-foreground uppercase">Get your free copy</p>
-          <h2 id="get-your-copy-heading" class="text-3xl leading-none font-bold md:text-5xl">We’ll Send It Straight to Your Inbox</h2>
+{
+  bg && eyebrow && heading && photo1 && photo2 && (
+    <section id="get-your-copy" class="relative my-15 py-25 md:py-40" aria-labelledby="get-your-copy-heading">
+      <div class="absolute inset-0 overflow-hidden">
+        <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
+          <CmsImage image={bg} alt="" widths={[1600, 3000]} class="size-full object-cover object-center" />
         </div>
+      </div>
 
-        <form class="flex w-full max-w-120 flex-col gap-7.5">
-          <div class="flex flex-col gap-2.5">
-            {
-              fields.map((field) => (
-                <input
-                  type={field.type}
-                  name={field.name}
-                  placeholder={field.placeholder}
-                  required={field.required}
-                  aria-label={field.placeholder}
-                  class="bg-cream w-full rounded-sm border-0 px-5 py-4.5 text-lg leading-none font-medium placeholder:text-muted-foreground focus:ring-2 focus:ring-secondary"
-                />
-              ))
-            }
+      <div class="relative container">
+        <div class="flex flex-col items-start gap-15 lg:flex-row lg:justify-between">
+          <div class="flex w-full max-w-145 flex-col gap-10">
+            <div class="flex flex-col gap-4">
+              <p class="leading-none font-bold text-muted-foreground uppercase">{eyebrow}</p>
+              <h2 id="get-your-copy-heading" class="text-3xl leading-none font-bold md:text-5xl">
+                {heading}
+              </h2>
+            </div>
+
+            <form class="flex w-full max-w-120 flex-col gap-7.5">
+              <div class="flex flex-col gap-2.5">
+                {fields.map((field) => (
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                    aria-label={field.placeholder}
+                    class="bg-cream w-full rounded-sm border-0 px-5 py-4.5 text-lg leading-none font-medium placeholder:text-muted-foreground focus:ring-2 focus:ring-secondary"
+                  />
+                ))}
+              </div>
+              <Button type="submit" size="lg" class="w-82.5 max-w-full">
+                Download PDF
+              </Button>
+            </form>
           </div>
-          <Button type="submit" size="lg" class="w-82.5 max-w-full">Download PDF</Button>
-        </form>
+
+          <div class="relative mx-auto hidden h-120 w-full max-w-140 shrink-0 lg:block" aria-hidden="true">
+            <div class="bg-cream absolute top-0 left-0 w-81 -rotate-3 rounded-sm p-3 pb-15 shadow-[0px_4px_7.5px_rgba(0,0,0,0.2)]">
+              <CmsImage image={photo1} alt="" widths={[600]} class="aspect-square w-full rounded-sm object-cover" />
+            </div>
+            <div class="bg-cream absolute top-50 left-56 w-81 rotate-6 rounded-sm p-3 pb-15 shadow-[0px_4px_7.5px_rgba(0,0,0,0.2)]">
+              <CmsImage image={photo2} alt="" widths={[600]} class="aspect-[300/188] w-full rounded-sm object-cover" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="relative mx-auto hidden h-120 w-full max-w-140 shrink-0 lg:block" aria-hidden="true">
-        <div class="bg-cream absolute top-0 left-0 w-81 -rotate-3 rounded-sm p-3 pb-15 shadow-[0px_4px_7.5px_rgba(0,0,0,0.2)]">
-          <Image src={photo1} alt="" width={600} height={600} class="aspect-square w-full rounded-sm object-cover" />
-        </div>
-        <div class="bg-cream absolute top-50 left-56 w-81 rotate-6 rounded-sm p-3 pb-15 shadow-[0px_4px_7.5px_rgba(0,0,0,0.2)]">
-          <Image src={photo2} alt="" width={600} height={450} class="aspect-[300/188] w-full rounded-sm object-cover" />
-        </div>
+      <div class="pointer-events-none absolute top-0 left-0 z-10 w-full -translate-y-1/2">
+        <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
       </div>
-    </div>
-  </div>
-
-  <div class="pointer-events-none absolute top-0 left-0 z-10 w-full -translate-y-1/2">
-    <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
-  </div>
-  <div class="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-[63%]">
-    <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
-  </div>
-</section>
+      <div class="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-[63%]">
+        <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
+      </div>
+    </section>
+  )
+}
 
 <script>
   import { gsap } from 'gsap';

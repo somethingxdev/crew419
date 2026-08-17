@@ -1,29 +1,18 @@
 ---
-const cards = [
-  {
-    title: 'Travel with a team',
-    text: 'You’ll never serve alone. Join a group of like-minded people and build friendships that continue long after the trip ends.',
-  },
-  {
-    title: 'Spiritual preparation',
-    text: 'Grow in your faith before you go with resources, guidance, and encouragement designed to prepare your heart for mission.',
-  },
-  {
-    title: 'Safe logistics',
-    text: 'From planning to arrival, our team provides organized travel support so you can focus on serving.',
-  },
-  {
-    title: 'Local ministry partnerships',
-    text: 'Work alongside trusted local organizations and communities to create meaningful, lasting impact.',
-  },
-];
+import { getSingleton } from '@/lib/content';
+
+const {
+  individuals_features_eyebrow: eyebrow,
+  individuals_features_heading: heading,
+  individuals_feature_cards: cards,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-20 py-30" aria-labelledby="what-to-expect-heading">
   <div class="container flex flex-col items-center gap-12.5">
     <div class="flex max-w-169 flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">What to Expect</p>
-      <h2 id="what-to-expect-heading" class="text-3xl font-bold md:text-5xl">Everything You Need for the Journey</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="what-to-expect-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <div class="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-4">

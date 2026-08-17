@@ -1,12 +1,15 @@
 ---
-import { Image } from 'astro:assets';
 import Menu from '@tabler/icons/outline/menu-2.svg';
-import logo from '@/assets/images/logo.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 import { Button } from '@/shared/ui/button';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from '@/shared/ui/navigation-menu';
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
-import { aboutItems, missionTripItems, resourceItems, simpleLinks } from './nav';
+import { getNavigation } from './nav';
+
+const { logo, site_name } = await getSingleton('global');
+const { mission_trips: missionTripItems, resources: resourceItems, about: aboutItems, simple: simpleLinks } = await getNavigation('header');
 ---
 
 <header
@@ -16,7 +19,7 @@ import { aboutItems, missionTripItems, resourceItems, simpleLinks } from './nav'
   <div class="container">
     <div class="flex items-center justify-between">
       <a href="/" class="shrink-0">
-        <Image src={logo} alt="Crew419" width={221} height={70} />
+        <CmsImage image={logo} alt={site_name} widths={[221, 442]} class="h-auto w-55" />
       </a>
 
       <NavigationMenu class="header-nav hidden max-w-none flex-none xl:flex" align="start" sideOffset={16} aria-label="Main">

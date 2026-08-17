@@ -1,41 +1,33 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
+import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import defaultBg from '@/assets/images/home/how-it-works/bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
+type HowItWorksPage = 'individuals' | 'school' | 'sports' | 'custom';
+
 interface Props {
-  bg?: LocalImageProps['src'];
+  /** Page-specific background — matches `how_it_works.page_backgrounds[].page`; without it the default `bg` is used. */
+  page?: HowItWorksPage;
 }
 
-const { bg = defaultBg } = Astro.props;
+const { page } = Astro.props;
 
-const steps = [
-  {
-    step: 'Step 1',
-    title: 'Book a 30-Minute Call',
-    text: 'Tell us about your church, school, or personal mission goals. We’ll help you choose the right opportunity.',
-    class: 'bg-[#576d87] md:left-2.5 md:top-2 md:-rotate-3',
-  },
-  {
-    step: 'Step 2',
-    title: 'We’ll Build Your Mission Experience',
-    text: 'From logistics and trusted local partnerships to discipleship training and travel preparation – we’ll handle the details together.',
-    class: 'bg-[#2b4767] md:left-30 md:top-12 md:rotate-3',
-  },
-  {
-    step: 'Step 3',
-    title: 'Go. Serve. Grow.',
-    text: 'Experience a mission that changes lives – including your own – and continue growing through post-trip discipleship.',
-    class: 'bg-secondary md:left-16 md:top-20',
-  },
-];
+const { eyebrow, heading, text, steps, bg: defaultBg, page_backgrounds: pageBackgrounds, cta_label: ctaLabel, cta_href: ctaHref } = await getSingleton('how_it_works');
+
+const pageBg = page && pageBackgrounds.find((item) => item.page === page);
+if (page && !pageBg) throw new Error(`how_it_works.page_backgrounds has no entry for page "${page}"`);
+const bg = pageBg ? pageBg.image : defaultBg;
+
+// Per-card colour/offset (styling only — content comes from the CMS).
+const cardClasses = ['bg-[#576d87] md:left-2.5 md:top-2 md:-rotate-3', 'bg-[#2b4767] md:left-30 md:top-12 md:rotate-3', 'bg-secondary md:left-16 md:top-20'];
 ---
 
 <section id="how-it-works" class="relative py-15 md:py-0" aria-labelledby="how-it-works-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" class="size-full object-cover object-bottom" />
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/20"></div>
   </div>
   <div class="container">
@@ -43,24 +35,24 @@ const steps = [
       <div class="relative mx-auto flex flex-col items-center gap-10">
         <div class="flex flex-col gap-8 text-center text-cream">
           <div class="flex flex-col gap-4">
-            <p class="leading-none font-bold uppercase opacity-65">How it works</p>
-            <h2 id="how-it-works-heading" class="text-3xl leading-none font-bold md:text-5xl">Mission Trips Done Right</h2>
+            <p class="leading-none font-bold uppercase opacity-65">{eyebrow}</p>
+            <h2 id="how-it-works-heading" class="text-3xl leading-none font-bold md:text-5xl">{heading}</h2>
           </div>
-          <p class="leading-none">A simple process that helps you serve with confidence.</p>
+          <p class="leading-none">{text}</p>
         </div>
 
         <div class="flex w-full flex-col items-center gap-5 md:relative md:block md:h-105 md:w-115">
           {
-            steps.map((item) => (
+            steps.map((item, index) => (
               <article
                 data-step-card
                 class:list={[
                   'flex h-85 w-full max-w-82 flex-col justify-between rounded-lg border border-white/15 p-8 text-cream shadow-[0px_4px_10px_rgba(0,0,0,0.1)] md:absolute md:w-82',
-                  item.class,
+                  cardClasses[index],
                 ]}
               >
                 <div class="flex flex-col gap-5">
-                  <p class="leading-none font-bold uppercase opacity-50">{item.step}</p>
+                  <p class="leading-none font-bold uppercase opacity-50">{item.step_label}</p>
                   <h3 class="text-2xl leading-none font-bold">{item.title}</h3>
                 </div>
                 <p class="leading-none">{item.text}</p>
@@ -69,7 +61,7 @@ const steps = [
           }
         </div>
 
-        <Button href="/contact" size="lg" class="w-82 max-w-full">Take the first step</Button>
+        <Button href={ctaHref} size="lg" class="w-82 max-w-full">{ctaLabel}</Button>
       </div>
     </div>
 

@@ -2,18 +2,26 @@
 import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import bg from '@/assets/images/donate/campaign-bg.png';
-import photo from '@/assets/images/donate/campaign-photo.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 import { Progress } from '@/shared/ui/progress';
 
-const raised = 84350;
-const goal = 150000;
+const {
+  donate_campaign_eyebrow: eyebrow,
+  donate_campaign_title: title,
+  donate_campaign_description: description,
+  donate_campaign_raised: raised,
+  donate_campaign_goal: goal,
+  donate_campaign_days_label: daysLabel,
+  donate_campaign_bg: bg,
+  donate_campaign_photo: photo,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-10 py-15 md:py-30 lg:py-40" aria-labelledby="campaign-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
     <div class="absolute inset-0 bg-[#cecece]/5"></div>
   </div>
 
@@ -22,10 +30,10 @@ const goal = 150000;
       <div class="flex w-full flex-col gap-10">
         <div class="flex max-w-151 flex-col gap-7.5">
           <div class="flex flex-col gap-4">
-            <p class="text-muted-foreground leading-none font-bold uppercase">Current campaign</p>
-            <h2 id="campaign-heading" class="text-3xl font-bold md:text-5xl">2026 Fishing Drive</h2>
+            <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+            <h2 id="campaign-heading" class="text-3xl font-bold md:text-5xl">{title}</h2>
           </div>
-          <p class="max-w-90 leading-none">Help us send more believers into God’s mission during the 2026 mission season.</p>
+          <p class="max-w-90 leading-none">{description}</p>
         </div>
 
         <div class="flex w-full flex-col gap-5">
@@ -44,7 +52,7 @@ const goal = 150000;
             </div>
             <div class="flex flex-col gap-1.25">
               <p class="text-muted-foreground leading-none font-bold uppercase">Days Remaining</p>
-              <p class="text-2xl font-bold">127 Days Left</p>
+              <p class="text-2xl font-bold">{daysLabel}</p>
             </div>
           </div>
         </div>
@@ -54,7 +62,7 @@ const goal = 150000;
     </div>
 
     <figure class="bg-cream mx-auto w-full max-w-131 rotate-3 rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] xl:mx-0">
-      <Image src={photo} alt="A mission team standing with local partners beside a fishing boat" widths={[800, 1200]} class="aspect-499/348 w-full rounded-sm object-cover" />
+      <CmsImage image={photo} alt="A mission team standing with local partners beside a fishing boat" widths={[800, 1200]} class="aspect-499/348 w-full rounded-sm object-cover" />
     </figure>
   </div>
 

@@ -2,11 +2,20 @@
 interface Props {
   eyebrow: string;
   title: string;
+  text: string;
   kind: 'mission' | 'vision' | 'motto';
 }
 
-const verses = ['Matthew 4:19', 'Luke 5:4–6', 'John 21:6–8', 'Matthew 24:14'];
-const { eyebrow, title, kind } = Astro.props;
+const { eyebrow, title, text, kind } = Astro.props;
+
+// Multiline text → paragraphs. For the motto, a trailing "Verse · Verse · …" line becomes the verse list.
+const paragraphs = text
+  .split(/\n\s*\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+const last = paragraphs.at(-1);
+const verses = kind === 'motto' && last?.includes('·') ? last.split(/\s*·\s*/) : [];
+const body = verses.length ? paragraphs.slice(0, -1) : paragraphs;
 ---
 
 <div class="flex w-full flex-col items-center gap-7.5 py-15 text-center xl:py-0">
@@ -15,47 +24,29 @@ const { eyebrow, title, kind } = Astro.props;
     <h2 class="text-3xl  font-bold md:text-5xl">{title}</h2>
   </div>
 
-  {
-    kind === 'mission' && (
-      <p class="max-w-126.25 text-base leading-none">
-        Crew419 equips and mobilizes believers for short-term mission trips to spread the Gospel, serving <span class="text-primary">“Til the Nets Are Full”.</span> Through partnerships with local
-        churches and ministries, we prepare participants before they go, support them while they serve, and encourage them to continue living on mission after they return home.
-      </p>
-    )
-  }
+  {kind === 'mission' && body.map((paragraph) => <p class="max-w-126.25 text-base leading-none">{paragraph}</p>)}
 
-  {
-    kind === 'vision' && (
-      <p class="max-w-135.5 text-base leading-none">
-        We believe every church can become a sending church and every believer can become an active participant in God’s mission. Our vision is to see lives transformed through Gospel-centered mission
-        experiences that strengthen local ministries and inspire lifelong discipleship.
-      </p>
-    )
-  }
+  {kind === 'vision' && body.map((paragraph) => <p class="max-w-135.5 text-base leading-none">{paragraph}</p>)}
 
   {
     kind === 'motto' && (
       <>
         <div class="flex max-w-152.5 flex-col gap-2.5 text-base leading-none">
-          <p>
-            Our motto reflects our commitment to faithfully follow where God leads and continue sharing the Gospel until His mission is complete. Inspired by Jesus’ call to His disciples to cast their
-            nets in faith (Luke 5:4–6; John 21:6–8), <span class="text-primary">“Til the Nets Are Full”</span> reminds us that every person matters and every opportunity to serve has eternal
-            significance.
-          </p>
-          <p>
-            The phrase also honors the legacy of <span class="text-primary">Ron Bishop</span>, founder of SCORE International, whose words encouraged generations of believers to stay committed to the
-            Great Commission. Our mission continues until the Gospel is proclaimed among all nations.
-          </p>
+          {body.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
         </div>
 
-        <ul class="flex flex-wrap items-center justify-center gap-3.75 text-lg leading-none font-medium">
-          {verses.map((verse, verseIndex) => (
-            <li class="flex items-center gap-3.75">
-              {verseIndex > 0 && <span class="bg-foreground size-1.5 rounded-full" aria-hidden="true" />}
-              {verse}
-            </li>
-          ))}
-        </ul>
+        {verses.length > 0 && (
+          <ul class="flex flex-wrap items-center justify-center gap-3.75 text-lg leading-none font-medium">
+            {verses.map((verse, verseIndex) => (
+              <li class="flex items-center gap-3.75">
+                {verseIndex > 0 && <span class="bg-foreground size-1.5 rounded-full" aria-hidden="true" />}
+                {verse}
+              </li>
+            ))}
+          </ul>
+        )}
       </>
     )
   }

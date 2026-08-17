@@ -1,6 +1,5 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import howItWorksBg from '@/assets/images/sports/how-it-works-bg.png';
 import Partners from '@/components/churches/Partners.astro';
 import Faq from '@/components/home/Faq.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
@@ -10,65 +9,19 @@ import Details from '@/components/sports/Details.astro';
 import EveryGame from '@/components/sports/EveryGame.astro';
 import Hero from '@/components/sports/Hero.astro';
 import MoreThanTheGame from '@/components/sports/MoreThanTheGame.astro';
+import { getSingleton } from '@/lib/content';
 
-const stats = [
-  { value: '20+', label: 'Years of Experience' },
-  { value: '150+', label: 'Church Partnerships' },
-  { value: 'Thousands', label: 'Mission Participants' },
-];
-
-const faqItems = [
-  {
-    id: 'destination',
-    question: 'Can we choose our destination?',
-    answer: 'Yes. Every custom mission trip is planned around your goals, destination, and ministry focus.',
-  },
-  {
-    id: 'itinerary',
-    question: 'Can we customize the itinerary?',
-    answer: 'Absolutely. We design each trip specifically for your church or school instead of using a fixed schedule.',
-  },
-  {
-    id: 'participants',
-    question: 'How many participants do we need?',
-    answer: 'Group sizes vary by destination. We’ll help determine the best option during the planning process.',
-  },
-  {
-    id: 'planning',
-    question: 'How early should we start planning?',
-    answer: 'We recommend starting several months before your preferred travel dates.',
-  },
-  {
-    id: 'logistics',
-    question: 'Will Crew419 handle the logistics?',
-    answer: 'Yes. We help coordinate travel, accommodations, ministry partnerships, and preparation.',
-  },
-  {
-    id: 'fundraising',
-    question: 'Do you help with fundraising?',
-    answer: 'Yes. We provide fundraising resources and guidance for your team.',
-  },
-  {
-    id: 'ministry-focus',
-    question: 'Can our trip focus on a specific ministry?',
-    answer: 'Absolutely. We can build your trip around sports, construction, medical missions, evangelism, or other ministry goals.',
-  },
-  {
-    id: 'why-crew419',
-    question: 'Why choose Crew419 instead of planning it ourselves?',
-    answer: 'We combine trusted partnerships, logistical expertise, and discipleship to create a safe, meaningful mission experience.',
-  },
-];
+const { sports_seo_title, sports_seo_description, sports_og_image } = await getSingleton('website_content');
 ---
 
-<Layout title="Sports Mission Trips | Crew419">
+<Layout title={sports_seo_title} description={sports_seo_description} ogImage={sports_og_image}>
   <Hero />
   <MoreThanTheGame />
   <Details />
   <EveryGame />
-  <HowItWorks bg={howItWorksBg} />
-  <Impact class="py-30" heading="Trusted by Churches Across Multiple Countries" stats={stats} />
-  <Partners />
-  <Faq items={faqItems} />
+  <HowItWorks page="sports" />
+  <Impact variant="audience" class="py-30" />
+  <Partners where="audience" />
+  <Faq page="sports" />
   <SportsCta />
 </Layout>

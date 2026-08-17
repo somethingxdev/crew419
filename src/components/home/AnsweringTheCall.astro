@@ -1,38 +1,11 @@
 ---
 import { Image } from 'astro:assets';
-import complexLogistics from '@/assets/images/home/answering-the-call/complex-logistics.png';
-import cookieCutter from '@/assets/images/home/answering-the-call/cookie-cutter.jpg';
-import noNextStep from '@/assets/images/home/answering-the-call/no-next-step.png';
-import spiritualPreparation from '@/assets/images/home/answering-the-call/spiritual-preparation.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-const problems = [
-  {
-    label: 'Cookie-cutter mission trips',
-    title: 'Cookie-cutter mission trips',
-    text: 'Every team has different goals. Churches, schools, sports teams, and individuals need mission experiences designed around their unique purpose – not a one-size-fits-all itinerary.',
-    image: cookieCutter,
-  },
-  {
-    label: 'Little spiritual preparation',
-    title: 'Little Spiritual Preparation',
-    text: 'A mission trip should be more than travel. Intentional discipleship before, during, and after helps participants grow in faith and return home ready to serve.',
-    image: spiritualPreparation,
-  },
-  {
-    label: 'Complex logistics',
-    title: 'Complex Logistics',
-    text: 'Planning travel, lodging, transportation, and ministry partnerships can quickly become overwhelming. We coordinate every detail so your team can focus on serving.',
-    image: complexLogistics,
-  },
-  {
-    label: 'No clear next step',
-    title: 'No Clear Next Step',
-    text: 'The mission doesn’t end when the trip is over. We provide resources and discipleship that help participants continue living on mission long after they return home.',
-    image: noNextStep,
-  },
-];
+const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_problems: problems } = await getSingleton('website_content');
 ---
 
 <section id="answering-the-call" class="relative" data-answering>
@@ -41,7 +14,7 @@ const problems = [
       problems.map((problem, index) => (
         <div data-slide-bg data-active={index === 0 ? '' : undefined} class="absolute inset-0">
           <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
-            <Image src={problem.image} alt="" widths={[1600]} class="size-full object-cover object-center blur-[2px]" loading={index > 0 ? 'lazy' : 'eager'} />
+            <CmsImage image={problem.image} alt="" widths={[1600]} class="size-full object-cover object-center blur-[2px]" loading={index > 0 ? 'lazy' : 'eager'} />
           </div>
           <div class="absolute inset-0 bg-black/20" />
         </div>
@@ -51,15 +24,15 @@ const problems = [
 
   <div class="relative z-10 mx-auto flex max-w-400 flex-col gap-12 px-12 pt-48 pb-25 lg:grid lg:min-h-212 lg:grid-cols-[1fr_420px_1fr] lg:gap-x-12 lg:pb-48">
     <div class="flex flex-col gap-4 lg:self-start">
-      <p class="leading-none font-bold text-muted-foreground uppercase">Answering the call</p>
-      <h2 class="max-w-117 text-5xl leading-none font-bold text-cream">Every Believer Is Called. But Too Many Never Go.</h2>
+      <p class="leading-none font-bold text-muted-foreground uppercase">{eyebrow}</p>
+      <h2 class="max-w-117 text-5xl leading-none font-bold text-cream">{heading}</h2>
     </div>
 
     <div class="relative w-full max-w-105 justify-self-center lg:self-start">
       {
         problems.map((problem, index) => (
           <article data-slide data-active={index === 0 ? '' : undefined} class="flex w-full flex-col gap-4 rounded-lg bg-cream px-2.5 pt-2.5 pb-5">
-            <Image src={problem.image} alt={problem.title} widths={[800]} class="h-81 w-full rounded-lg object-cover" loading={index > 0 ? 'lazy' : 'eager'} />
+            <CmsImage image={problem.image} alt={problem.alt} widths={[800]} class="h-81 w-full rounded-lg object-cover" loading={index > 0 ? 'lazy' : 'eager'} />
             <div class="flex flex-col gap-5 px-2.5">
               <h3 class="text-2xl leading-none font-bold">{problem.title}</h3>
               <p class="text-justify text-sm leading-none">{problem.text}</p>

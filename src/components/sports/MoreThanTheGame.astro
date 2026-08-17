@@ -1,27 +1,29 @@
 ---
-const cards = [
-  'Teams need purpose beyond winning',
-  'International travel is difficult to organize',
-  'Coaches need trusted partners',
-  'Players want meaningful experiences',
-];
+import { getSingleton } from '@/lib/content';
+
+const {
+  sports_intro_eyebrow: eyebrow,
+  sports_intro_heading: heading,
+  sports_intro_text: text,
+  sports_challenge_cards: cards,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-20 py-30" aria-labelledby="more-than-the-game-heading">
   <div class="container flex flex-col items-center gap-12.5">
     <div class="flex max-w-170 flex-col items-center gap-7.5 text-center">
       <div class="flex flex-col items-center gap-4">
-        <p class="text-muted-foreground leading-none font-bold uppercase">More than the game</p>
-        <h2 id="more-than-the-game-heading" class="text-3xl font-bold md:text-5xl">Your Team Was Made for More Than Competition</h2>
+        <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+        <h2 id="more-than-the-game-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
       </div>
-      <p class="leading-none">Sports build character – but mission trips build faith, unity, and eternal impact.</p>
+      <p class="leading-none">{text}</p>
     </div>
 
     <div class="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-4">
       {
-        cards.map((title) => (
+        cards.map((card) => (
           <article class="bg-cream flex min-h-45 items-center justify-center rounded-lg p-7.5">
-            <h3 class="text-center text-2xl font-bold">{title}</h3>
+            <h3 class="text-center text-2xl font-bold">{card.title}</h3>
           </article>
         ))
       }

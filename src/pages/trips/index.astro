@@ -1,16 +1,19 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Compass from '@/components/trips/Compass.astro';
+import Cta from '@/components/trips/Cta.astro';
 import CustomGroup from '@/components/trips/CustomGroup.astro';
 import Hero from '@/components/trips/Hero.astro';
 import Locations from '@/components/trips/Locations.astro';
 import WhyTripsAreDifferent from '@/components/trips/WhyTripsAreDifferent.astro';
 import Impact from '@/components/home/Impact.astro';
 import Faq from '@/components/home/Faq.astro';
-import Cta from '@/components/home/Cta.astro';
+import { getSingleton } from '@/lib/content';
+
+const { trips_hub_seo_title, trips_hub_seo_description, trips_hub_og_image } = await getSingleton('website_content');
 ---
 
-<Layout title="Mission Trips | Crew419">
+<Layout title={trips_hub_seo_title} description={trips_hub_seo_description} ogImage={trips_hub_og_image}>
   <Hero />
   <Locations />
   <Compass />

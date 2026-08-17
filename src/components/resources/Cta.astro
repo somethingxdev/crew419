@@ -1,35 +1,58 @@
 ---
-import { Image } from 'astro:assets';
-import bg from '@/assets/images/resources/cta-bg.png';
+import type { CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
-  secondaryLabel: string;
-  secondaryHref: string;
+  /** Resource whose `cta_*` fields are shown; without it the travel-guides hub CTA (`resources_hub_cta_*`) is used. */
+  resource?: CollectionEntry<'resources'>;
   class?: string;
 }
 
-const { secondaryLabel, secondaryHref, class: className = 'py-15' } = Astro.props;
+const { resource, class: className = 'py-15' } = Astro.props;
+
+async function hubCta() {
+  const {
+    resources_hub_cta_title: title,
+    resources_hub_cta_text: text,
+    resources_hub_cta_image: image,
+    resources_hub_cta_primary_label: primaryLabel,
+    resources_hub_cta_primary_href: primaryHref,
+    resources_hub_cta_secondary_label: secondaryLabel,
+    resources_hub_cta_secondary_href: secondaryHref,
+  } = await getSingleton('website_content');
+  return { title, text, image, primaryLabel, primaryHref, secondaryLabel, secondaryHref };
+}
+
+const { title, text, image, primaryLabel, primaryHref, secondaryLabel, secondaryHref } = resource
+  ? {
+      title: resource.data.cta_title,
+      text: resource.data.cta_text,
+      image: resource.data.cta_image,
+      primaryLabel: resource.data.cta_primary_label,
+      primaryHref: resource.data.cta_primary_href,
+      secondaryLabel: resource.data.cta_secondary_label,
+      secondaryHref: resource.data.cta_secondary_href,
+    }
+  : await hubCta();
 ---
 
 <section class={className} aria-labelledby="resources-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover" />
+        <CmsImage image={image} alt="" widths={[1600, 3000]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
       <div class="relative z-10 mx-auto flex w-full max-w-155 flex-col items-center justify-center gap-7.5 px-5 py-15 text-center text-cream md:py-0">
         <div class="flex w-full flex-col items-center gap-6">
-          <h2 id="resources-cta-heading" class="text-3xl font-bold md:text-5xl">Your Mission Starts With One Step</h2>
-          <p class="leading-none">
-            God is already moving around the world.<br />
-            Let’s discover where He’s inviting you to serve.
-          </p>
+          <h2 id="resources-cta-heading" class="text-3xl font-bold md:text-5xl">{title}</h2>
+          <p class="leading-none whitespace-pre-line">{text}</p>
         </div>
         <div class="flex flex-col items-center gap-4 sm:flex-row">
-          <Button href="/contact" variant="cream" size="lg">Book a 30–minute call</Button>
+          <Button href={primaryHref} variant="cream" size="lg">{primaryLabel}</Button>
           <Button href={secondaryHref} variant="glass" size="lg" class="max-w-full">{secondaryLabel}</Button>
         </div>
       </div>

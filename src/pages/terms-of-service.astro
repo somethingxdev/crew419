@@ -1,8 +1,12 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import LegalPage from '@/components/legal/Page.astro';
+import { getSingleton } from '@/lib/content';
+
+// Legal pages have no CMS entry — description/OG image come from the global site defaults.
+const { seo_description, og_image } = await getSingleton('global');
 ---
 
-<Layout title="Terms of Service | Crew419">
+<Layout title="Terms of Service | Crew419" description={seo_description} ogImage={og_image}>
   <LegalPage title="Terms of Service" />
 </Layout>

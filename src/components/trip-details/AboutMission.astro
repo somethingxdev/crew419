@@ -1,21 +1,22 @@
 ---
-import { Image } from 'astro:assets';
-import photo1 from '@/assets/images/trip-details/about/photo-1.png';
-import photo2 from '@/assets/images/trip-details/about/photo-2.png';
+import type { CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
 import PhotoPairSection from '@/components/shared/PhotoPairSection.astro';
+
+interface Props {
+  trip: CollectionEntry<'trips'>;
+}
+
+const { about_eyebrow: eyebrow, about_heading: heading, about_text: text, about_photo_left: photoLeft, about_photo_right: photoRight } = Astro.props.trip.data;
 ---
 
 <PhotoPairSection labelledBy="about-mission-heading">
-  <Image slot="image-left" src={photo1} alt="Volunteers moving building materials with a wheelbarrow" width={600} height={600} />
-  <Image slot="image-right" src={photo2} alt="A volunteer teaching a classroom of local schoolchildren" width={600} height={600} />
+  <CmsImage slot="image-left" image={photoLeft} alt="" widths={[600, 1200]} />
+  <CmsImage slot="image-right" image={photoRight} alt="" widths={[600, 1200]} />
 
   <div class="flex w-full flex-col items-start gap-4">
-    <p class="text-muted-foreground leading-none font-bold uppercase">About the mission</p>
-    <h2 id="about-mission-heading" class="text-3xl font-bold md:text-5xl">Serve Local Communities with Purpose</h2>
+    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+    <h2 id="about-mission-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
   </div>
-  <p class="max-w-129.25 leading-tight">
-    Partner with trusted local churches as you support outreach programs designed to strengthen communities and share the love of Christ. Throughout the week you’ll participate in children’s ministry,
-    community visits, evangelism, prayer, and practical service projects while building lasting relationships with local believers. No previous mission experience is required – just a willing heart
-    and a desire to serve.
-  </p>
+  <div class="flex max-w-129.25 flex-col gap-4 leading-tight" set:html={text} />
 </PhotoPairSection>

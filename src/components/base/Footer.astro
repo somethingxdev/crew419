@@ -1,60 +1,22 @@
 ---
-import { Image } from 'astro:assets';
-import logo from '@/assets/images/logo.png';
+import CmsImage from '@/components/base/CmsImage.astro';
 import LifeInMission from '@/components/home/LifeInMission.astro';
 import Facebook from '@/icons/facebook.svg';
 import Instagram from '@/icons/instragram.svg';
 import Youtube from '@/icons/youtube.svg';
+import { getSingleton } from '@/lib/content';
+import { getNavigation } from './nav';
+
+const { logo, site_name, tagline, copyright, facebook_url, instagram_url, youtube_url } = await getSingleton('global');
+const nav = await getNavigation('footer');
 
 const columns = [
-  {
-    title: 'Mission Trips',
-    links: [
-      { label: 'All Trips', href: '/trips' },
-      { label: 'Custom Trips', href: '/trips/custom' },
-      { label: 'USA', href: '/trips/usa' },
-      { label: 'Canada', href: '/trips/canada' },
-      { label: 'Caribbean', href: '/trips/caribbean' },
-      { label: 'Central America', href: '/trips/central-america' },
-      { label: 'South America', href: '/trips/south-america' },
-      { label: 'Africa', href: '/trips/africa' },
-      { label: 'Europe', href: '/trips/europe' },
-      { label: 'Middle East', href: '/trips/middle-east' },
-      { label: 'Asia', href: '/trips/asia' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Discipleship Guide', href: '/resources/discipleship-guide' },
-      { label: 'Travel Guides', href: '/resources/travel-guides' },
-      { label: 'Fundraising Guide', href: '/resources/fundraising-guide' },
-    ],
-  },
-  {
-    title: 'About',
-    links: [
-      { label: 'Our Mission', href: '/about/mission' },
-      { label: 'Leadership Team', href: '/about/leadership' },
-      { label: 'Statement of Faith', href: '/about/statement-of-faith' },
-      { label: 'Stories', href: '/stories' },
-    ],
-  },
-  {
-    title: 'Connect',
-    links: [
-      { label: 'Book a 30-Minute Call', href: '/contact' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Donate', href: '/donate' },
-    ],
-  },
+  { title: 'Mission Trips', links: nav.mission_trips },
+  { title: 'Resources', links: nav.resources },
+  { title: 'About', links: nav.about },
+  { title: 'Connect', links: nav.connect },
 ];
-
-const legal = [
-  { label: 'Privacy Policy', href: '/privacy-policy' },
-  { label: 'Terms of Service', href: '/terms-of-service' },
-  { label: 'Refund Policy', href: '/refund-policy' },
-];
+const legal = nav.legal;
 ---
 
 <LifeInMission />
@@ -64,19 +26,32 @@ const legal = [
     <div class="flex justify-between">
       <div class="w-96">
         <a href="/">
-          <Image src={logo} alt="Crew419" width={221} height={70} class="h-18 w-auto" />
+          <CmsImage image={logo} alt={site_name} widths={[221, 442]} class="h-18 w-auto" />
         </a>
-        <p class="mt-8 text-lg leading-none font-medium">Mobilizing believers for Gospel-centered mission trips around the world – until the nets are full.</p>
+        <p class="mt-8 text-lg leading-none font-medium">{tagline}</p>
         <div class="mt-8 flex gap-3">
-          <a href="#" aria-label="Facebook" class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300">
-            <Facebook />
-          </a>
-          <a href="#" aria-label="Instagram" class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300">
-            <Instagram />
-          </a>
-          <a href="#" aria-label="YouTube" class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300">
-            <Youtube />
-          </a>
+          {
+            (
+              [
+                { href: facebook_url, label: 'Facebook', Icon: Facebook },
+                { href: instagram_url, label: 'Instagram', Icon: Instagram },
+                { href: youtube_url, label: 'YouTube', Icon: Youtube },
+              ] as const
+            ).map(
+              ({ href, label, Icon }) =>
+                href && (
+                  <a
+                    href={href}
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener"
+                    class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    <Icon />
+                  </a>
+                ),
+            )
+          }
         </div>
       </div>
 
@@ -101,7 +76,7 @@ const legal = [
     </div>
 
     <div class="mt-12 flex items-center justify-between text-lg leading-none font-medium">
-      <p>© Crew419. All Rights Reserved.</p>
+      <p>{copyright}</p>
       <div class="flex gap-25">
         {
           legal.map((item) => (

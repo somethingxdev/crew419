@@ -1,8 +1,12 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Sitemap from '@/components/sitemap/Sitemap.astro';
+import { getSingleton } from '@/lib/content';
+
+// The sitemap has no CMS entry — description/OG image come from the global site defaults.
+const { seo_description, og_image } = await getSingleton('global');
 ---
 
-<Layout title="Sitemap | Crew419">
+<Layout title="Sitemap | Crew419" description={seo_description} ogImage={og_image}>
   <Sitemap />
 </Layout>

@@ -1,27 +1,36 @@
 ---
 import { Image } from 'astro:assets';
 import decor from '@/assets/images/decor-bottom.png';
-import bg from '@/assets/images/sports/hero-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  sports_hero_eyebrow: eyebrow,
+  sports_hero_title: title,
+  sports_hero_description: description,
+  sports_hero_image: image,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
 ---
 
 <section class="relative" aria-labelledby="sports-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover object-bottom" />
+    <CmsImage image={image} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 
   <div class="relative container flex w-full flex-1 flex-col justify-between gap-20 py-60">
     <div class="flex w-full max-w-213 flex-col items-center text-center xl:items-start xl:text-left">
-      <p class="leading-none font-bold text-cream/80 uppercase">Sports mission trips</p>
+      <p class="leading-none font-bold text-cream/80 uppercase">{eyebrow}</p>
       <h1 id="sports-hero-heading" class="mt-3 text-4xl font-bold text-cream text-shadow-2xs md:text-6xl xl:text-[74px]">
-        When Faith and Sports Collide
+        {title}
       </h1>
       <p class="mt-7.5 max-w-137.5 text-lg leading-none font-medium text-cream">
-        Use the sport you love to compete, serve, and share the Gospel with athletes and communities around the world.
+        {description}
       </p>
       <div class="mt-7.5 flex w-full max-w-137.5 flex-col gap-4 sm:flex-row">
-        <Button href="/contact" variant="cream" size="lg" class="flex-1">Book a 30–minute call</Button>
+        <Button href={ctaHref} variant="cream" size="lg" class="flex-1">{ctaLabel}</Button>
         <Button href="#how-it-works" variant="glass" size="lg" class="flex-1">See how it works</Button>
       </div>
     </div>

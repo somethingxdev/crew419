@@ -1,10 +1,19 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
 import InTheField from '@/components/regions/InTheField.astro';
 import Hero from '@/components/thank-you/Hero.astro';
+import { getSingleton } from '@/lib/content';
+
+const { thank_you_seo_title, thank_you_seo_description, thank_you_og_image } = await getSingleton('website_content');
+
+// The thank-you page has no "In the field" fields of its own — it reuses the Africa region's section.
+const africa = (await getCollection('regions')).find(({ data }) => data.slug === 'africa');
+if (!africa) throw new Error('Thank-you page: region "africa" is not loaded (needed for the "In the field" section)');
+const { field_eyebrow, field_heading, field_bg } = africa.data;
 ---
 
-<Layout title="Thank You | Crew419">
+<Layout title={thank_you_seo_title} description={thank_you_seo_description} ogImage={thank_you_og_image}>
   <Hero />
-  <InTheField />
+  <InTheField eyebrow={field_eyebrow} heading={field_heading} bg={field_bg} />
 </Layout>

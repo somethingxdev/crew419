@@ -1,11 +1,19 @@
 ---
 import { Image, type LocalImageProps } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
 import children from '@/assets/images/regions/africa/ministry/children.png';
 import construction from '@/assets/images/regions/africa/ministry/construction.png';
 import evangelism from '@/assets/images/regions/africa/ministry/evangelism.png';
 import medical from '@/assets/images/regions/africa/ministry/medical.png';
 import sports from '@/assets/images/regions/africa/ministry/sports.png';
 
+interface Props {
+  region: CollectionEntry<'regions'>;
+}
+
+const { ministry_eyebrow: eyebrow, ministry_heading: heading, ministry_text: text } = Astro.props.region.data;
+
+// No CMS field for the opportunity cards yet — kept local.
 interface Opportunity {
   title: string;
   text: string;
@@ -58,9 +66,9 @@ const last = opportunities.length - 1;
 <section id="ministry" class="overflow-x-clip py-30" aria-labelledby="ministry-heading">
   <div class="container flex flex-col xl:flex-row xl:items-center xl:justify-between xl:gap-20">
     <div class="flex max-w-130 flex-col items-start">
-      <p class="text-muted-foreground leading-none font-bold uppercase">Ministry Opportunities</p>
-      <h2 id="ministry-heading" class="mt-3.75 text-3xl  font-bold md:text-5xl">How You Can Serve</h2>
-      <p class="mt-7.5 max-w-112 leading-none">Every trip offers different ways to serve, from using your skills to meeting practical needs and sharing the Gospel.</p>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="ministry-heading" class="mt-3.75 text-3xl  font-bold md:text-5xl">{heading}</h2>
+      <p class="mt-7.5 max-w-112 leading-none">{text}</p>
       <p class="mt-12.5 hidden font-serif text-5xl  font-bold xl:block" data-ministry-counter aria-hidden="true">01 / 05</p>
     </div>
 

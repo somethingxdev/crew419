@@ -1,25 +1,33 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
 import decor from '@/assets/images/decor-bottom.png';
+import CmsImage from '@/components/base/CmsImage.astro';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
-  bg: LocalImageProps['src'];
-  eyebrow: string;
-  title: string;
-  description: string;
-  primaryLabel: string;
-  primaryHref?: string;
-  secondaryLabel?: string;
-  secondaryHref?: string;
+  resource: CollectionEntry<'resources'>;
 }
 
-const { bg, eyebrow, title, description, primaryLabel, primaryHref = '#get-your-copy', secondaryLabel = 'Book a 30–minute call', secondaryHref = '/contact' } = Astro.props;
+const {
+  hero_image: bg,
+  hero_eyebrow: eyebrow,
+  hero_title: title,
+  hero_description: description,
+  hero_primary_label: primaryLabel,
+  hero_primary_href: heroPrimaryHref,
+  hero_secondary_label: secondaryLabel,
+  hero_secondary_href: secondaryHref,
+  pdf,
+} = Astro.props.resource.data;
+
+// An uploaded PDF is what the primary button downloads; without one the button uses the CMS href (e.g. "#get-your-copy").
+const primaryHref = pdf ? pdf.url : heroPrimaryHref;
 ---
 
 <section class="relative" aria-labelledby="guide-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover" />
+    <CmsImage image={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 

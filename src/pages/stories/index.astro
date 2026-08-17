@@ -3,9 +3,12 @@ import Layout from '@/layouts/Layout.astro';
 import Catalog from '@/components/stories/Catalog.astro';
 import Cta from '@/components/stories/Cta.astro';
 import Hero from '@/components/stories/Hero.astro';
+import { getSingleton } from '@/lib/content';
+
+const { stories_hub_seo_title, stories_hub_seo_description, stories_hub_og_image } = await getSingleton('website_content');
 ---
 
-<Layout title="Stories | Crew419">
+<Layout title={stories_hub_seo_title} description={stories_hub_seo_description} ogImage={stories_hub_og_image}>
   <Hero />
   <Catalog />
   <Cta />

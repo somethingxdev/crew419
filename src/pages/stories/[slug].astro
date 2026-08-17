@@ -1,0 +1,25 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import Article from '@/components/story-detail/Article.astro';
+import Cta from '@/components/story-detail/Cta.astro';
+import MoreStories from '@/components/story-detail/MoreStories.astro';
+
+export async function getStaticPaths() {
+  const stories = await getCollection('stories');
+  return stories.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'stories'>;
+}
+
+const { entry } = Astro.props;
+const { seo_title, seo_description, og_image, canonical_url } = entry.data;
+---
+
+<Layout title={seo_title} description={seo_description} ogImage={og_image} canonical={canonical_url}>
+  <Article entry={entry} />
+  <MoreStories entry={entry} />
+  <Cta entry={entry} />
+</Layout>

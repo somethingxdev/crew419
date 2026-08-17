@@ -1,0 +1,23 @@
+---
+/**
+ * <Image> for a Directus image (`imageSchema` from the content layer).
+ * Width/height come from Directus, so Astro optimizes it at build time
+ * exactly like a local import: `<CmsImage image={data.hero_image} alt="…" widths={[800, 1600]} />`.
+ */
+import { Image } from 'astro:assets';
+import type { HTMLAttributes } from 'astro/types';
+import type { DirectusImage } from '@/lib/directus-loader';
+
+interface Props extends Omit<HTMLAttributes<'img'>, 'src' | 'width' | 'height' | 'alt'> {
+  image: DirectusImage;
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  quality?: number | 'low' | 'mid' | 'high' | 'max';
+  format?: 'avif' | 'webp' | 'png' | 'jpg' | 'jpeg' | 'svg';
+}
+
+const { image, ...rest } = Astro.props;
+---
+
+<Image src={image.url} width={image.width} height={image.height} {...rest} />

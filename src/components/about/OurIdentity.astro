@@ -1,35 +1,35 @@
 ---
-const marqueeText = 'You’re becoming part of a mission';
+import { getSingleton } from '@/lib/content';
+
+const {
+  about_identity_eyebrow: eyebrow,
+  about_identity_heading: heading,
+  about_identity_text: text,
+  about_identity_verse: verse,
+  about_identity_marquee: marqueeText,
+} = await getSingleton('website_content');
+
+// Rich text paragraphs; the verse quote sits right after the second paragraph ("…where Jesus says:").
+const [intro, lead, ...rest] = text.split(/(?<=<\/p>)/).filter((paragraph) => paragraph.trim());
 ---
 
 <section class="overflow-x-clip py-15" aria-labelledby="our-identity-heading">
   <div class="container">
     <div class="flex flex-col gap-3.75">
-      <p class="text-muted-foreground text-base leading-none font-bold uppercase">Our identity</p>
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">{eyebrow}</p>
 
       <div class="flex flex-col gap-10 xl:flex-row xl:items-start xl:justify-between xl:gap-30">
-        <h2 id="our-identity-heading" class="max-w-130.25 text-3xl  font-bold md:text-5xl">More Than a Name. A Mission</h2>
+        <h2 id="our-identity-heading" class="max-w-130.25 text-3xl  font-bold md:text-5xl">{heading}</h2>
 
-        <div class="flex w-full max-w-148.75 flex-col gap-10 text-foreground">
-          <p class="text-base leading-none">
-            The name Crew419 represents who we are and why we serve. Crew represents a community of believers working together with a shared purpose — serving alongside one another, local
-            churches, and ministry partners around the world. We believe mission is not something we do alone. Together, we become part of something greater: sharing the Gospel and serving
-            others.
-          </p>
+        <div class="flex w-full max-w-148.75 flex-col gap-10 text-base leading-none text-foreground [&_strong]:font-normal [&_strong]:text-primary">
+          <Fragment set:html={intro} />
 
           <div class="flex flex-col gap-3.75">
-            <p class="text-base leading-none">
-              The number <span class="text-primary">419</span> comes from <span class="text-primary">Matthew 4:19</span>, where Jesus says:
-            </p>
-            <p class="font-serif text-2xl  font-bold">“Follow me, and I will make you fishers of men.”</p>
+            <Fragment set:html={lead} />
+            <p class="font-serif text-2xl  font-bold">{verse}</p>
           </div>
 
-          <p class="text-base leading-none">
-            This verse reminds us that every believer is called to follow Jesus and participate in His mission. Our motto, “Until the Nets Are Full,” comes from the stories of Jesus calling His
-            disciples to cast their nets and trust His word. In Luke 5:4-6, Jesus tells Simon Peter to let down his nets, and they bring in such a great catch that the nets begin to break. In
-            John 21:6, Jesus again fills the nets when the disciples follow His direction. These moments represent our mission: to faithfully go where God leads, share the Gospel with others,
-            and continue reaching people until the nets are full. At Crew419, you’re not just joining a trip.
-          </p>
+          <Fragment set:html={rest.join('')} />
         </div>
       </div>
     </div>

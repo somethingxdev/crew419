@@ -1,28 +1,35 @@
 ---
 import { Image } from 'astro:assets';
 import decor from '@/assets/images/decor-bottom.png';
-import bg from '@/assets/images/resources/travel-guides/hero-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  resources_hub_hero_eyebrow: eyebrow,
+  resources_hub_hero_title: title,
+  resources_hub_hero_description: description,
+  resources_hub_hero_image: bg,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
 ---
 
 <section class="relative" aria-labelledby="travel-guides-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover" />
+    <CmsImage image={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover" />
     <div class="absolute inset-0 bg-black/5"></div>
   </div>
 
   <div class="relative container flex w-full flex-1 flex-col justify-between gap-20 py-60">
     <div class="flex w-full max-w-242 flex-col items-center text-center xl:items-start xl:text-left">
-      <p class="leading-none font-bold text-cream/80 uppercase">Travel guides</p>
+      <p class="leading-none font-bold text-cream/80 uppercase">{eyebrow}</p>
       <h1 id="travel-guides-hero-heading" class="mt-3 text-4xl font-bold text-cream text-shadow-2xs md:text-6xl xl:text-[74px]">
-        Know Before You Go
+        {title}
       </h1>
-      <p class="mt-7.5 max-w-137.5 text-lg leading-none font-medium text-cream">
-        Everything you need to know before traveling with Crew419. Browse destination-specific guides with practical travel information, cultural insights, and preparation tips.
-      </p>
+      <p class="mt-7.5 max-w-137.5 text-lg leading-none font-medium text-cream">{description}</p>
       <div class="mt-7.5 flex w-full max-w-137.5 flex-col gap-4 sm:flex-row">
         <Button href="#destinations" variant="cream" size="lg" class="flex-1">Browse Destinations</Button>
-        <Button href="/contact" variant="glass" size="lg" class="flex-1">Book a 30–minute call</Button>
+        <Button href={ctaHref} variant="glass" size="lg" class="flex-1">{ctaLabel}</Button>
       </div>
     </div>
   </div>

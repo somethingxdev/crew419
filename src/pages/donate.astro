@@ -1,21 +1,30 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Cta from '@/components/about/Cta.astro';
 import Campaign from '@/components/donate/Campaign.astro';
+import Cta from '@/components/donate/Cta.astro';
 import Hero from '@/components/donate/Hero.astro';
 import JoinMission from '@/components/donate/JoinMission.astro';
 import WhereGiftGoes from '@/components/donate/WhereGiftGoes.astro';
 import WhySupport from '@/components/donate/WhySupport.astro';
 import Impact from '@/components/home/Impact.astro';
-import Stories from '@/components/regions/Stories.astro';
+import Stories from '@/components/home/Stories.astro';
+import { getSingleton } from '@/lib/content';
+
+const {
+  donate_seo_title,
+  donate_seo_description,
+  donate_og_image,
+  donate_stories_eyebrow: storiesEyebrow,
+  donate_stories_heading: storiesHeading,
+} = await getSingleton('website_content');
 ---
 
-<Layout title="Donate | Crew419">
+<Layout title={donate_seo_title} description={donate_seo_description} ogImage={donate_og_image}>
   <Hero />
   <WhySupport />
   <WhereGiftGoes />
-  <Impact class="py-15 xl:py-20" eyebrow="The nets are getting fuller" heading="Lives Changed Through Your Generosity" showMedia={false} />
-  <Stories eyebrow="Real Impact" heading="See What Your Support Makes Possible" />
+  <Impact variant="donate" class="py-15 xl:py-20" />
+  <Stories eyebrow={storiesEyebrow} heading={storiesHeading} />
   <Campaign />
   <JoinMission />
   <Cta />

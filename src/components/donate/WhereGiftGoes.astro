@@ -2,43 +2,28 @@
 import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import bg from '@/assets/images/donate/gift-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-const features = [
-  {
-    num: '01',
-    title: 'Ministry Infrastructure',
-    text: 'Sustains the daily operations and staff that keep Crew419 running – and every trip possible.',
-  },
-  {
-    num: '02',
-    title: 'Discipleship & Evangelism',
-    text: 'Funds ongoing training and outreach that continues long after a trip ends.',
-  },
-  {
-    num: '03',
-    title: 'Trip Scholarships',
-    text: 'Gives a teenager or adult who couldn’t otherwise afford it the chance for a life-changing trip.',
-  },
-  {
-    num: '04',
-    title: 'Partners on the Ground',
-    text: 'Provides medical, educational, food, and spiritual resources — and direct support for local missionaries and church partners serving year-round.',
-  },
-];
+const {
+  donate_gift_eyebrow: eyebrow,
+  donate_gift_heading: heading,
+  donate_gift_bg: bg,
+  donate_gift_features: features,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-10 py-15 md:py-30 lg:py-37.5" aria-labelledby="where-gift-goes-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 
   <div class="container">
     <div class="relative z-10 flex w-full flex-col justify-between gap-10 xl:flex-row xl:items-start">
       <div class="flex max-w-202 flex-col gap-4 text-cream">
-        <p class="leading-none font-bold uppercase opacity-80">Where your gift goes</p>
-        <h2 id="where-gift-goes-heading" class="text-3xl font-bold text-shadow-2xs md:text-5xl">Your Trip Fee Covers the Trip. Your Gift Covers the Mission.</h2>
+        <p class="leading-none font-bold uppercase opacity-80">{eyebrow}</p>
+        <h2 id="where-gift-goes-heading" class="text-3xl font-bold text-shadow-2xs md:text-5xl">{heading}</h2>
       </div>
 
       <div class="flex w-full max-w-130 shrink-0 flex-col gap-5">

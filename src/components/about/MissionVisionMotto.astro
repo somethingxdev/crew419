@@ -1,41 +1,9 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
-import missionImg from '@/assets/images/about/mission/mission.png';
-import mottoImg from '@/assets/images/about/mission/motto-poster.png';
-import visionImg from '@/assets/images/about/mission/vision.png';
 import MissionVisionCopy from '@/components/about/MissionVisionCopy.astro';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-interface Block {
-  eyebrow: string;
-  title: string;
-  image: LocalImageProps['src'];
-  alt: string;
-  kind: 'mission' | 'vision' | 'motto';
-}
-
-const blocks: Block[] = [
-  {
-    kind: 'mission',
-    eyebrow: 'Mission',
-    title: 'Equipping Believers for God’s Mission',
-    image: missionImg,
-    alt: 'A child watching the sunrise over a village at dawn',
-  },
-  {
-    kind: 'vision',
-    eyebrow: 'Vision',
-    title: 'A World Reached Through Faithful Servants',
-    image: visionImg,
-    alt: 'Mission team members praying with a local family over an open Bible',
-  },
-  {
-    kind: 'motto',
-    eyebrow: 'Our motto',
-    title: 'Serving Until the Nets Are Full',
-    image: mottoImg,
-    alt: 'Children lining up outside a village home to meet a mission team',
-  },
-];
+const { about_mission_blocks: blocks } = await getSingleton('website_content');
 ---
 
 <section class="overflow-x-clip border-t border-cream pb-15" aria-label="Mission, vision and motto">
@@ -44,10 +12,10 @@ const blocks: Block[] = [
       blocks.map((block, index) => (
         <div class:list={['flex flex-col xl:flex-row xl:items-center xl:gap-25', index > 0 && 'border-t border-cream']}>
           <div class="min-w-0 flex-1">
-            <MissionVisionCopy eyebrow={block.eyebrow} title={block.title} kind={block.kind} />
+            <MissionVisionCopy eyebrow={block.eyebrow} title={block.title} text={block.text} kind={block.kind} />
           </div>
-          <Image
-            src={block.image}
+          <CmsImage
+            image={block.image}
             alt={block.alt}
             widths={[800, 1600, 2400]}
             sizes="(min-width: 1280px) min(50vw, 790px), calc(100vw - 2.5rem + 60px)"

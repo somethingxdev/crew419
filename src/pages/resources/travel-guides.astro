@@ -3,10 +3,13 @@ import Layout from '@/layouts/Layout.astro';
 import ResourcesCta from '@/components/resources/Cta.astro';
 import Destinations from '@/components/resources/travel-guides/Destinations.astro';
 import Hero from '@/components/resources/travel-guides/Hero.astro';
+import { getSingleton } from '@/lib/content';
+
+const { resources_hub_seo_title, resources_hub_seo_description, resources_hub_og_image } = await getSingleton('website_content');
 ---
 
-<Layout title="Travel Guides | Crew419">
+<Layout title={resources_hub_seo_title} description={resources_hub_seo_description} ogImage={resources_hub_og_image}>
   <Hero />
   <Destinations />
-  <ResourcesCta secondaryLabel="Explore mission Trips" secondaryHref="/trips" />
+  <ResourcesCta />
 </Layout>

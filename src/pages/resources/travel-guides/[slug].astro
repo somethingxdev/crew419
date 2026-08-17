@@ -1,0 +1,27 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import ResourcesCta from '@/components/resources/Cta.astro';
+import GuideHero from '@/components/resources/guide/Hero.astro';
+import Details from '@/components/resources/travel-guides/detail/Details.astro';
+import MissionSlider from '@/components/resources/travel-guides/detail/MissionSlider.astro';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('resources', ({ data }) => data.kind === 'travel_guide');
+  return guides.map((guide) => ({ params: { slug: guide.data.slug }, props: { guide } }));
+}
+
+interface Props {
+  guide: CollectionEntry<'resources'>;
+}
+
+const { guide } = Astro.props;
+const { seo_title, seo_description, og_image, canonical_url } = guide.data;
+---
+
+<Layout title={seo_title} description={seo_description} ogImage={og_image} canonical={canonical_url}>
+  <GuideHero resource={guide} />
+  <Details resource={guide} />
+  <MissionSlider resource={guide} />
+  <ResourcesCta resource={guide} class="py-30" />
+</Layout>

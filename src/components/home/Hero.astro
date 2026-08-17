@@ -1,32 +1,34 @@
 ---
 import { Image } from 'astro:assets';
 import decor from '@/assets/images/decor-bottom.png';
-import bg from '@/assets/images/home/hero/bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const { home_hero_eyebrow: eyebrow, home_hero_title: title, home_hero_description: description, home_hero_image: image } = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
+
+// "Live Missionally. Here I Am. Send Me." → three styled lines.
+const [line1, line2, line3] = title.split(/(?<=\.)\s+/);
 ---
 
 <section class="relative flex min-h-150 flex-col pt-20 xl:min-h-220 xl:pt-26" aria-label="Hero">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-right-bottom" />
+    <CmsImage image={image} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom-right" />
   </div>
 
   <div class="relative w-full px-5 py-15 md:px-12 xl:pt-40 xl:pb-0">
     <div class="mx-auto w-full max-w-375">
-      <p class="leading-none font-bold text-muted-foreground uppercase">
-        Matthew 4:19 –<br />
-        “Follow Me, and I will make you fishers of men.”
-      </p>
+      <p class="leading-none font-bold text-muted-foreground uppercase whitespace-pre-line">{eyebrow}</p>
 
       <h1 class="mt-3 flex flex-col text-4xl leading-none font-bold text-foreground md:text-6xl xl:text-7xl">
-        <span class="uppercase">Live Missionally</span>
-        <span class="pl-16 md:pl-24 xl:pl-36">Here I Am.</span>
+        <span class="uppercase">{line1}</span>
+        <span class="pl-16 md:pl-24 xl:pl-36">{line2}</span>
         <span class="text-primary flex flex-wrap items-start gap-x-6 gap-y-8">
-          Send Me.
+          {line3}
           <span class="flex flex-col items-start gap-5 pt-1 xl:pt-6">
-            <span class="text-muted-foreground max-w-88 font-sans text-lg leading-none font-medium normal-case">
-              Trusted mission trips that equip believers to serve, grow, and make a lasting impact.
-            </span>
-            <Button href="/contact" size="lg" class="w-82 max-w-full">Book a 30–minute call</Button>
+            <span class="text-muted-foreground max-w-88 font-sans text-lg leading-none font-medium normal-case">{description}</span>
+            <Button href={ctaHref} size="lg" class="w-82 max-w-full">{ctaLabel}</Button>
           </span>
         </span>
       </h1>

@@ -2,35 +2,21 @@
 import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import bg from '@/assets/images/school/why-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-const features = [
-  {
-    num: '01',
-    title: 'Student-Focused Itineraries',
-    text: 'Every trip is tailored to your school’s goals, schedule, and the needs of your students.',
-  },
-  {
-    num: '02',
-    title: 'Safe & Organized Travel',
-    text: 'Our experienced team manages logistics so teachers can focus on leading and mentoring students.',
-  },
-  {
-    num: '03',
-    title: 'Local Ministry Partnerships',
-    text: 'Students serve alongside trusted local churches and ministries that create lasting Kingdom impact.',
-  },
-  {
-    num: '04',
-    title: 'Leadership Development',
-    text: 'Mission trips help students grow in faith, confidence, compassion, and servant leadership.',
-  },
-];
+const {
+  school_features_eyebrow: eyebrow,
+  school_features_heading: heading,
+  school_features_text: text,
+  school_features_bg: bg,
+  school_feature_cards: features,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-10 py-15 md:py-30 lg:py-37.5" aria-labelledby="why-crew419-school-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 
@@ -38,12 +24,10 @@ const features = [
     <div class="relative z-10 flex w-full flex-col justify-between gap-10 xl:flex-row xl:items-start">
       <div class="flex max-w-215 flex-col gap-7.5 text-cream">
         <div class="flex flex-col gap-3.75">
-          <p class="leading-none font-bold uppercase opacity-80">Why crew419</p>
-          <h2 id="why-crew419-school-heading" class="text-3xl font-bold text-shadow-2xs md:text-5xl">Everything You Need for a Meaningful Student Mission Trip</h2>
+          <p class="leading-none font-bold uppercase opacity-80">{eyebrow}</p>
+          <h2 id="why-crew419-school-heading" class="text-3xl font-bold text-shadow-2xs md:text-5xl">{heading}</h2>
         </div>
-        <p class="max-w-131 text-lg leading-none font-medium">
-          We partner with Christian schools to create safe, organized, and Christ-centered mission experiences that help students grow while serving communities around the world.
-        </p>
+        <p class="max-w-131 text-lg leading-none font-medium">{text}</p>
       </div>
 
       <div class="flex w-full max-w-130 shrink-0 flex-col gap-5">

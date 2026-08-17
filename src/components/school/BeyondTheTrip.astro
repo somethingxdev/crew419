@@ -1,39 +1,32 @@
 ---
+import { getSingleton } from '@/lib/content';
+
+const {
+  school_more_eyebrow: eyebrow,
+  school_more_heading: heading,
+  school_more_text: text,
+  school_more_cards: cards,
+} = await getSingleton('website_content');
+
 // Geometry mirrors the Figma frame (1600x353): the path vector fills the top 326px,
 // each column sits so its dot center (65px + 10px from column top) lands on the curve.
-const phases = [
-  {
-    title: 'Prepare',
-    text: 'Access devotionals, training sessions, fundraising resources, and practical guides before your trip begins.',
-    class: 'left-[7.5%] top-[58.64%] w-61 items-start text-left',
-    stop: 0.081,
-  },
-  {
-    title: 'Serve',
-    text: 'Daily reflections and team discussions help students connect their experiences with their faith while serving.',
-    class: 'left-[42.31%] top-[41.08%] w-61 items-center text-center',
-    stop: 0.5,
-  },
-  {
-    title: 'Reflect',
-    text: 'Continue learning after returning home through testimonies, follow-up resources, and opportunities for ongoing service.',
-    class: 'left-[81.63%] top-[2.83%] w-56 items-start text-left',
-    stop: 0.822,
-  },
+const geometry = [
+  { class: 'left-[7.5%] top-[58.64%] w-61 items-start text-left', stop: 0.081 },
+  { class: 'left-[42.31%] top-[41.08%] w-61 items-center text-center', stop: 0.5 },
+  { class: 'left-[81.63%] top-[2.83%] w-56 items-start text-left', stop: 0.822 },
 ];
+
+const phases = cards.map((card, i) => ({ ...card, ...geometry[i] }));
 ---
 
 <section class="relative z-20 overflow-x-clip py-30" aria-labelledby="school-beyond-heading">
   <div class="container flex flex-col items-center">
     <div class="flex max-w-195 flex-col items-center gap-7.5 text-center">
       <div class="flex flex-col items-center gap-4">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">Beyond the trip</p>
-        <h2 id="school-beyond-heading" class="text-3xl font-bold md:text-5xl">Preparing Students for More Than a Week of Service</h2>
+        <p class="text-muted-foreground text-base leading-none font-bold uppercase">{eyebrow}</p>
+        <h2 id="school-beyond-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
       </div>
-      <p class="max-w-124 text-base leading-none">
-        A mission trip is only part of the journey. Our discipleship resources help students prepare before departure, grow throughout the experience, and continue living out their faith after
-        returning home.
-      </p>
+      <p class="max-w-124 text-base leading-none">{text}</p>
     </div>
   </div>
 

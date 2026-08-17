@@ -10,9 +10,12 @@ import Impact from '@/components/home/Impact.astro';
 import Statements from '@/components/home/Statements.astro';
 import Stories from '@/components/home/Stories.astro';
 import WhyCrew419Exists from '@/components/home/WhyCrew419Exists.astro';
+import { getSingleton } from '@/lib/content';
+
+const { home_seo_title, home_seo_description, home_og_image, home_stories_eyebrow, home_stories_heading, home_stories_text } = await getSingleton('website_content');
 ---
 
-<Layout>
+<Layout title={home_seo_title} description={home_seo_description} ogImage={home_og_image}>
   <Hero />
   <WhyCrew419Exists />
   <AnsweringTheCall />
@@ -20,7 +23,7 @@ import WhyCrew419Exists from '@/components/home/WhyCrew419Exists.astro';
   <HowItWorks />
   <Impact class="py-30" />
   <FindYourMissionPath />
-  <Stories />
+  <Stories eyebrow={home_stories_eyebrow} heading={home_stories_heading} text={home_stories_text} />
   <Faq />
   <Cta />
 </Layout>

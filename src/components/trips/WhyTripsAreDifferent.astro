@@ -2,43 +2,28 @@
 import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import bg from '@/assets/images/trips/why-different/bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-const features = [
-  {
-    num: '01',
-    title: 'Trusted Local Churches',
-    text: 'Every trip is developed alongside long-term ministry partners.',
-  },
-  {
-    num: '02',
-    title: 'Discipleship Before, During & After',
-    text: 'Preparation doesn’t end when the plane lands.',
-  },
-  {
-    num: '03',
-    title: 'Safe & Well Organized',
-    text: 'Travel logistics, accommodation, and support are handled by experienced leaders.',
-  },
-  {
-    num: '04',
-    title: 'Lasting Kingdom Impact',
-    text: 'Serve alongside local churches, building lasting relationships and making a meaningful impact.',
-  },
-];
+const {
+  trips_hub_why_eyebrow: eyebrow,
+  trips_hub_why_heading: heading,
+  trips_hub_why_bg: bg,
+  trips_hub_why_features: features,
+} = await getSingleton('website_content');
 ---
 
 <section id="why-different" class="relative z-20 py-15 md:py-30 lg:py-40" aria-labelledby="why-different-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/5"></div>
   </div>
 
   <div class="container">
     <div class="relative z-10 flex w-full flex-col justify-between gap-10 xl:flex-row xl:items-start">
       <div class="flex max-w-134 flex-col gap-3.75 text-cream">
-        <p class="leading-none font-bold uppercase opacity-80">Mission Trips Built Around Purpose</p>
-        <h2 id="why-different-heading" class="text-3xl  font-bold text-shadow-2xs md:text-5xl">Why Crew419 Trips Are Different</h2>
+        <p class="leading-none font-bold uppercase opacity-80">{eyebrow}</p>
+        <h2 id="why-different-heading" class="text-3xl  font-bold text-shadow-2xs md:text-5xl">{heading}</h2>
       </div>
 
       <div class="flex w-full max-w-130 flex-col gap-5">

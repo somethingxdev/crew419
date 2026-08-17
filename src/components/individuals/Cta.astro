@@ -1,27 +1,35 @@
 ---
-import { Image } from 'astro:assets';
-import bg from '@/assets/images/individuals/cta-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  individuals_cta_title: title,
+  individuals_cta_text: text,
+  individuals_cta_image: image,
+  individuals_cta_primary_label: primaryLabel,
+  individuals_cta_primary_href: primaryHref,
+  individuals_cta_secondary_label: secondaryLabel,
+  individuals_cta_secondary_href: secondaryHref,
+} = await getSingleton('website_content');
 ---
 
 <section class="py-15" aria-labelledby="individuals-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover" />
+        <CmsImage image={image} alt="" widths={[1600, 3000]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
       <div class="relative z-10 mx-auto flex w-full max-w-203 flex-col items-center justify-center gap-7.5 px-5 py-15 text-center text-cream md:py-0">
         <div class="flex w-full flex-col items-center gap-6">
-          <h2 id="individuals-cta-heading" class="max-w-167 text-3xl font-bold md:text-5xl">Find the Mission That’s Right for You</h2>
-          <p class="max-w-112 leading-none">
-            Your next adventure can be more than a trip – it can be an opportunity to serve, grow, and make an eternal impact. Explore upcoming Crew419 missions and find where you belong.
-          </p>
+          <h2 id="individuals-cta-heading" class="max-w-167 text-3xl font-bold md:text-5xl">{title}</h2>
+          <p class="max-w-112 leading-none">{text}</p>
         </div>
         <div class="flex flex-col items-center gap-4 sm:flex-row">
-          <Button href="/contact" variant="cream" size="lg">Book a 30–minute call</Button>
-          <Button href="/trips" variant="glass" size="lg" class="w-62 max-w-full">Explore Trips</Button>
+          <Button href={primaryHref} variant="cream" size="lg">{primaryLabel}</Button>
+          <Button href={secondaryHref} variant="glass" size="lg" class="w-62 max-w-full">{secondaryLabel}</Button>
         </div>
       </div>
     </div>

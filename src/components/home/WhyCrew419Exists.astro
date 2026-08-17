@@ -1,86 +1,38 @@
 ---
-import { Image, type LocalImageProps } from 'astro:assets';
-import polaroid1 from '@/assets/images/home/why-crew419/polaroid-1.jpg';
-import polaroid2 from '@/assets/images/home/why-crew419/polaroid-2.jpg';
-import polaroid3 from '@/assets/images/home/why-crew419/polaroid-3.jpg';
-import polaroid4 from '@/assets/images/home/why-crew419/polaroid-4.jpg';
-import polaroid5 from '@/assets/images/home/why-crew419/polaroid-5.jpg';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 
-interface Polaroid {
-  image: LocalImageProps['src'];
-  alt: string;
-  rotate: number;
-  left: number;
-  top: number;
-  wrapperW: number;
-  wrapperH: number;
-  z: number;
-}
+const {
+  home_why_eyebrow: eyebrow,
+  home_why_heading: heading,
+  home_why_paragraphs: paragraphs,
+  home_why_photo_1: photo1,
+  home_why_photo_2: photo2,
+  home_why_photo_3: photo3,
+  home_why_photo_4: photo4,
+  home_why_photo_5: photo5,
+} = await getSingleton('website_content');
 
-const polaroids: Polaroid[] = [
-  {
-    image: polaroid1,
-    alt: 'Students in uniforms sitting at desks in a classroom',
-    rotate: 3,
-    left: 0,
-    top: 0,
-    wrapperW: 343,
-    wrapperH: 388,
-    z: 2,
-  },
-  {
-    image: polaroid2,
-    alt: 'Empty chairs along a weathered school veranda',
-    rotate: -6,
-    left: 289,
-    top: 122,
-    wrapperW: 361,
-    wrapperH: 404,
-    z: 1,
-  },
-  {
-    image: polaroid3,
-    alt: 'People praying with heads bowed in church pews',
-    rotate: 0,
-    left: 590,
-    top: 67,
-    wrapperW: 324,
-    wrapperH: 372,
-    z: 3,
-  },
-  {
-    image: polaroid4,
-    alt: 'A community gathering in a circle outdoors',
-    rotate: 6,
-    left: 852,
-    top: 122,
-    wrapperW: 361,
-    wrapperH: 404,
-    z: 4,
-  },
-  {
-    image: polaroid5,
-    alt: 'A small group in discussion seated in a circle',
-    rotate: -3,
-    left: 1157,
-    top: 9,
-    wrapperW: 343,
-    wrapperH: 388,
-    z: 5,
-  },
+// Layout of the five polaroids (styling only — photos come from the CMS; no CMS field for alt texts).
+const layout = [
+  { alt: 'Students in uniforms sitting at desks in a classroom', rotate: 3, left: 0, top: 0, wrapperW: 343, wrapperH: 388, z: 2 },
+  { alt: 'Empty chairs along a weathered school veranda', rotate: -6, left: 289, top: 122, wrapperW: 361, wrapperH: 404, z: 1 },
+  { alt: 'People praying with heads bowed in church pews', rotate: 0, left: 590, top: 67, wrapperW: 324, wrapperH: 372, z: 3 },
+  { alt: 'A community gathering in a circle outdoors', rotate: 6, left: 852, top: 122, wrapperW: 361, wrapperH: 404, z: 4 },
+  { alt: 'A small group in discussion seated in a circle', rotate: -3, left: 1157, top: 9, wrapperW: 343, wrapperH: 388, z: 5 },
 ];
+
+const polaroids = [photo1, photo2, photo3, photo4, photo5].map((image, index) => ({ image, ...layout[index]! }));
 ---
 
 <section id="why-crew419" class="relative z-30 py-30" aria-labelledby="why-crew419-heading" data-why-crew419>
   <div class="mx-auto flex max-w-4xl flex-col items-center gap-8 px-5 text-center md:px-12">
     <div class="flex flex-col items-center gap-4" data-why-copy>
-      <p class="text-muted-foreground leading-none font-bold uppercase">Why Crew419 exists</p>
-      <h2 id="why-crew419-heading" class="max-w-154 text-3xl leading-none font-bold md:text-5xl">Some Callings Never Become Action</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="why-crew419-heading" class="max-w-154 text-3xl leading-none font-bold md:text-5xl">{heading}</h2>
     </div>
     <div class="text-foreground flex max-w-130 flex-col gap-2.5 md:text-lg leading-tight" data-why-copy>
-      <p>Every year, churches, schools, and individuals feel called to serve.</p>
-      <p>Without trusted partners, preparation, and support, many of those opportunities are never realized.</p>
-      <p>Communities miss encouragement. Churches miss connection. Believers miss the chance to grow through serving.</p>
+      {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
     </div>
   </div>
 
@@ -96,7 +48,7 @@ const polaroids: Polaroid[] = [
               style={`transform: rotate(${card.rotate}deg)`}
             >
               <div class="relative h-full min-w-0 flex-1 overflow-hidden rounded-sm">
-                <Image src={card.image} alt={card.alt} width={600} height={600} class="size-full origin-center object-cover will-change-transform" data-polaroid-photo />
+                <CmsImage image={card.image} alt={card.alt} widths={[600]} class="size-full origin-center object-cover will-change-transform" data-polaroid-photo />
               </div>
             </figure>
           </div>

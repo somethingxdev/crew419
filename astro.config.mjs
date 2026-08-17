@@ -1,9 +1,18 @@
 import tailwindcss from '@tailwindcss/vite';
 // @ts-check
-import { defineConfig, fontProviders } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+  env: {
+    schema: {
+      DIRECTUS_URL: envField.string({ context: 'server', access: 'public', url: true }),
+      DIRECTUS_TOKEN: envField.string({ context: 'server', access: 'secret' }),
+    },
+  },
+  image: {
+    remotePatterns: [{ protocol: 'https' }],
+  },
   fonts: [
     {
       name: 'Arvo',

@@ -1,22 +1,23 @@
 ---
 import { Image } from 'astro:assets';
-import video from '@/assets/images/trip-details/week-video.png';
+import type { CollectionEntry } from 'astro:content';
 
-const days = [
-  { title: 'Day 1', text: 'Arrive in Zambia, meet your team, orientation, welcome dinner, and evening devotion.' },
-  {
-    title: 'Day 2–9',
-    text: 'Morning devotion, community outreach, children’s ministry, home visits, local church partnership, evening team reflection and worship.',
-  },
-  { title: 'Day 10', text: 'Closing celebration, church service, team debrief, and departure.' },
-];
+interface Props {
+  trip: CollectionEntry<'trips'>;
+}
+
+const { week_eyebrow: eyebrow, week_heading: heading, itinerary: days, week_media: media } = Astro.props.trip.data;
+
+// `week_media` is a generic file: a video, or an image (Directus knows the size of images).
+const isVideo = media.type.startsWith('video/');
+const mediaClass = 'h-auto w-full rounded-lg object-cover lg:h-134.5 lg:flex-1';
 ---
 
 <section class="py-15" aria-labelledby="your-week-heading">
   <div class="container">
     <div class="flex flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">Your week</p>
-      <h2 id="your-week-heading" class="max-w-164 text-3xl font-bold md:text-5xl">What Your Mission Week Could Look Like</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="your-week-heading" class="max-w-164 text-3xl font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <div class="mt-12.5 flex flex-col gap-12.5 lg:flex-row lg:items-start lg:gap-20">
@@ -31,7 +32,15 @@ const days = [
         }
       </ul>
 
-      <Image src={video} alt="A volunteer greeting children outside a village home" widths={[800, 1600]} class="h-auto w-full rounded-lg object-cover lg:h-134.5 lg:flex-1" />
+      {
+        isVideo ? (
+          <video src={media.url} class={mediaClass} autoplay muted loop playsinline />
+        ) : media.width && media.height ? (
+          <Image src={media.url} width={media.width} height={media.height} alt="" widths={[800, 1600]} class={mediaClass} />
+        ) : (
+          <Image src={media.url} inferSize alt="" widths={[800, 1600]} class={mediaClass} />
+        )
+      }
     </div>
   </div>
 </section>

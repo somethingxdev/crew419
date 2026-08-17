@@ -1,19 +1,14 @@
 ---
-const values = [
-  { title: 'Christ-Centered', text: 'Jesus is at the center of every mission, partnership, and decision.' },
-  { title: 'Biblical Truth', text: 'Scripture guides how we serve, teach, and lead.' },
-  { title: 'Discipleship', text: 'We prepare people before, during, and after every mission trip.' },
-  { title: 'Partnership', text: 'We serve alongside trusted local churches – not independently of them.' },
-  { title: 'Compassion', text: 'We meet practical needs while sharing the hope of the Gospel.' },
-  { title: 'Integrity', text: 'We lead with transparency, humility, and excellence.' },
-];
+import { getSingleton } from '@/lib/content';
+
+const { about_values_eyebrow: eyebrow, about_values_heading: heading, about_values_cards: values } = await getSingleton('website_content');
 ---
 
 <section class="py-15" aria-labelledby="what-we-believe-heading">
   <div class="container">
     <div class="mx-auto flex max-w-169 flex-col items-center gap-3.75 text-center">
-      <p class="text-muted-foreground text-base leading-none font-bold uppercase">What we believe</p>
-      <h2 id="what-we-believe-heading" class="text-3xl  font-bold md:text-5xl">The Values That Guide Everything We Do</h2>
+      <p class="text-muted-foreground text-base leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="what-we-believe-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <div class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">

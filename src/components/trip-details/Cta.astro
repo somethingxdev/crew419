@@ -1,23 +1,37 @@
 ---
-import { Image } from 'astro:assets';
-import bg from '@/assets/images/trip-details/cta-bg.png';
+import type { CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
 import { Button } from '@/shared/ui/button';
+
+interface Props {
+  trip: CollectionEntry<'trips'>;
+}
+
+const {
+  cta_title: title,
+  cta_text: text,
+  cta_image: bg,
+  cta_primary_label: primaryLabel,
+  cta_primary_href: primaryHref,
+  cta_secondary_label: secondaryLabel,
+  cta_secondary_href: secondaryHref,
+} = Astro.props.trip.data;
 ---
 
 <section class="py-15" aria-labelledby="trip-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
+        <CmsImage image={bg} alt="" widths={[1600]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
       <div class="relative z-10 mx-auto flex w-full max-w-155 flex-col items-center justify-center px-5 py-15 text-center text-cream md:py-0">
-        <h2 id="trip-cta-heading" class="text-3xl  font-bold md:text-5xl">Your Mission Starts With One Step</h2>
-        <p class="mt-7.5 max-w-137.5 leading-tight">God is already moving around the world. Let’s discover where He’s inviting you to serve.</p>
+        <h2 id="trip-cta-heading" class="text-3xl  font-bold md:text-5xl">{title}</h2>
+        <p class="mt-7.5 max-w-137.5 leading-tight">{text}</p>
         <div class="mt-7.5 flex w-full max-w-133 flex-col gap-4 sm:flex-row">
-          <Button href="/contact" variant="cream" size="lg" class="flex-1">Book a 30–minute call</Button>
-          <Button href="/trips#destinations" variant="glass" size="lg" class="flex-1">Find Your Destination</Button>
+          <Button href={primaryHref} variant="cream" size="lg" class="flex-1">{primaryLabel}</Button>
+          <Button href={secondaryHref} variant="glass" size="lg" class="flex-1">{secondaryLabel}</Button>
         </div>
       </div>
     </div>

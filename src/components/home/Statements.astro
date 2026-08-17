@@ -1,24 +1,24 @@
 ---
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  home_mission_eyebrow: eyebrow,
+  home_mission_heading: heading,
+  home_mission_text: text,
+  home_mission_cta_label: ctaLabel,
+  home_mission_cta_href: ctaHref,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-30 py-30" aria-labelledby="statements-heading">
   <div class="container">
-    <p class="text-muted-foreground leading-none font-bold uppercase">Crew419 Mission Statement</p>
+    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
     <div class="mt-4 flex flex-col gap-10 xl:flex-row xl:items-start xl:gap-36">
-      <h2 id="statements-heading" class="max-w-154 shrink-0 text-3xl leading-none font-bold xl:text-5xl">A Trusted Guide for Your Mission Journey</h2>
+      <h2 id="statements-heading" class="max-w-154 shrink-0 text-3xl leading-none font-bold xl:text-5xl">{heading}</h2>
       <div class="flex w-full max-w-122 flex-col gap-8">
-        <div class="flex flex-col gap-10 leading-none">
-          <p>
-            Crew419 equips churches, schools, and individuals for Gospel-centered mission trips that inspire spiritual growth and meaningful service. We partner with trusted local ministries worldwide
-            to create mission experiences that are thoughtfully planned, spiritually grounded, and focused on building lasting relationships.
-          </p>
-          <div class="flex flex-col gap-6">
-            <h3 class="text-2xl leading-none font-bold">For us, a mission trip is more than a week of serving.</h3>
-            <p>It's a journey that prepares you before you go, supports you while you're serving, and continues shaping your faith long after you return home.</p>
-          </div>
-        </div>
-        <Button href="/about/mission" class="w-full max-w-82">Learn About Crew419</Button>
+        <div class="flex flex-col gap-10 leading-none [&_h3]:text-2xl [&_h3]:leading-none [&_h3]:font-bold [&_h3+p]:-mt-4" set:html={text} />
+        <Button href={ctaHref} class="w-full max-w-82">{ctaLabel}</Button>
       </div>
     </div>
   </div>

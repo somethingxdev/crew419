@@ -1,26 +1,32 @@
 ---
-import { Image } from 'astro:assets';
-import bg from '@/assets/images/churches/widget-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  churches_widget_heading: heading,
+  churches_widget_text: text,
+  churches_widget_bg: bg,
+  churches_widget_cta_label: ctaLabel,
+  churches_widget_cta_href: ctaHref,
+} = await getSingleton('website_content');
 ---
 
 <section class="py-30" aria-labelledby="widget-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
+        <CmsImage image={bg} alt="" widths={[1600]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/5"></div>
       </div>
 
       <div class="relative z-10 flex w-full flex-col justify-center px-5 py-15 md:px-15 md:py-0">
         <div class="flex max-w-150 flex-col items-start gap-7.5">
           <div class="flex flex-col gap-7.5">
-            <h2 id="widget-heading" class="text-3xl  font-bold md:text-5xl">Put Your Trips on Your Church’s Website</h2>
-            <p class="max-w-124 leading-none">
-              Keep your church informed with a simple embeddable widget that displays upcoming mission trips, important dates, and registration information right on your church’s website.
-            </p>
+            <h2 id="widget-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
+            <p class="max-w-124 leading-none">{text}</p>
           </div>
-          <Button href="/contact" size="lg" class="w-82.5 max-w-full">Learn more</Button>
+          <Button href={ctaHref} size="lg" class="w-82.5 max-w-full">{ctaLabel}</Button>
         </div>
       </div>
     </div>

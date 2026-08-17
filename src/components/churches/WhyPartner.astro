@@ -1,35 +1,22 @@
 ---
-const challenges = [
-  {
-    title: 'Complex Logistics',
-    text: 'Flights, transportation, lodging, and schedules all require careful coordination.',
-  },
-  {
-    title: 'Finding the Right Ministry',
-    text: 'Not every mission opportunity aligns with your church’s goals and calling.',
-  },
-  {
-    title: 'Preparing Your Team',
-    text: 'Spiritual, practical, and cultural preparation is essential before serving.',
-  },
-  {
-    title: 'Limited Time',
-    text: 'Most pastors already lead busy ministries and don’t have time to organize every detail.',
-  },
-];
+import { getSingleton } from '@/lib/content';
+
+const {
+  churches_intro_eyebrow: eyebrow,
+  churches_intro_heading: heading,
+  churches_intro_text: text,
+  churches_challenge_cards: challenges,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative z-20 py-30" aria-labelledby="why-partner-heading">
   <div class="container flex flex-col items-center gap-12.5">
     <div class="flex max-w-195 flex-col items-center gap-7.5 text-center">
       <div class="flex flex-col items-center gap-4">
-        <p class="text-muted-foreground leading-none font-bold uppercase">Why churches need a partner</p>
-        <h2 id="why-partner-heading" class="text-3xl  font-bold md:text-5xl">Leading a Mission Trip Shouldn’t Feel Overwhelming</h2>
+        <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+        <h2 id="why-partner-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
       </div>
-      <p class="max-w-124 leading-none">
-        Planning an international mission trip involves far more than choosing a destination. From travel logistics and safety to ministry partnerships and team preparation, the process can quickly
-        become overwhelming for pastors and church leaders.
-      </p>
+      <p class="max-w-124 leading-none">{text}</p>
     </div>
 
     <div class="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-4">

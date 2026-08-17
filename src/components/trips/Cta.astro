@@ -1,0 +1,44 @@
+---
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
+
+const {
+  trips_hub_cta_title: title,
+  trips_hub_cta_text: text,
+  trips_hub_cta_image: image,
+  trips_hub_cta_primary_label: primaryLabel,
+  trips_hub_cta_primary_href: primaryHref,
+  trips_hub_cta_secondary_label: secondaryLabel,
+  trips_hub_cta_secondary_href: secondaryHref,
+} = await getSingleton('website_content');
+
+// First paragraph is body copy, the remaining paragraph(s) form the emphasized lead-in above the buttons.
+const [intro, ...lead] = text.split(/\n\s*\n/);
+---
+
+<section class="py-15" aria-labelledby="cta-heading">
+  <div class="container">
+    <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
+      <div class="absolute inset-0 overflow-hidden">
+        <CmsImage image={image} alt="" widths={[1600]} class="size-full object-cover object-[center_72%]" />
+        <div class="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      <div class="relative z-10 mx-auto flex w-full max-w-160 flex-col items-center justify-center gap-10 px-5 py-15 text-center text-cream md:py-0">
+        <div class="flex w-full flex-col items-center gap-6">
+          <h2 id="cta-heading" class="text-3xl leading-none font-bold md:text-5xl">{title}</h2>
+          <p class="leading-none">{intro}</p>
+        </div>
+
+        <div class="flex w-full max-w-135 flex-col items-center gap-8">
+          {lead.map((paragraph) => <p class="max-w-108 text-lg leading-none font-medium">{paragraph}</p>)}
+          <div class="flex flex-col items-center gap-4 sm:flex-row">
+            <Button href={primaryHref} variant="cream">{primaryLabel}</Button>
+            <Button href={secondaryHref} variant="glass">{secondaryLabel}</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

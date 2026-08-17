@@ -1,26 +1,31 @@
 ---
 import { Image } from 'astro:assets';
 import decor from '@/assets/images/decor-bottom.png';
-import bg from '@/assets/images/stories/hero-bg.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  stories_hub_hero_eyebrow: eyebrow,
+  stories_hub_hero_title: title,
+  stories_hub_hero_description: description,
+  stories_hub_hero_image: image,
+} = await getSingleton('website_content');
 ---
 
 <section class="relative flex min-h-150 flex-col pt-20 xl:min-h-222 xl:pt-26" aria-labelledby="stories-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-center" />
+    <CmsImage image={image} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-center" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 
   <div class="relative container w-full py-15 xl:pt-30 xl:pb-20">
     <div class="flex w-full max-w-240 flex-col items-center text-center xl:items-start xl:text-left">
-      <p class="text-base leading-none font-bold text-cream/80 uppercase">Real stories. Real impact.</p>
-      <h1 id="stories-hero-heading" class="mt-3 text-4xl font-bold text-cream text-shadow-2xs md:text-6xl xl:text-7xl">Every Mission Has a Story Worth Sharing</h1>
+      <p class="text-base leading-none font-bold text-cream/80 uppercase">{eyebrow}</p>
+      <h1 id="stories-hero-heading" class="mt-3 text-4xl font-bold text-cream text-shadow-2xs md:text-6xl xl:text-7xl">{title}</h1>
 
       <div class="mt-7.5 flex w-full max-w-137.5 flex-col items-center gap-7.5 xl:items-start">
-        <p class="text-lg leading-none font-medium text-cream">
-          Every trip leaves a lasting impact – not only on the communities we serve, but also on the people who answer God’s call. Read stories from the mission field, discover how lives are being
-          transformed, and see what happens when believers step into God’s mission.
-        </p>
+        <p class="text-lg leading-none font-medium text-cream">{description}</p>
         <div class="flex w-full flex-col gap-4 sm:flex-row">
           <Button href="/contact" variant="cream" size="lg" class="flex-1">Book a 30–minute call</Button>
           <Button href="/trips" variant="glass" size="lg" class="flex-1">Explore mission trips</Button>

@@ -1,89 +1,65 @@
 ---
-import { Image } from 'astro:assets';
-import photo1 from '@/assets/images/trip-details/similar/photo-1.png';
-import photo2 from '@/assets/images/trip-details/similar/photo-2.png';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
 
-const trips = [
-  {
-    label: 'General Mission',
-    title: 'Zambia Community Mission',
-    date: 'July 8–17',
-    price: 'From $1,850',
-    duration: '10 Days',
-    href: '/trips/africa',
-    image: photo1,
-    alt: 'A mother walking with her children through a village at sunset',
-  },
-  {
-    label: 'Sports',
-    title: 'Zambia Sports Outreach',
-    date: 'July 8–17',
-    price: 'From $1,850',
-    duration: '10 Days',
-    href: '/trips/africa',
-    image: photo2,
-    alt: 'Young players chasing a football on a dusty pitch',
-  },
-  {
-    label: 'General Mission',
-    title: 'Zambia Community Mission',
-    date: 'July 8–17',
-    price: 'From $1,850',
-    duration: '10 Days',
-    href: '/trips/africa',
-    image: photo1,
-    alt: 'A mother walking with her children through a village at sunset',
-  },
-  {
-    label: 'Sports',
-    title: 'Zambia Sports Outreach',
-    date: 'July 8–17',
-    price: 'From $1,850',
-    duration: '10 Days',
-    href: '/trips/africa',
-    image: photo2,
-    alt: 'Young players chasing a football on a dusty pitch',
-  },
-];
+interface Props {
+  trip: CollectionEntry<'trips'>;
+}
+
+const { trip } = Astro.props;
+
+// Every other published trip (the collection is already limited to published ones).
+const trips = await getCollection('trips', (entry) => entry.id !== trip.id);
+
+const ministryLabels: Record<CollectionEntry<'trips'>['data']['ministry'], string> = {
+  general: 'General Mission',
+  sports: 'Sports',
+  children: 'Children',
+  construction: 'Construction',
+  evangelism: 'Evangelism',
+  medical: 'Medical',
+};
 ---
 
-<section class="py-15" aria-labelledby="similar-trips-heading">
-  <div class="container">
-    <div class="flex flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">Explore more</p>
-      <h2 id="similar-trips-heading" class="text-3xl  font-bold md:text-5xl">Similar Mission Trips</h2>
-    </div>
+{
+  trips.length > 0 && (
+    <section class="py-15" aria-labelledby="similar-trips-heading">
+      <div class="container">
+        <div class="flex flex-col items-center gap-4 text-center">
+          <p class="text-muted-foreground leading-none font-bold uppercase">Explore more</p>
+          <h2 id="similar-trips-heading" class="text-3xl  font-bold md:text-5xl">Similar Mission Trips</h2>
+        </div>
 
-    <ul class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-      {
-        trips.map((trip) => (
-          <li>
-            <article class="bg-cream flex h-full flex-col rounded-lg p-5">
-              <Image src={trip.image} alt={trip.alt} widths={[400, 800]} class="h-65 w-full rounded-lg object-cover" />
+        <ul class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+          {trips.map(({ data }) => (
+            <li>
+              <article class="bg-cream flex h-full flex-col rounded-lg p-5">
+                <CmsImage image={data.card_image} alt={data.card_image_alt} widths={[400, 800]} class="h-65 w-full rounded-lg object-cover" />
 
-              <div class="mt-5 flex flex-1 flex-col gap-6.5">
-                <div class="flex flex-col gap-2.5">
-                  <p class="text-muted-foreground leading-none font-bold uppercase">{trip.label}</p>
-                  <h3 class="text-2xl  font-bold">{trip.title}</h3>
+                <div class="mt-5 flex flex-1 flex-col gap-6.5">
+                  <div class="flex flex-col gap-2.5">
+                    <p class="text-muted-foreground leading-none font-bold uppercase">{ministryLabels[data.ministry]}</p>
+                    <h3 class="text-2xl  font-bold">{data.title}</h3>
+                  </div>
+
+                  <div class="flex flex-col gap-2.5 leading-none">
+                    <p>{data.dates_label}</p>
+                    <p>{data.price_label}</p>
+                    <p>{data.duration_label}</p>
+                  </div>
                 </div>
 
-                <div class="flex flex-col gap-2.5 leading-none">
-                  <p>{trip.date}</p>
-                  <p>{trip.price}</p>
-                  <p>{trip.duration}</p>
-                </div>
-              </div>
-
-              <a
-                href={trip.href}
-                class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground mt-5 w-fit border-b pb-2 leading-none font-black uppercase transition-colors"
-              >
-                View trip
-              </a>
-            </article>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</section>
+                <a
+                  href={`/trips/${data.slug}`}
+                  class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground mt-5 w-fit border-b pb-2 leading-none font-black uppercase transition-colors"
+                >
+                  View trip
+                </a>
+              </article>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,93 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  resource: CollectionEntry<'resources'>;
+}
+
+type Resource = CollectionEntry<'resources'>['data'];
+type Section = NonNullable<Resource['sections']>[number];
+
+/** `sections[].lists` is a raw JSON code field in Directus — its shape depends on the section type. */
+type ListColumn = { label: string; items: string[] };
+type PackingLists = { what_to_pack: ListColumn[]; what_not_to_pack: string[] };
+type DosDontsLists = ListColumn[];
+
+function listsOf(section: Section): unknown {
+  if (section.lists == null) throw new Error(`Travel guide section "${section.title}" (${section.type}) has no "lists" JSON`);
+  return section.lists;
+}
+const packingLists = (section: Section) => listsOf(section) as PackingLists;
+const dosDontsLists = (section: Section) => listsOf(section) as DosDontsLists;
+
+// Only travel guides have sections — guides (discipleship / fundraising) leave the field empty.
+const { title, sections } = Astro.props.resource.data;
+---
+
+{
+  sections && (
+    <section class="pt-40 pb-30" aria-label={`${title} travel guide details`}>
+      <div class="container flex flex-col gap-20">
+        {sections.map((section) => (
+          <div class="border-muted-foreground grid gap-5 border-b pb-20 md:grid-cols-2">
+            <h2 class="text-3xl  font-bold md:text-4xl">{section.title}</h2>
+
+            {section.type === 'text' && <p class="leading-none">{section.text}</p>}
+
+            {section.type === 'packing' && (
+              <div class="flex flex-col gap-15">
+                <div class="flex flex-col gap-7.5">
+                  <h3 class="text-2xl font-bold">What to Pack</h3>
+                  <div class="grid gap-10 sm:grid-cols-3">
+                    {packingLists(section).what_to_pack.map((column) => (
+                      <div class="flex flex-col gap-5">
+                        <p class="text-lg leading-none font-medium">{column.label}</p>
+                        <ul class="flex flex-col gap-3.75">
+                          {column.items.map((item) => (
+                            <li class="text-muted-foreground flex items-center gap-2.5 text-lg leading-none font-medium">
+                              <span class="bg-primary size-2 shrink-0 rounded-full" aria-hidden="true" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div class="flex flex-col gap-5">
+                  <h3 class="text-2xl font-bold">What Not to Pack</h3>
+                  <ul class="flex flex-col gap-3.75">
+                    {packingLists(section).what_not_to_pack.map((item) => (
+                      <li class="text-muted-foreground flex items-center gap-2.5 text-lg leading-none font-medium">
+                        <span class="bg-primary size-2 shrink-0 rounded-full" aria-hidden="true" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {section.type === 'dos_donts' && (
+              <div class="grid gap-10 sm:grid-cols-2">
+                {dosDontsLists(section).map((column) => (
+                  <div class="flex flex-col gap-5">
+                    <h3 class="text-2xl font-bold">{column.label}</h3>
+                    <ul class="flex flex-col gap-3.75">
+                      {column.items.map((item) => (
+                        <li class="text-muted-foreground flex items-center gap-2.5 text-lg leading-none font-medium">
+                          <span class="bg-primary size-2 shrink-0 rounded-full" aria-hidden="true" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}

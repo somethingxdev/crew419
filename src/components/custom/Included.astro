@@ -1,22 +1,18 @@
 ---
-const items = [
-  'Mission Planning',
-  'Destination Selection',
-  'Trusted Ministry Partnerships',
-  'Travel Coordination',
-  'Accommodation Planning',
-  'Discipleship Materials',
-  'Leader Support',
-  'Safety Guidance',
-  'Fundraising Resources',
-];
+import { getSingleton } from '@/lib/content';
+
+const {
+  custom_included_eyebrow: eyebrow,
+  custom_included_heading: heading,
+  custom_included_items: items,
+} = await getSingleton('website_content');
 ---
 
 <section class="py-30" aria-labelledby="included-heading">
   <div class="container">
     <div class="mx-auto flex max-w-177 flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">What’s Included</p>
-      <h2 id="included-heading" class="text-3xl  font-bold md:text-5xl">Everything You Need. Nothing You Don’t.</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <h2 id="included-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <ul class="mt-12.5 flex flex-wrap items-center justify-center gap-5">

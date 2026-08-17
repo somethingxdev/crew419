@@ -1,32 +1,51 @@
 ---
 import { Image } from 'astro:assets';
 import decor from '@/assets/images/decor-bottom.png';
-import bg from '@/assets/images/trips/hero/bg.png';
-import polaroid from '@/assets/images/trips/hero/polaroid.jpg';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  trips_hub_hero_eyebrow: eyebrow,
+  trips_hub_hero_title: title,
+  trips_hub_hero_description: description,
+  trips_hub_hero_image: image,
+  trips_hub_hero_polaroid: polaroid,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
+
+// "Find the Mission God Is Calling You To" → "Find the" / "Mission" / "God Is" "Calling" "You To".
+const words = title.split(/\s+/);
+const lead = words.slice(0, 2).join(' ');
+const accent = words[2];
+const tail = words.slice(3);
+const tailStart = tail.slice(0, 2).join(' ');
+const tailAccent = tail[2];
+const tailEnd = tail.slice(3).join(' ');
+const tailText = tail.join(' ');
 ---
 
 <section class="relative flex min-h-150 flex-col pt-20 xl:min-h-226 xl:pt-26" aria-labelledby="trips-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom" />
+    <CmsImage image={image} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom" />
   </div>
 
   <div class="relative w-full px-5 py-15 md:px-12 xl:pt-24 xl:pb-20">
     <div class="mx-auto flex w-full max-w-7xl flex-col items-center">
       <div class="flex w-full flex-col items-center gap-6 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_max-content] xl:items-start xl:gap-0">
         <div class="flex flex-col items-center text-center xl:items-start xl:pt-5 xl:text-left">
-          <p class="leading-none font-bold text-cream/80 uppercase">Discover your next mission</p>
+          <p class="leading-none font-bold text-cream/80 uppercase">{eyebrow}</p>
           <h1 id="trips-hero-heading" class="mt-3 text-4xl font-bold text-cream md:text-6xl xl:text-7xl z-10 text-shadow-2xs">
-            <span class="block">Find the</span>
-            <span class="text-primary mt-0 block pl-10 uppercase xl:pl-40 xl:text-[72px]">Mission</span>
-            <span class="sr-only">God Is Calling You To</span>
+            <span class="block">{lead}</span>
+            <span class="text-primary mt-0 block pl-10 uppercase xl:pl-40 xl:text-[72px]">{accent}</span>
+            <span class="sr-only">{tailText}</span>
           </h1>
         </div>
 
         <figure class="relative z-10 w-60 shrink-0 rotate-6 xl:-mx-16 xl:-translate-x-15 xl:w-75">
           <div class="bg-cream flex aspect-300/344 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
             <div class="relative h-full min-w-0 flex-1 overflow-hidden rounded-sm">
-              <Image src={polaroid} alt="A mission team standing together on a hillside overlooking mountains" width={600} height={600} class="size-full object-cover" />
+              <CmsImage image={polaroid} alt="A mission team standing together on a hillside overlooking mountains" widths={[600, 1200]} class="size-full object-cover" />
             </div>
           </div>
         </figure>
@@ -36,19 +55,17 @@ import { Button } from '@/shared/ui/button';
           aria-hidden="true"
         >
           <span>
-            <span class="text-cream">God Is </span>
-            <span class="text-primary">Calling</span>
+            <span class="text-cream">{tailStart} </span>
+            <span class="text-primary">{tailAccent}</span>
           </span>
-          <span class="text-cream">You To</span>
+          <span class="text-cream">{tailEnd}</span>
         </div>
       </div>
 
-      <p class="mt-8 max-w-113 text-center text-lg leading-none font-medium text-cream">
-        Whether through sports, construction, medical outreach, or evangelism, every Crew419 trip strengthens your faith while making a lasting impact.
-      </p>
+      <p class="mt-8 max-w-113 text-center text-lg leading-none font-medium text-cream">{description}</p>
 
       <div class="mt-8 flex w-full max-w-135 flex-col items-center justify-center gap-4 sm:flex-row">
-        <Button href="/contact" variant="cream" size="lg">Book a 30–minute call</Button>
+        <Button href={ctaHref} variant="cream" size="lg">{ctaLabel}</Button>
         <Button href="#destinations" variant="glass" size="lg">Find Your Destination</Button>
       </div>
     </div>

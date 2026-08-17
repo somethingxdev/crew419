@@ -2,9 +2,12 @@
 import Layout from '@/layouts/Layout.astro';
 import Hero from '@/components/not-found/Hero.astro';
 import Compass from '@/components/trips/Compass.astro';
+import { getSingleton } from '@/lib/content';
+
+const { not_found_seo_title, not_found_seo_description, not_found_og_image } = await getSingleton('website_content');
 ---
 
-<Layout title="Page Not Found | Crew419">
+<Layout title={not_found_seo_title} description={not_found_seo_description} ogImage={not_found_og_image}>
   <Hero />
   <Compass href="/trips#destinations" />
 </Layout>

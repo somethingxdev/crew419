@@ -1,27 +1,43 @@
 ---
-import { Image } from 'astro:assets';
-import boat from '@/assets/images/not-found/boat.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  not_found_title_1: title1,
+  not_found_title_2: title2,
+  not_found_text: text,
+  not_found_image: image,
+  not_found_primary_label: primaryLabel,
+  not_found_primary_href: primaryHref,
+  not_found_secondary_label: secondaryLabel,
+  not_found_secondary_href: secondaryHref,
+} = await getSingleton('website_content');
+
+// "Looks Like This Boat Missed the Shore" → the last three words are highlighted.
+const words = title2.split(/\s+/);
+const title2Start = words.slice(0, -3).join(' ');
+const title2Highlight = words.slice(-3).join(' ');
 ---
 
 <section class="relative pt-32 pb-24 md:pt-40 xl:pt-52 xl:pb-30" aria-labelledby="not-found-heading">
   <div class="container">
     <div class="mx-auto flex w-full max-w-261 flex-col items-center gap-8 text-center">
       <h1 id="not-found-heading" class="flex flex-col gap-4  font-bold text-foreground">
-        <span class="text-4xl md:text-6xl xl:text-7xl">OOPS…</span>
+        <span class="text-4xl md:text-6xl xl:text-7xl">{title1}</span>
         <span class="text-2xl md:text-4xl xl:text-[52px]">
-          Looks Like This Boat <span class="text-primary">Missed the Shore</span>
+          {title2Start} <span class="text-primary">{title2Highlight}</span>
         </span>
       </h1>
 
-      <Image src={boat} alt="An engraving of an empty wooden boat with fishing nets drifting on the water" widths={[344, 688]} class="h-auto w-64 md:w-86" />
+      <CmsImage image={image} alt="An engraving of an empty wooden boat with fishing nets drifting on the water" widths={[344, 688]} class="h-auto w-64 md:w-86" />
 
       <div class="flex w-full max-w-138 flex-col items-center gap-8">
-        <p class="max-w-132 text-lg leading-none font-medium text-foreground/80">The page you’re looking for couldn’t be found – but your next mission is still out there.</p>
+        <p class="max-w-132 text-lg leading-none font-medium text-foreground/80">{text}</p>
 
         <div class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button href="/trips" variant="primary" size="lg" class="w-full sm:w-67">Explore Mission Trips</Button>
-          <Button href="/" variant="soft" size="lg" class="w-full sm:w-67">Back to home</Button>
+          <Button href={primaryHref} variant="primary" size="lg" class="w-full sm:w-67">{primaryLabel}</Button>
+          <Button href={secondaryHref} variant="soft" size="lg" class="w-full sm:w-67">{secondaryLabel}</Button>
         </div>
       </div>
     </div>

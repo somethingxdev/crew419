@@ -1,26 +1,34 @@
 ---
-import { Image } from 'astro:assets';
-import church from '@/assets/images/trips/custom-group/church.jpg';
-import children from '@/assets/images/trips/custom-group/children.jpg';
+import CmsImage from '@/components/base/CmsImage.astro';
 import PhotoPairSection from '@/components/shared/PhotoPairSection.astro';
+import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
+
+const {
+  trips_hub_custom_eyebrow: eyebrow,
+  trips_hub_custom_heading: heading,
+  trips_hub_custom_text: text,
+  trips_hub_custom_photo_left: photoLeft,
+  trips_hub_custom_photo_right: photoRight,
+} = await getSingleton('website_content');
+
+// First paragraph is the lead line, the rest is body copy.
+const [lead, ...paragraphs] = text.split(/\n\s*\n/);
 ---
 
 <PhotoPairSection id="custom-group-trips" labelledBy="custom-group-heading" class="py-30">
-  <Image slot="image-left" src={church} alt="A white country church with a steeple under an overcast sky" width={600} height={600} />
-  <Image slot="image-right" src={children} alt="School children in uniforms running toward the camera on a dirt path" width={600} height={600} />
+  <CmsImage slot="image-left" image={photoLeft} alt="A white country church with a steeple under an overcast sky" widths={[600, 1200]} />
+  <CmsImage slot="image-right" image={photoRight} alt="School children in uniforms running toward the camera on a dirt path" widths={[600, 1200]} />
 
   <div class="flex w-full flex-col items-start gap-4">
-    <p class="text-muted-foreground leading-none font-bold uppercase">Custom Group trips</p>
-    <h2 id="custom-group-heading" class="max-w-158.25 text-3xl font-bold md:text-5xl">Leading a Church or School Group?</h2>
+    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+    <h2 id="custom-group-heading" class="max-w-158.25 text-3xl font-bold md:text-5xl">{heading}</h2>
   </div>
 
   <div class="flex w-full max-w-138 flex-col items-start gap-7.5">
     <div class="flex w-full flex-col items-start gap-4 text-foreground">
-      <p class="text-lg leading-none font-medium">We don’t believe every mission trip should look the same.</p>
-      <p class="leading-none">
-        Crew419 designs custom mission experiences tailored to your ministry goals, group size, and calling. Rather than fitting your team into a pre-built itinerary, we build the trip around you.
-      </p>
+      <p class="text-lg leading-none font-medium">{lead}</p>
+      {paragraphs.map((paragraph) => <p class="leading-none">{paragraph}</p>)}
     </div>
 
     <div class="flex w-full flex-col items-stretch gap-4 sm:flex-row sm:items-start">

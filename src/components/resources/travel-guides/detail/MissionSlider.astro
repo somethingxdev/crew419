@@ -1,0 +1,109 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import decorBottom from '@/assets/images/decor-bottom.png';
+import decorTop from '@/assets/images/decor-top.png';
+import photo1 from '@/assets/images/resources/travel-guides/kenya/slider/photo-1.png';
+import photo2 from '@/assets/images/resources/travel-guides/kenya/slider/photo-2.png';
+import photo3 from '@/assets/images/resources/travel-guides/kenya/slider/photo-3.png';
+import photo4 from '@/assets/images/resources/travel-guides/kenya/slider/photo-4.png';
+import photo5 from '@/assets/images/resources/travel-guides/kenya/slider/photo-5.png';
+import photo6 from '@/assets/images/resources/travel-guides/kenya/slider/photo-6.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { Button } from '@/shared/ui/button';
+
+interface Props {
+  resource: CollectionEntry<'resources'>;
+}
+
+// Only travel guides have the mission slider — guides (discipleship / fundraising) leave these fields empty.
+const { slider_eyebrow: eyebrow, slider_heading: heading, slider_bg: bg } = Astro.props.resource.data;
+
+// Slider photos have no CMS field yet — they stay local.
+const photos = [
+  { image: photo1, alt: 'A mission team member greeting local children in Kenya', class: 'h-93 -rotate-6' },
+  { image: photo5, alt: 'Volunteers sharing a meal with community members', class: 'h-65 rotate-6' },
+  { image: photo6, alt: 'A team praying together with a local congregation', class: 'h-93 -rotate-3' },
+  { image: photo2, alt: 'Mission participants serving in a Kenyan village', class: 'h-93 rotate-6' },
+  { image: photo3, alt: 'A volunteer laughing with local kids outdoors', class: 'h-65 -rotate-3' },
+  { image: photo4, alt: 'Team members walking through a rural Kenyan community', class: 'h-93 -rotate-10' },
+];
+---
+
+{
+  eyebrow && heading && bg && (
+    <section class="relative py-15 md:py-30" aria-labelledby="kenya-mission-heading" data-kenya-mission>
+      <div class="absolute inset-0 overflow-hidden">
+        <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+        <div class="absolute inset-0 bg-black/20" />
+      </div>
+
+      <div class="relative container z-10">
+        <div class="mx-auto flex max-w-242 flex-col items-center gap-3.5 text-center text-cream">
+          <p class="leading-none font-bold uppercase opacity-80">{eyebrow}</p>
+          <h2 id="kenya-mission-heading" class="text-3xl font-bold md:text-5xl">
+            {heading}
+          </h2>
+        </div>
+
+        <div class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0">
+          <Button type="button" variant="cream" size="icon" aria-label="Previous photo" data-kenya-mission-prev>
+            <ArrowLeft />
+          </Button>
+          <Button type="button" variant="cream" size="icon" aria-label="Next photo" data-kenya-mission-next>
+            <ArrowRight />
+          </Button>
+        </div>
+      </div>
+
+      <div class="relative z-10 mt-15 overflow-hidden py-6" data-kenya-mission-viewport>
+        <ul class="flex touch-pan-y items-center gap-8 pl-5 md:pl-12" data-kenya-mission-container>
+          {photos.map((photo) => (
+            <li class:list={['bg-cream w-81 shrink-0 rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]', photo.class]}>
+              <Image src={photo.image} alt={photo.alt} widths={[800]} class="size-full rounded-sm object-cover" />
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="pointer-events-none absolute top-0 left-0 z-10 w-full -translate-y-1/2">
+        <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
+      </div>
+      <div class="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-[63%]">
+        <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
+      </div>
+    </section>
+  )
+}
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+
+  const section = document.querySelector<HTMLElement>('[data-kenya-mission]');
+  const viewport = section?.querySelector<HTMLElement>('[data-kenya-mission-viewport]');
+  const prev = section?.querySelector<HTMLButtonElement>('[data-kenya-mission-prev]');
+  const next = section?.querySelector<HTMLButtonElement>('[data-kenya-mission-next]');
+
+  if (section && viewport && prev && next) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const embla = EmblaCarousel(viewport, {
+      align: 'start',
+      containScroll: 'trimSnaps',
+      duration: reduced ? 0 : 25,
+      watchDrag: !reduced,
+    });
+
+    const toggleButtons = () => {
+      prev.disabled = !embla.canScrollPrev();
+      next.disabled = !embla.canScrollNext();
+    };
+
+    prev.addEventListener('click', () => embla.scrollPrev());
+    next.addEventListener('click', () => embla.scrollNext());
+    embla.on('select', toggleButtons);
+    embla.on('reInit', toggleButtons);
+    toggleButtons();
+  }
+</script>

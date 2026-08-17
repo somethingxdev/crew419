@@ -1,21 +1,44 @@
 ---
-import { Image } from 'astro:assets';
-import bg from '@/assets/images/stories/cta-bg.png';
+import type { CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
 import { Button } from '@/shared/ui/button';
+
+interface Props {
+  entry: CollectionEntry<'stories'>;
+}
+
+const {
+  cta_title: title,
+  cta_text: text,
+  cta_image: image,
+  cta_primary_label: primaryLabel,
+  cta_primary_href: primaryHref,
+  cta_secondary_label: secondaryLabel,
+  cta_secondary_href: secondaryHref,
+} = Astro.props.entry.data;
 ---
 
 <section class="py-15" aria-labelledby="story-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
+        <CmsImage image={image} alt="" widths={[1600]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
       <div class="relative z-10 mx-auto flex w-full max-w-155 flex-col items-center justify-center px-5 py-15 text-center text-cream md:py-0">
-        <h2 id="story-cta-heading" class="text-3xl  font-bold md:text-5xl">Inspired by This Story?</h2>
-        <p class="mt-6 max-w-92 text-base leading-none">Your next step could be joining a future mission team, serving alongside local churches, and becoming part of the next story God is writing.</p>
-        <Button href="/contact" variant="cream" size="lg" class="mt-7.5 w-82.5 max-w-full">Book a 30–minute call</Button>
+        <h2 id="story-cta-heading" class="text-3xl  font-bold md:text-5xl">{title}</h2>
+        <p class="mt-6 max-w-92 text-base leading-none">{text}</p>
+        <div class="mt-7.5 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <Button href={primaryHref} variant="cream" size="lg" class="w-82.5 max-w-full">{primaryLabel}</Button>
+          {
+            secondaryLabel && secondaryHref && (
+              <Button href={secondaryHref} variant="glass" size="lg" class="w-82.5 max-w-full">
+                {secondaryLabel}
+              </Button>
+            )
+          }
+        </div>
       </div>
     </div>
   </div>
