@@ -2,6 +2,8 @@ import tailwindcss from '@tailwindcss/vite';
 // @ts-check
 import { defineConfig, envField, fontProviders } from 'astro/config';
 
+import svelte from '@astrojs/svelte';
+
 // https://astro.build/config
 export default defineConfig({
   env: {
@@ -10,9 +12,11 @@ export default defineConfig({
       DIRECTUS_TOKEN: envField.string({ context: 'server', access: 'secret' }),
     },
   },
+
   image: {
     remotePatterns: [{ protocol: 'https' }],
   },
+
   fonts: [
     {
       name: 'Arvo',
@@ -43,7 +47,10 @@ export default defineConfig({
       },
     },
   ],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  integrations: [svelte()],
 });

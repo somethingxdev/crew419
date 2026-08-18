@@ -3,21 +3,26 @@ import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
 import CmsImage from '@/components/base/CmsImage.astro';
+import Dice from '@/components/shared/Dice.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
+  /** Link the CTA elsewhere. Without it the CTA becomes a button that rolls the dice. */
   href?: string;
 }
 
-const { href = '#destinations' } = Astro.props;
+const { href } = Astro.props;
+
+// Face and pip colours, so the cube sits in the section's palette.
+const diceTint = 'var(--color-cream)';
+const dicePip = 'var(--color-secondary)';
 
 const {
   trips_hub_compass_heading: heading,
   trips_hub_compass_text: text,
   trips_hub_compass_cta_label: ctaLabel,
   trips_hub_compass_bg: bg,
-  trips_hub_compass_image: compass,
 } = await getSingleton('website_content');
 
 // "Not Sure Where God Is Calling You?" → three positioned lines: "Not Sure" / "Where God" / "Is Calling You?".
@@ -27,9 +32,7 @@ const [line1, line2, line3] = [words.slice(0, 2).join(' '), words.slice(2, 4).jo
 
 <section id="compass" class="relative overflow-x-clip" aria-labelledby="compass-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <div data-parallax-bg class="absolute inset-0 will-change-transform motion-safe:inset-auto motion-safe:top-0 motion-safe:left-0 motion-safe:h-dvh motion-safe:w-full">
-      <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
-    </div>
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="absolute inset-0 size-full object-cover object-center" />
     <div class="absolute inset-0 bg-black/20 backdrop-blur-xs"></div>
   </div>
 
@@ -44,10 +47,10 @@ const [line1, line2, line3] = [words.slice(0, 2).join(' '), words.slice(2, 4).jo
         <span class="block text-4xl md:text-5xl">{line3}</span>
       </p>
       <p class="max-w-85 leading-none" aria-hidden="true">{text}</p>
-      <Button href={href} variant="primary" size="lg">{ctaLabel}</Button>
-      <figure class="w-64 md:w-80">
-        <CmsImage image={compass} alt="A gold antique compass" widths={[540, 1080]} class="h-auto w-full" />
-      </figure>
+      <Button href={href} variant="primary" size="lg" data-compass-cta>{ctaLabel}</Button>
+      <div class="flex w-64 justify-center md:w-80" aria-hidden="true">
+        <Dice size="clamp(130px, 34vw, 180px)" tint={diceTint} pip={dicePip} controls={false} />
+      </div>
     </div>
 
     <div class="hidden origin-center items-center gap-5 text-cream xl:flex max-2xl:scale-[0.85] 2xl:scale-100">
@@ -57,15 +60,15 @@ const [line1, line2, line3] = [words.slice(0, 2).join(' '), words.slice(2, 4).jo
           <span class="col-1 row-1 mt-19 font-serif text-[74px] font-bold whitespace-nowrap">{line2}</span>
           <span class="col-1 row-1 mt-38.5 ml-55.75 font-serif text-[74px] font-bold whitespace-nowrap">{line3}</span>
         </p>
-        <p class="col-1 row-1 mt-23.25 ml-114 w-85 leading-none" aria-hidden="true">{text}</p>
+        <p class="col-1 row-1 mt-12 ml-114 w-85 leading-none" aria-hidden="true">{text}</p>
         <div class="col-1 row-1 mt-66.25 ml-55.75">
-          <Button href={href} variant="primary" size="lg" class="w-82.5">{ctaLabel}</Button>
+          <Button href={href} variant="primary" size="lg" class="w-82.5" data-compass-cta>{ctaLabel}</Button>
         </div>
       </div>
 
-      <figure class="relative h-135.25 w-135 shrink-0">
-        <CmsImage image={compass} alt="A gold antique compass" widths={[540, 1080]} class="size-full object-contain" />
-      </figure>
+      <div class="flex h-135.25 w-135 shrink-0 items-center justify-center" aria-hidden="true">
+        <Dice size={230} tint={diceTint} pip={dicePip} controls={false} />
+      </div>
     </div>
   </div>
 
@@ -78,30 +81,13 @@ const [line1, line2, line3] = [words.slice(0, 2).join(' '), words.slice(2, 4).jo
 </section>
 
 <script>
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-  gsap.registerPlugin(ScrollTrigger);
-
   const section = document.querySelector<HTMLElement>('#compass');
-  const layer = section?.querySelector<HTMLElement>('[data-parallax-bg]');
 
-  if (section && layer) {
-    const mm = gsap.matchMedia();
-
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const syncParallax = () => {
-        gsap.set(layer, { y: -section.getBoundingClientRect().top });
-      };
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top bottom',
-        end: 'bottom top',
-        refreshPriority: 1,
-        onUpdate: syncParallax,
-        onRefresh: syncParallax,
-      });
+  // Without an href the CTA is a plain button: it rolls both cubes (only one is ever visible).
+  const dice = section?.querySelectorAll<HTMLElement>('[data-dice]') ?? [];
+  section?.querySelectorAll<HTMLElement>('[data-compass-cta]:not([href])').forEach((cta) => {
+    cta.addEventListener('click', () => {
+      dice.forEach((cube) => cube.dispatchEvent(new CustomEvent('dice:trigger')));
     });
-  }
+  });
 </script>
