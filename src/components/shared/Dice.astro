@@ -1,0 +1,344 @@
+---
+interface Props {
+  /** Face shown before the first roll. */
+  initialValue?: 1 | 2 | 3 | 4 | 5 | 6;
+  /** Roll duration in ms. */
+  duration?: number;
+  /** Cube edge length. A number is treated as px; a string is used as-is (e.g. a clamp()). */
+  size?: number | string;
+  /** Resting lean in degrees. Set both to 0 for a flat, head-on cube. */
+  tiltX?: number;
+  tiltY?: number;
+  /** Base face colour; the highlight and edge tones are derived from it. */
+  tint?: string;
+  /** Pip colour. */
+  pip?: string;
+  /** Render the built-in roll button. Turn off to drive the cube from an outside control. */
+  controls?: boolean;
+  class?: string;
+}
+
+const {
+  initialValue = 1,
+  duration = 1200,
+  size = 120,
+  tiltX = -22,
+  tiltY = -32,
+  tint = '#f6f3ec',
+  pip = '#16150f',
+  controls = true,
+  class: className,
+} = Astro.props;
+
+const edge = typeof size === 'number' ? `${size}px` : size;
+
+const PIPS = [1, 2, 3, 4, 5, 6] as const;
+---
+
+<div
+  class:list={['dice', className]}
+  data-dice
+  data-initial-value={initialValue}
+  data-duration={duration}
+  data-tilt-x={tiltX}
+  data-tilt-y={tiltY}
+  style={`--dice-size: ${edge}; --dice-duration: ${duration}ms; --dice-tint: ${tint}; --dice-pip: ${pip};`}
+>
+  <div class="scene">
+    <div class="cube" data-dice-cube>
+      {/* Square inner cube: plugs the gaps the outer faces' rounded corners leave open. */}
+      <div class="core">
+        {PIPS.map((face) => <div class={`core__face core__face--${face}`} />)}
+      </div>
+
+      {
+        PIPS.map((face) => (
+          <div class={`face face--${face}`}>
+            {Array.from({ length: face }, () => (
+              <span class="pip" />
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  {
+    controls && (
+      <button type="button" class="roll-button" data-dice-roll>
+        <slot>Roll Dice</slot>
+      </button>
+    )
+  }
+
+  <output class="dice-status" aria-live="polite" data-dice-output></output>
+</div>
+
+<script>
+  type Orientation = { x: number; y: number };
+
+  // Cube rotation that brings each face to the front.
+  const ORIENTATIONS: Record<number, Orientation> = {
+    1: { x: 0, y: 0 },
+    2: { x: 0, y: -90 },
+    3: { x: 0, y: -180 },
+    4: { x: 0, y: 90 },
+    5: { x: -90, y: 0 },
+    6: { x: 90, y: 0 },
+  };
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-dice]').forEach((root) => {
+    const cube = root.querySelector<HTMLElement>('[data-dice-cube]');
+    const button = root.querySelector<HTMLButtonElement>('[data-dice-roll]');
+    const output = root.querySelector<HTMLElement>('[data-dice-output]');
+    if (!cube || !output) return;
+
+    const duration = reduced ? 0 : Number(root.dataset.duration);
+    let value = Number(root.dataset.initialValue);
+    // Absolute rotation, always increasing, so the cube spins on instead of snapping back.
+    let spinX = 0;
+    let spinY = 0;
+    // Resting lean, so three faces stay visible before the first roll.
+    let tilt: Orientation = { x: Number(root.dataset.tiltX), y: Number(root.dataset.tiltY) };
+    let isRolling = false;
+
+    // Keeping the same four rotate functions in every state lets the browser interpolate
+    // the lean away smoothly while the cube is still spinning.
+    const render = () => {
+      const face = ORIENTATIONS[value];
+      cube.style.transform =
+        `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ` +
+        `rotateX(${spinX + face.x}deg) rotateY(${spinY + face.y}deg)`;
+    };
+
+    const roll = () => {
+      if (isRolling) return;
+      isRolling = true;
+      if (button) button.disabled = true;
+      root.classList.add('is-rolling');
+
+      value = Math.floor(Math.random() * 6) + 1;
+      tilt = { x: 0, y: 0 }; // settle flat, facing the viewer
+      if (!reduced) {
+        spinX += 360 * (2 + Math.floor(Math.random() * 2));
+        spinY += 360 * (3 + Math.floor(Math.random() * 2));
+      }
+      render();
+
+      window.setTimeout(() => {
+        isRolling = false;
+        if (button) button.disabled = false;
+        root.classList.remove('is-rolling');
+        output.textContent = `Rolled ${value}`;
+        root.dispatchEvent(new CustomEvent('dice:roll', { detail: { value }, bubbles: true }));
+      }, duration);
+    };
+
+    render();
+    button?.addEventListener('click', roll);
+    root.addEventListener('dice:trigger', roll);
+  });
+</script>
+
+<style>
+  .dice {
+    --half: calc(var(--dice-size) / 2);
+    --radius: calc(var(--dice-size) * 0.07);
+    /* The rounded corners leave a notch at each vertex; an inner cube plugs it.
+       Its square corners must sit inside the rounded silhouette, so the inset has a
+       floor of 0.293 * radius — kept just above that to minimise what shows through. */
+    --core-size: calc(var(--dice-size) * 0.95);
+    --core-half: calc(var(--core-size) / 2);
+    --core-offset: calc(var(--dice-size) * 0.025);
+    --face-tone: radial-gradient(
+      circle at 30% 22%,
+      color-mix(in srgb, var(--dice-tint), white 60%) 0%,
+      var(--dice-tint) 42%,
+      color-mix(in srgb, var(--dice-tint), #6b5c3e 16%) 100%
+    );
+    --face-shading:
+      inset calc(var(--dice-size) * 0.06) calc(var(--dice-size) * 0.06) calc(var(--dice-size) * 0.14) rgb(255 255 255 / 0.8),
+      inset calc(var(--dice-size) * -0.05) calc(var(--dice-size) * -0.07) calc(var(--dice-size) * 0.16) rgb(120 108 86 / 0.2);
+
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .scene {
+    position: relative;
+    width: var(--dice-size);
+    height: var(--dice-size);
+    perspective: calc(var(--dice-size) * 5);
+    filter: drop-shadow(0 calc(var(--dice-size) * 0.14) calc(var(--dice-size) * 0.12) rgb(0 0 0 / 0.28));
+  }
+
+  .cube {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform var(--dice-duration) cubic-bezier(0.2, 0.7, 0.25, 1);
+  }
+
+  .dice.is-rolling .scene {
+    animation: toss var(--dice-duration) cubic-bezier(0.35, 0, 0.3, 1);
+  }
+
+  @keyframes toss {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-28%);
+    }
+  }
+
+  /* ---- faces ---- */
+
+  .face {
+    position: absolute;
+    box-sizing: border-box;
+    display: grid;
+    width: var(--dice-size);
+    height: var(--dice-size);
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    padding: 12%;
+    border-radius: var(--radius);
+    background: var(--face-tone);
+    box-shadow: var(--face-shading);
+  }
+
+  .face--1 { transform: rotateY(0deg) translateZ(var(--half)); }
+  .face--2 { transform: rotateY(90deg) translateZ(var(--half)); }
+  .face--3 { transform: rotateY(180deg) translateZ(var(--half)); }
+  .face--4 { transform: rotateY(-90deg) translateZ(var(--half)); }
+  .face--5 { transform: rotateX(90deg) translateZ(var(--half)); }
+  .face--6 { transform: rotateX(-90deg) translateZ(var(--half)); }
+
+  /* ---- pip placement on the 3x3 grid ---- */
+
+  .pip {
+    width: calc(var(--dice-size) * 0.17);
+    height: calc(var(--dice-size) * 0.17);
+    place-self: center;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 38% 30%,
+      color-mix(in srgb, var(--dice-pip), white 22%) 0%,
+      var(--dice-pip) 65%,
+      color-mix(in srgb, var(--dice-pip), black 55%) 100%
+    );
+    box-shadow:
+      inset 0 calc(var(--dice-size) * 0.015) calc(var(--dice-size) * 0.03) rgb(0 0 0 / 0.9),
+      0 calc(var(--dice-size) * 0.008) 0 rgb(255 255 255 / 0.45);
+  }
+
+  .face--1 .pip { grid-area: 2 / 2; }
+
+  .face--2 .pip:nth-child(1) { grid-area: 1 / 1; }
+  .face--2 .pip:nth-child(2) { grid-area: 3 / 3; }
+
+  .face--3 .pip:nth-child(1) { grid-area: 1 / 1; }
+  .face--3 .pip:nth-child(2) { grid-area: 2 / 2; }
+  .face--3 .pip:nth-child(3) { grid-area: 3 / 3; }
+
+  .face--4 .pip:nth-child(1) { grid-area: 1 / 1; }
+  .face--4 .pip:nth-child(2) { grid-area: 1 / 3; }
+  .face--4 .pip:nth-child(3) { grid-area: 3 / 1; }
+  .face--4 .pip:nth-child(4) { grid-area: 3 / 3; }
+
+  .face--5 .pip:nth-child(1) { grid-area: 1 / 1; }
+  .face--5 .pip:nth-child(2) { grid-area: 1 / 3; }
+  .face--5 .pip:nth-child(3) { grid-area: 2 / 2; }
+  .face--5 .pip:nth-child(4) { grid-area: 3 / 1; }
+  .face--5 .pip:nth-child(5) { grid-area: 3 / 3; }
+
+  .face--6 .pip:nth-child(1) { grid-area: 1 / 1; }
+  .face--6 .pip:nth-child(2) { grid-area: 1 / 3; }
+  .face--6 .pip:nth-child(3) { grid-area: 2 / 1; }
+  .face--6 .pip:nth-child(4) { grid-area: 2 / 3; }
+  .face--6 .pip:nth-child(5) { grid-area: 3 / 1; }
+  .face--6 .pip:nth-child(6) { grid-area: 3 / 3; }
+
+  /* ---- inner cube filling the rounded corners ---- */
+
+  .core {
+    position: absolute;
+    inset: var(--core-offset);
+    transform-style: preserve-3d;
+  }
+
+  .core__face {
+    position: absolute;
+    width: var(--core-size);
+    height: var(--core-size);
+    /* Same tone and shading as the outer faces, plus a slight darkening, so what shows through
+       each rounded corner reads as a shaded bevel rather than a bright wedge. */
+    background: var(--face-tone);
+    box-shadow: var(--face-shading);
+    filter: brightness(0.94);
+  }
+
+  .core__face--1 { transform: rotateY(0deg) translateZ(var(--core-half)); }
+  .core__face--2 { transform: rotateY(90deg) translateZ(var(--core-half)); }
+  .core__face--3 { transform: rotateY(180deg) translateZ(var(--core-half)); }
+  .core__face--4 { transform: rotateY(-90deg) translateZ(var(--core-half)); }
+  .core__face--5 { transform: rotateX(90deg) translateZ(var(--core-half)); }
+  .core__face--6 { transform: rotateX(-90deg) translateZ(var(--core-half)); }
+
+  /* ---- controls ---- */
+
+  .dice-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .roll-button {
+    min-width: 120px;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: #4caf50;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .roll-button:hover:not(:disabled) {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgb(0 0 0 / 0.15);
+  }
+
+  .roll-button:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+  }
+
+  .roll-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cube,
+    .roll-button {
+      transition: none;
+    }
+    .dice.is-rolling .scene {
+      animation: none;
+    }
+  }
+</style>
