@@ -1,17 +1,15 @@
 ---
-import CmsImage from '@/components/base/CmsImage.astro';
-import { getSingleton } from '@/lib/content';
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/cta/bg-3.png';
 import { Button } from '@/shared/ui/button';
 
-const {
-  custom_cta_title: title,
-  custom_cta_text: text,
-  custom_cta_image: image,
-  custom_cta_primary_label: primaryLabel,
-  custom_cta_primary_href: primaryHref,
-  custom_cta_secondary_label: secondaryLabel,
-  custom_cta_secondary_href: secondaryHref,
-} = await getSingleton('website_content');
+// Static CTA — the same on every visit, so it is not editable in the CMS.
+const title = 'Let’s Build a Mission That Fits Your Calling';
+const text = 'Your church or school doesn’t need to fit into someone else’s itinerary.\n\nLet’s create a mission experience designed specifically for your people, your goals, and the community you’re called to serve.';
+const primaryLabel = 'Book a 30–minute call';
+const primaryHref = '/contact';
+const secondaryLabel = 'Explore Mission Trips';
+const secondaryHref = '/trips';
 
 const paragraphs = text.split(/\n\s*\n/);
 ---
@@ -20,7 +18,7 @@ const paragraphs = text.split(/\n\s*\n/);
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <CmsImage image={image} alt="" widths={[1600]} class="size-full object-cover" />
+        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 

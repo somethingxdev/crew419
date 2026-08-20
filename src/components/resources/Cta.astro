@@ -1,48 +1,25 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import CmsImage from '@/components/base/CmsImage.astro';
-import { getSingleton } from '@/lib/content';
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/cta/bg-2.png';
+import { SITE_LINKS } from '@/lib/links';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
-  /** Resource whose `cta_*` fields are shown; without it the travel-guides hub CTA (`resources_hub_cta_*`) is used. */
-  resource?: CollectionEntry<'resources'>;
   class?: string;
 }
 
-const { resource, class: className = 'py-15' } = Astro.props;
+const { class: className = 'py-15' } = Astro.props;
 
-async function hubCta() {
-  const {
-    resources_hub_cta_title: title,
-    resources_hub_cta_text: text,
-    resources_hub_cta_image: image,
-    resources_hub_cta_primary_label: primaryLabel,
-    resources_hub_cta_primary_href: primaryHref,
-    resources_hub_cta_secondary_label: secondaryLabel,
-    resources_hub_cta_secondary_href: secondaryHref,
-  } = await getSingleton('website_content');
-  return { title, text, image, primaryLabel, primaryHref, secondaryLabel, secondaryHref };
-}
-
-const { title, text, image, primaryLabel, primaryHref, secondaryLabel, secondaryHref } = resource
-  ? {
-      title: resource.data.cta_title,
-      text: resource.data.cta_text,
-      image: resource.data.cta_image,
-      primaryLabel: resource.data.cta_primary_label,
-      primaryHref: resource.data.cta_primary_href,
-      secondaryLabel: resource.data.cta_secondary_label,
-      secondaryHref: resource.data.cta_secondary_href,
-    }
-  : await hubCta();
+// Static CTA — the same on the travel-guides hub and on every guide, so it is not editable in the CMS.
+const title = 'Your Mission Starts With One Step';
+const text = "God is already moving around the world.\nLet's discover where He's inviting you to serve.";
 ---
 
 <section class={className} aria-labelledby="resources-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <CmsImage image={image} alt="" widths={[1600, 3000]} class="size-full object-cover" />
+        <Image src={bg} alt="" widths={[1600, 3000]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
@@ -52,8 +29,8 @@ const { title, text, image, primaryLabel, primaryHref, secondaryLabel, secondary
           <p class="leading-none whitespace-pre-line">{text}</p>
         </div>
         <div class="flex flex-col items-center gap-4 sm:flex-row">
-          <Button href={primaryHref} variant="cream" size="lg">{primaryLabel}</Button>
-          <Button href={secondaryHref} variant="glass" size="lg" class="max-w-full">{secondaryLabel}</Button>
+          <Button href={SITE_LINKS.call.href} variant="cream" size="lg">{SITE_LINKS.call.label}</Button>
+          <Button href="/trips" variant="glass" size="lg" class="max-w-full">Explore Mission Trips</Button>
         </div>
       </div>
     </div>

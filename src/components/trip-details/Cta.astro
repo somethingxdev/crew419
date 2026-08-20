@@ -1,18 +1,19 @@
 ---
-import CmsImage from '@/components/base/CmsImage.astro';
-import { getSingleton } from '@/lib/content';
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/cta/bg-4.png';
 import { SITE_LINKS } from '@/lib/links';
 import { Button } from '@/shared/ui/button';
 
-// The CTA is identical on every trip page, so it lives in `website_content` instead of on each trip.
-const { trip_cta_title: title, trip_cta_text: text, trip_cta_image: bg } = await getSingleton('website_content');
+// Static CTA — the same on every trip page, so it is not editable in the CMS.
+const title = 'Your Mission Starts With One Step';
+const text = 'God is already moving around the world. Let’s discover where He’s inviting you to serve.';
 ---
 
 <section class="py-15" aria-labelledby="trip-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <CmsImage image={bg} alt="" widths={[1600]} class="size-full object-cover" />
+        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 

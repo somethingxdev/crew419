@@ -1,18 +1,19 @@
 ---
-import CmsImage from '@/components/base/CmsImage.astro';
-import { getSingleton } from '@/lib/content';
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/cta/bg-2.png';
 import { SITE_LINKS } from '@/lib/links';
 import { Button } from '@/shared/ui/button';
 
-// The CTA is identical on every story page, so it lives in `website_content` instead of on each story.
-const { story_cta_title: title, story_cta_text: text, story_cta_image: image } = await getSingleton('website_content');
+// Static CTA — the same on every story page, so it is not editable in the CMS.
+const title = 'Inspired by This Story?';
+const text = 'Your next step could be joining a future mission team, serving alongside local churches, and becoming part of the next story God is writing.';
 ---
 
 <section class="py-15" aria-labelledby="story-cta-heading">
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <CmsImage image={image} alt="" widths={[1600]} class="size-full object-cover" />
+        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
