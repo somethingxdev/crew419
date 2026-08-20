@@ -4,6 +4,7 @@ import Layout from '@/layouts/Layout.astro';
 import Article from '@/components/story-detail/Article.astro';
 import Cta from '@/components/story-detail/Cta.astro';
 import MoreStories from '@/components/story-detail/MoreStories.astro';
+import { getSingleton } from '@/lib/content';
 
 export async function getStaticPaths() {
   const stories = await getCollection('stories');
@@ -15,11 +16,13 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { seo_title, seo_description, og_image, canonical_url } = entry.data;
+const { seo_title, seo_description } = entry.data;
+// Stories have no OG image of their own — the site-wide default is used.
+const { og_image } = await getSingleton('global');
 ---
 
-<Layout title={seo_title} description={seo_description} ogImage={og_image} canonical={canonical_url}>
+<Layout title={seo_title} description={seo_description} ogImage={og_image}>
   <Article entry={entry} />
   <MoreStories entry={entry} />
-  <Cta entry={entry} />
+  <Cta />
 </Layout>

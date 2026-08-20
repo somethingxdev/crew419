@@ -2,6 +2,7 @@
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import ChevronDown from '@tabler/icons/outline/chevron-down.svg';
 import CmsImage from '@/components/base/CmsImage.astro';
+import { storyDate, STORY_TYPE_LABELS } from '@/lib/story';
 import { Dropdown, DropdownContent, DropdownRadioGroup, DropdownRadioItem, DropdownTrigger } from '@/shared/ui/dropdown';
 
 type StoryData = CollectionEntry<'stories'>['data'];
@@ -13,11 +14,6 @@ interface Filter {
   options: FilterOption[];
 }
 
-const typeLabels: Record<StoryData['type'], string> = {
-  'trip-recap': 'Trip Recap',
-  testimony: 'Testimony',
-  'ministry-update': 'Ministry Update',
-};
 
 const ministryLabels: Record<StoryData['ministry'], string> = {
   children: 'Children',
@@ -33,7 +29,7 @@ const filters: Filter[] = [
   {
     key: 'type',
     label: 'Story Type',
-    options: [{ label: 'All Types', value: 'all' }, ...Object.entries(typeLabels).map(([value, label]) => ({ label, value }))],
+    options: [{ label: 'All Types', value: 'all' }, ...Object.entries(STORY_TYPE_LABELS).map(([value, label]) => ({ label, value }))],
   },
   {
     key: 'region',
@@ -91,16 +87,16 @@ const currentPage = 1;
           <li data-story data-type={story.type} data-region={story.regionSlug} data-ministry={story.ministry}>
             <article class="bg-cream flex h-full flex-col rounded-lg px-4 pt-4 pb-5">
               <a href={story.href} class="block overflow-hidden rounded-lg" tabindex="-1" aria-hidden="true">
-                <CmsImage image={story.card_image} alt={story.card_image_alt} widths={[400, 800]} class="h-65 w-full object-cover transition-transform duration-500 hover:scale-105" />
+                <CmsImage image={story.card_image} alt={story.title} widths={[400, 800]} class="h-65 w-full object-cover transition-transform duration-500 hover:scale-105" />
               </a>
               <div class="mt-5 flex flex-1 flex-col">
-                <p class="text-muted-foreground text-base leading-none font-bold uppercase">{typeLabels[story.type]}</p>
+                <p class="text-muted-foreground text-base leading-none font-bold uppercase">{STORY_TYPE_LABELS[story.type]}</p>
                 <h3 class="mt-2.5 line-clamp-2 min-h-13 text-2xl  font-bold">
                   <a href={story.href} class="hover:text-primary transition-colors">
                     {story.title}
                   </a>
                 </h3>
-                <p class="text-muted-foreground mt-5 text-base leading-none">{story.date_label}</p>
+                <p class="text-muted-foreground mt-5 text-base leading-none">{storyDate(story.published_on)}</p>
               </div>
               <a
                 href={story.href}

@@ -4,6 +4,8 @@ import { defineConfig, envField, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+  // Used to build absolute canonical URLs.
+  site: 'https://crew419.com',
   env: {
     schema: {
       DIRECTUS_URL: envField.string({ context: 'server', access: 'public', url: true }),

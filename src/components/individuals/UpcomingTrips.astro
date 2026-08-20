@@ -2,6 +2,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
+import { tripDates, tripDuration } from '@/lib/trip';
 
 const {
   individuals_more_eyebrow: eyebrow,
@@ -35,15 +36,15 @@ const trips = await Promise.all(
         trips.map((trip) => (
           <article class="bg-cream flex flex-col items-start justify-between gap-5 rounded-lg p-5">
             <div class="flex w-full flex-col gap-5">
-              <CmsImage image={trip.card_image} alt={trip.card_image_alt} widths={[680]} class="h-65 w-full rounded-lg object-cover" />
+              <CmsImage image={trip.card_image} alt={trip.title} widths={[680]} class="h-65 w-full rounded-lg object-cover" />
               <div class="flex flex-col gap-2.5">
                 <p class="text-muted-foreground leading-none font-bold uppercase">{trip.region.name}</p>
                 <h3 class="text-2xl font-bold">{trip.title}</h3>
               </div>
               <ul class="flex flex-col gap-2.5 leading-none">
-                <li>{trip.dates_label}</li>
-                <li>{trip.price_label}</li>
-                <li>{trip.duration_label}</li>
+                <li>{tripDates(trip)}</li>
+                <li>{trip.price}</li>
+                <li>{tripDuration(trip)}</li>
               </ul>
             </div>
             <a href={trip.href} class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground border-b pb-2 leading-none font-black uppercase transition-colors">

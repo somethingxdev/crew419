@@ -1,21 +1,11 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
+import { SITE_LINKS } from '@/lib/links';
 import { Button } from '@/shared/ui/button';
 
-interface Props {
-  entry: CollectionEntry<'stories'>;
-}
-
-const {
-  cta_title: title,
-  cta_text: text,
-  cta_image: image,
-  cta_primary_label: primaryLabel,
-  cta_primary_href: primaryHref,
-  cta_secondary_label: secondaryLabel,
-  cta_secondary_href: secondaryHref,
-} = Astro.props.entry.data;
+// The CTA is identical on every story page, so it lives in `website_content` instead of on each story.
+const { story_cta_title: title, story_cta_text: text, story_cta_image: image } = await getSingleton('website_content');
 ---
 
 <section class="py-15" aria-labelledby="story-cta-heading">
@@ -30,14 +20,7 @@ const {
         <h2 id="story-cta-heading" class="text-3xl  font-bold md:text-5xl">{title}</h2>
         <p class="mt-6 max-w-92 text-base leading-none">{text}</p>
         <div class="mt-7.5 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <Button href={primaryHref} variant="cream" size="lg" class="w-82.5 max-w-full">{primaryLabel}</Button>
-          {
-            secondaryLabel && secondaryHref && (
-              <Button href={secondaryHref} variant="glass" size="lg" class="w-82.5 max-w-full">
-                {secondaryLabel}
-              </Button>
-            )
-          }
+          <Button href={SITE_LINKS.call.href} variant="cream" size="lg" class="w-82.5 max-w-full">{SITE_LINKS.call.label}</Button>
         </div>
       </div>
     </div>

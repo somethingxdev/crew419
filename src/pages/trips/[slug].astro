@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import { getSingleton } from '@/lib/content';
 import Layout from '@/layouts/Layout.astro';
 import Faq from '@/components/home/Faq.astro';
 import RegionAbout from '@/components/regions/About.astro';
@@ -43,10 +44,12 @@ if (!entry) throw new Error(`trips/${Astro.params.slug}: neither a region nor a 
 const tripRegion = trip && (await getEntry(trip.data.region));
 if (trip && !tripRegion) throw new Error(`trips/${trip.data.slug}: region "${trip.data.region.id}" is not published`);
 
-const { seo_title, seo_description, og_image, canonical_url } = entry.data;
+const { seo_title, seo_description } = entry.data;
+// Trips and regions have no OG image of their own — the site-wide default is used.
+const { og_image } = await getSingleton('global');
 ---
 
-<Layout title={seo_title} description={seo_description} ogImage={og_image} canonical={canonical_url}>
+<Layout title={seo_title} description={seo_description} ogImage={og_image}>
   {
     trip && tripRegion && (
       <>
@@ -56,11 +59,11 @@ const { seo_title, seo_description, og_image, canonical_url } = entry.data;
         <YourWeek trip={trip} />
         <WhoCanJoin trip={trip} />
         <WhatsIncluded trip={trip} />
-        <InTheField eyebrow={tripRegion.data.field_eyebrow} heading={tripRegion.data.field_heading} bg={tripRegion.data.field_bg} />
+        <InTheField bg={tripRegion.data.field_bg} />
         <Stories region={tripRegion} />
         <SimilarTrips trip={trip} />
         <Faq />
-        <TripCta trip={trip} />
+        <TripCta />
       </>
     )
   }
@@ -70,7 +73,7 @@ const { seo_title, seo_description, og_image, canonical_url } = entry.data;
         <RegionHero region={region} />
         <RegionAbout region={region} />
         <Ministry region={region} />
-        <InTheField eyebrow={region.data.field_eyebrow} heading={region.data.field_heading} bg={region.data.field_bg} />
+        <InTheField bg={region.data.field_bg} />
         <Stories region={region} />
         <RegionCta region={region} />
       </>

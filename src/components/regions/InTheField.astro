@@ -15,12 +15,10 @@ import type { DirectusImage } from '@/lib/directus-loader';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
-  eyebrow: string;
-  heading: string;
   bg: DirectusImage;
 }
 
-const { eyebrow, heading, bg } = Astro.props;
+const { bg } = Astro.props;
 
 // No CMS field for the gallery photos yet — kept local.
 const photos = [
@@ -41,8 +39,8 @@ const photos = [
 
   <div class="relative container z-10">
     <div class="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center text-cream">
-      <p class="leading-none font-bold uppercase opacity-80">{eyebrow}</p>
-      <h2 id="in-field-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
+      <p class="leading-none font-bold uppercase opacity-80">In the field</p>
+      <h2 id="in-field-heading" class="text-3xl  font-bold md:text-5xl">See the Mission in Action</h2>
     </div>
 
     <div class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0">

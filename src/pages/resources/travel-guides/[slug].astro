@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
+import { getSingleton } from '@/lib/content';
 import ResourcesCta from '@/components/resources/Cta.astro';
 import GuideHero from '@/components/resources/guide/Hero.astro';
 import Details from '@/components/resources/travel-guides/detail/Details.astro';
@@ -16,10 +17,12 @@ interface Props {
 }
 
 const { guide } = Astro.props;
-const { seo_title, seo_description, og_image, canonical_url } = guide.data;
+const { seo_title, seo_description } = guide.data;
+// Resources have no OG image of their own — the site-wide default is used.
+const { og_image } = await getSingleton('global');
 ---
 
-<Layout title={seo_title} description={seo_description} ogImage={og_image} canonical={canonical_url}>
+<Layout title={seo_title} description={seo_description} ogImage={og_image}>
   <GuideHero resource={guide} />
   <Details resource={guide} />
   <MissionSlider resource={guide} />

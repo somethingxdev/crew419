@@ -10,10 +10,10 @@ const { thank_you_seo_title, thank_you_seo_description, thank_you_og_image } = a
 // The thank-you page has no "In the field" fields of its own — it reuses the Africa region's section.
 const africa = (await getCollection('regions')).find(({ data }) => data.slug === 'africa');
 if (!africa) throw new Error('Thank-you page: region "africa" is not loaded (needed for the "In the field" section)');
-const { field_eyebrow, field_heading, field_bg } = africa.data;
+const { field_bg } = africa.data;
 ---
 
 <Layout title={thank_you_seo_title} description={thank_you_seo_description} ogImage={thank_you_og_image}>
   <Hero />
-  <InTheField eyebrow={field_eyebrow} heading={field_heading} bg={field_bg} />
+  <InTheField bg={field_bg} />
 </Layout>

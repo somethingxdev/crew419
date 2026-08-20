@@ -11,7 +11,7 @@ interface Props {
   trip: CollectionEntry<'trips'>;
 }
 
-const { who_can_join_eyebrow: eyebrow, who_can_join_heading: heading, who_can_join: groups } = Astro.props.trip.data;
+const { who_can_join: groups } = Astro.props.trip.data;
 
 // No CMS field for the card icons — local icons, assigned by position.
 const icons = [individual, church, school, family, compass, handshake];
@@ -20,8 +20,8 @@ const icons = [individual, church, school, family, compass, handshake];
 <section class="py-15" aria-labelledby="who-can-join-heading">
   <div class="container">
     <div class="flex flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-      <h2 id="who-can-join-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">Who can join</p>
+      <h2 id="who-can-join-heading" class="text-3xl font-bold md:text-5xl">Everyone Has a Place to Serve</h2>
     </div>
 
     <div class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">

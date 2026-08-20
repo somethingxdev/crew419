@@ -6,7 +6,7 @@ interface Props {
   trip: CollectionEntry<'trips'>;
 }
 
-const { week_eyebrow: eyebrow, week_heading: heading, itinerary: days, week_media: media } = Astro.props.trip.data;
+const { itinerary: days, week_media: media } = Astro.props.trip.data;
 
 // `week_media` is a generic file: a video, or an image (Directus knows the size of images).
 const isVideo = media.type.startsWith('video/');
@@ -16,8 +16,8 @@ const mediaClass = 'h-auto w-full rounded-lg object-cover lg:h-134.5 lg:flex-1';
 <section class="py-15" aria-labelledby="your-week-heading">
   <div class="container">
     <div class="flex flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-      <h2 id="your-week-heading" class="max-w-164 text-3xl font-bold md:text-5xl">{heading}</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">Your week</p>
+      <h2 id="your-week-heading" class="max-w-164 text-3xl font-bold md:text-5xl">What Your Mission Week Could Look Like</h2>
     </div>
 
     <div class="mt-12.5 flex flex-col gap-12.5 lg:flex-row lg:items-start lg:gap-20">

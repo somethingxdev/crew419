@@ -4,22 +4,18 @@ import type { CollectionEntry } from 'astro:content';
 import decor from '@/assets/images/decor-bottom.png';
 import CmsImage from '@/components/base/CmsImage.astro';
 import { Button } from '@/shared/ui/button';
+import { SITE_LINKS } from '@/lib/links';
+import { tripFacts } from '@/lib/trip';
 
 interface Props {
   trip: CollectionEntry<'trips'>;
 }
 
-const {
-  hero_eyebrow: eyebrow,
-  hero_title: title,
-  hero_description: description,
-  hero_image: bg,
-  hero_primary_label: primaryLabel,
-  hero_primary_href: primaryHref,
-  hero_secondary_label: secondaryLabel,
-  hero_secondary_href: secondaryHref,
-  hero_facts: facts,
-} = Astro.props.trip.data;
+const trip = Astro.props.trip.data;
+const { hero_title: title, hero_description: description, hero_image: bg } = trip;
+
+// Dates, length, ministry and price all come from the Overview fields — nothing to fill in by hand.
+const facts = tripFacts(trip);
 ---
 
 <section class="relative" aria-labelledby="trip-hero-heading">
@@ -30,12 +26,12 @@ const {
 
   <div class="relative container flex w-full flex-1 flex-col justify-between gap-20 pt-50 pb-40">
     <div class="flex w-full max-w-195 flex-col items-center text-center xl:items-start xl:text-left">
-      <p class="leading-none font-bold text-cream/80 uppercase">{eyebrow}</p>
+      <p class="leading-none font-bold text-cream/80 uppercase">Upcoming mission</p>
       <h1 id="trip-hero-heading" class="mt-3 text-4xl  font-bold text-cream text-shadow-2xs md:text-6xl xl:text-[74px]">{title}</h1>
       <p class="mt-7.5 max-w-137.5 text-lg leading-none font-medium text-cream">{description}</p>
       <div class="mt-7.5 flex w-full max-w-137.5 flex-col gap-4 sm:flex-row">
-        <Button href={primaryHref} variant="cream" size="lg" class="flex-1">{primaryLabel}</Button>
-        <Button href={secondaryHref} variant="glass" size="lg" class="flex-1">{secondaryLabel}</Button>
+        <Button href={SITE_LINKS.call.href} variant="cream" size="lg" class="flex-1">{SITE_LINKS.call.label}</Button>
+        <Button href={SITE_LINKS.guide.href} variant="glass" size="lg" class="flex-1">{SITE_LINKS.guide.label}</Button>
       </div>
     </div>
 

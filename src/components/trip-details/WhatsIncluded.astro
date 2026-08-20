@@ -5,7 +5,7 @@ interface Props {
   trip: CollectionEntry<'trips'>;
 }
 
-const { included_eyebrow: eyebrow, included_heading: heading, included_items: items } = Astro.props.trip.data;
+const { included_items: items } = Astro.props.trip.data;
 
 const lists = [
   { title: 'Included', items: items.filter((item) => item.group === 'included') },
@@ -16,8 +16,8 @@ const lists = [
 <section class="py-30" aria-labelledby="whats-included-heading">
   <div class="container flex flex-col gap-12.5 xl:flex-row xl:justify-between xl:gap-20">
     <div class="flex flex-col gap-4">
-      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-      <h2 id="whats-included-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
+      <p class="text-muted-foreground leading-none font-bold uppercase">What’s included</p>
+      <h2 id="whats-included-heading" class="text-3xl  font-bold md:text-5xl">What’s Covered</h2>
     </div>
 
     <div class="grid gap-12.5 sm:grid-cols-2 sm:gap-25 xl:w-full xl:max-w-185">

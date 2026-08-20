@@ -34,7 +34,7 @@ const initial = locations[0];
               <div class="absolute flex items-center justify-center" data-locations-slide data-pos={pos} data-name={location.name} data-href={location.href}>
                 <article class="bg-cream flex items-center rounded-lg p-2.5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]" data-locations-card>
                   <div class="relative size-full min-w-0 overflow-hidden rounded-lg">
-                    <CmsImage image={location.card_image} alt={location.card_image_alt} widths={[800]} class="absolute inset-0 size-full object-cover" />
+                    <CmsImage image={location.card_image} alt={location.name} widths={[800]} class="absolute inset-0 size-full object-cover" />
                     <div class="absolute inset-0 bg-black/50" data-locations-dim />
                   </div>
                 </article>

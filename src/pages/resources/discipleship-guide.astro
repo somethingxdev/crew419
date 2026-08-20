@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
+import { getSingleton } from '@/lib/content';
 import ResourcesCta from '@/components/resources/Cta.astro';
 import GuideCards from '@/components/resources/guide/Cards.astro';
 import GetYourCopy from '@/components/resources/guide/GetYourCopy.astro';
@@ -11,10 +12,12 @@ const guides = await getCollection('resources', ({ data }) => data.kind === 'dis
 if (guides.length !== 1) throw new Error(`Expected exactly one "discipleship" resource in Directus, found ${guides.length}`);
 const [guide] = guides;
 
-const { seo_title, seo_description, og_image, canonical_url } = guide.data;
+const { seo_title, seo_description } = guide.data;
+// Resources have no OG image of their own — the site-wide default is used.
+const { og_image } = await getSingleton('global');
 ---
 
-<Layout title={seo_title} description={seo_description} ogImage={og_image} canonical={canonical_url}>
+<Layout title={seo_title} description={seo_description} ogImage={og_image}>
   <GuideHero resource={guide} />
   <GuideCards resource={guide} />
   <GuideIntro resource={guide} />

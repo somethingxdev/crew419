@@ -7,7 +7,7 @@ interface Props {
   trip: CollectionEntry<'trips'>;
 }
 
-const { about_eyebrow: eyebrow, about_heading: heading, about_text: text, about_photo_left: photoLeft, about_photo_right: photoRight } = Astro.props.trip.data;
+const { about_text: text, about_photo_left: photoLeft, about_photo_right: photoRight } = Astro.props.trip.data;
 ---
 
 <PhotoPairSection labelledBy="about-mission-heading">
@@ -15,8 +15,8 @@ const { about_eyebrow: eyebrow, about_heading: heading, about_text: text, about_
   <CmsImage slot="image-right" image={photoRight} alt="" widths={[600, 1200]} />
 
   <div class="flex w-full flex-col items-start gap-4">
-    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-    <h2 id="about-mission-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
+    <p class="text-muted-foreground leading-none font-bold uppercase">About the mission</p>
+    <h2 id="about-mission-heading" class="text-3xl font-bold md:text-5xl">Serve Local Communities with Purpose</h2>
   </div>
   <div class="flex max-w-129.25 flex-col gap-4 leading-tight" set:html={text} />
 </PhotoPairSection>

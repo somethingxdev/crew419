@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@staminna/directus-mcp-server": "12.0.1",
     "typescript": "^6.0.3"
   }
 }

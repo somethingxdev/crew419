@@ -1,21 +1,18 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
+import { getSingleton } from '@/lib/content';
+import { SITE_LINKS } from '@/lib/links';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
   region: CollectionEntry<'regions'>;
 }
 
-const {
-  cta_title: title,
-  cta_text: text,
-  cta_image: bg,
-  cta_primary_label: primaryLabel,
-  cta_primary_href: primaryHref,
-  cta_secondary_label: secondaryLabel,
-  cta_secondary_href: secondaryHref,
-} = Astro.props.region.data;
+const { name } = Astro.props.region.data;
+
+// Only the region name changes between region pages, so the copy lives in `website_content`.
+const { region_cta_text: text, region_cta_image: bg } = await getSingleton('website_content');
 ---
 
 <section class="py-15" aria-labelledby="region-cta-heading">
@@ -26,17 +23,13 @@ const {
         <div class="absolute inset-0 bg-black/20"></div>
       </div>
 
-      <div class="relative z-10 mx-auto flex w-full max-w-158 flex-col items-center justify-center px-5 py-15 text-center text-cream md:py-0">
-        <h2 id="region-cta-heading" class="text-3xl  font-bold md:text-5xl">{title}</h2>
-        <p class="mt-6 max-w-90 leading-none">{text}</p>
-        <Button href={primaryHref} variant="cream" size="lg" class="mt-7.5 w-82.5 max-w-full">{primaryLabel}</Button>
-        {
-          secondaryLabel && secondaryHref && (
-            <Button href={secondaryHref} variant="glass" size="lg" class="mt-4 w-82.5 max-w-full">
-              {secondaryLabel}
-            </Button>
-          )
-        }
+      <div class="relative z-10 mx-auto flex w-full max-w-155 flex-col items-center justify-center px-5 py-15 text-center text-cream md:py-0">
+        <h2 id="region-cta-heading" class="text-3xl  font-bold md:text-5xl">Ready to Serve in {name}?</h2>
+        <p class="mt-7.5 max-w-137.5 leading-tight">{text}</p>
+        <div class="mt-7.5 flex w-full max-w-133 flex-col gap-4 sm:flex-row">
+          <Button href={SITE_LINKS.call.href} variant="cream" size="lg" class="flex-1">{SITE_LINKS.call.label}</Button>
+          <Button href={SITE_LINKS.destinations.href} variant="glass" size="lg" class="flex-1">{SITE_LINKS.destinations.label}</Button>
+        </div>
       </div>
     </div>
   </div>

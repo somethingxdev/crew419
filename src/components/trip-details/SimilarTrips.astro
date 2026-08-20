@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
+import { MINISTRY_LABELS, tripDates, tripDuration } from '@/lib/trip';
 
 interface Props {
   trip: CollectionEntry<'trips'>;
@@ -10,15 +11,6 @@ const { trip } = Astro.props;
 
 // Every other published trip (the collection is already limited to published ones).
 const trips = await getCollection('trips', (entry) => entry.id !== trip.id);
-
-const ministryLabels: Record<CollectionEntry<'trips'>['data']['ministry'], string> = {
-  general: 'General Mission',
-  sports: 'Sports',
-  children: 'Children',
-  construction: 'Construction',
-  evangelism: 'Evangelism',
-  medical: 'Medical',
-};
 ---
 
 {
@@ -34,18 +26,18 @@ const ministryLabels: Record<CollectionEntry<'trips'>['data']['ministry'], strin
           {trips.map(({ data }) => (
             <li>
               <article class="bg-cream flex h-full flex-col rounded-lg p-5">
-                <CmsImage image={data.card_image} alt={data.card_image_alt} widths={[400, 800]} class="h-65 w-full rounded-lg object-cover" />
+                <CmsImage image={data.card_image} alt={data.title} widths={[400, 800]} class="h-65 w-full rounded-lg object-cover" />
 
                 <div class="mt-5 flex flex-1 flex-col gap-6.5">
                   <div class="flex flex-col gap-2.5">
-                    <p class="text-muted-foreground leading-none font-bold uppercase">{ministryLabels[data.ministry]}</p>
+                    <p class="text-muted-foreground leading-none font-bold uppercase">{MINISTRY_LABELS[data.ministry]}</p>
                     <h3 class="text-2xl  font-bold">{data.title}</h3>
                   </div>
 
                   <div class="flex flex-col gap-2.5 leading-none">
-                    <p>{data.dates_label}</p>
-                    <p>{data.price_label}</p>
-                    <p>{data.duration_label}</p>
+                    <p>{tripDates(data)}</p>
+                    <p>{data.price}</p>
+                    <p>{tripDuration(data)}</p>
                   </div>
                 </div>
 

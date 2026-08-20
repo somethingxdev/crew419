@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
 import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import CmsImage from '@/components/base/CmsImage.astro';
+import { storyDate, STORY_TYPE_LABELS } from '@/lib/story';
 import { Button } from '@/shared/ui/button';
 
 interface Props {
@@ -16,11 +17,6 @@ const { region, eyebrow = 'Real Stories', heading = 'Featured Stories from This 
 
 const stories = await getCollection('stories', ({ data }) => data.region.id === region.id);
 
-const typeLabels: Record<CollectionEntry<'stories'>['data']['type'], string> = {
-  'trip-recap': 'Trip Recap',
-  testimony: 'Testimony',
-  'ministry-update': 'Ministry Update',
-};
 
 // Alternating card layout (decorative).
 const layouts = [
@@ -57,11 +53,11 @@ const layouts = [
                 <li class:list={['min-w-0 shrink-0', layout.itemClass]}>
                   <div class:list={['relative isolate flex items-center', layout.pairClass]}>
                     <article class="relative z-10 flex w-[min(480px,calc(100vw-2.5rem))] flex-col rounded-sm bg-cream p-5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
-                      <p class="text-muted-foreground leading-none font-bold uppercase">{typeLabels[story.type]}</p>
+                      <p class="text-muted-foreground leading-none font-bold uppercase">{STORY_TYPE_LABELS[story.type]}</p>
                       <h3 class="mt-2.5 text-2xl  font-bold">{story.title}</h3>
                       <p class="mt-6 leading-none">{story.excerpt}</p>
                       <div class="mt-7.5 flex items-center justify-between">
-                        <p class="text-muted-foreground leading-none">{story.date_label}</p>
+                        <p class="text-muted-foreground leading-none">{storyDate(story.published_on)}</p>
                         <a
                           href={`/stories/${story.slug}`}
                           class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground border-b pb-2 leading-none font-black uppercase transition-colors"
@@ -76,7 +72,7 @@ const layouts = [
                         layout.photoClass,
                       ]}
                     >
-                      <CmsImage image={story.card_image} alt={story.card_image_alt} widths={[800]} class="size-full rounded-sm object-cover" />
+                      <CmsImage image={story.card_image} alt={story.title} widths={[800]} class="size-full rounded-sm object-cover" />
                     </figure>
                   </div>
                 </li>
