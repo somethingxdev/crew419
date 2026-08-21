@@ -5,7 +5,7 @@ import { directusLoader } from '@/lib/directus-loader';
 type Name = keyof typeof schemas;
 type Query = { filter?: Record<string, unknown>; sort?: string[] };
 
-/** Extra query per collection (filters / default order). Everything else is `select *`. */
+
 const query: Partial<Record<Name, Query>> = {
   trips: { filter: { status: { _eq: 'published' } }, sort: ['start_date'] },
   resources: { filter: { status: { _eq: 'published' } }, sort: ['title'] },
