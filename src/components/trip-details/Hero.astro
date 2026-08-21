@@ -9,13 +9,14 @@ import { tripFacts } from '@/lib/trip';
 
 interface Props {
   trip: CollectionEntry<'trips'>;
+  category: CollectionEntry<'trip_categories'>;
 }
 
 const trip = Astro.props.trip.data;
 const { hero_title: title, hero_description: description, hero_image: bg } = trip;
 
-// Dates, length, ministry and price all come from the Overview fields — nothing to fill in by hand.
-const facts = tripFacts(trip);
+// Dates, length, category and price all come from the Overview fields — nothing to fill in by hand.
+const facts = tripFacts(trip, Astro.props.category.data.name);
 ---
 
 <section class="relative" aria-labelledby="trip-hero-heading">

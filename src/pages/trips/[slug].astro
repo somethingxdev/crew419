@@ -15,7 +15,6 @@ import TripCta from '@/components/trip-details/Cta.astro';
 import TripHero from '@/components/trip-details/Hero.astro';
 import SimilarTrips from '@/components/trip-details/SimilarTrips.astro';
 import WhatsIncluded from '@/components/trip-details/WhatsIncluded.astro';
-import WhoCanJoin from '@/components/trip-details/WhoCanJoin.astro';
 import YourWeek from '@/components/trip-details/YourWeek.astro';
 
 /**
@@ -44,6 +43,10 @@ if (!entry) throw new Error(`trips/${Astro.params.slug}: neither a region nor a 
 const tripRegion = trip && (await getEntry(trip.data.region));
 if (trip && !tripRegion) throw new Error(`trips/${trip.data.slug}: region "${trip.data.region.id}" is not published`);
 
+// The category carries the shared About the Mission content and the category name in the hero facts.
+const tripCategory = trip && (await getEntry(trip.data.category));
+if (trip && !tripCategory) throw new Error(`trips/${trip.data.slug}: category "${trip.data.category.id}" does not exist`);
+
 const { seo_title, seo_description } = entry.data;
 // Trips and regions have no OG image of their own — the site-wide default is used.
 const { og_image } = await getSingleton('global');
@@ -51,13 +54,12 @@ const { og_image } = await getSingleton('global');
 
 <Layout title={seo_title} description={seo_description} ogImage={og_image}>
   {
-    trip && tripRegion && (
+    trip && tripRegion && tripCategory && (
       <>
-        <TripHero trip={trip} />
+        <TripHero trip={trip} category={tripCategory} />
         <AtAGlance trip={trip} />
-        <AboutMission trip={trip} />
+        <AboutMission category={tripCategory} />
         <YourWeek trip={trip} />
-        <WhoCanJoin trip={trip} />
         <WhatsIncluded trip={trip} />
         <InTheField bg={tripRegion.data.field_bg} />
         <Stories region={tripRegion} />

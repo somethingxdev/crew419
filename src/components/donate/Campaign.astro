@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/donate-campaign.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
 import CmsImage from '@/components/base/CmsImage.astro';
@@ -14,14 +15,13 @@ const {
   donate_campaign_raised: raised,
   donate_campaign_goal: goal,
   donate_campaign_days_label: daysLabel,
-  donate_campaign_bg: bg,
   donate_campaign_photo: photo,
 } = await getSingleton('website_content');
 ---
 
 <section class="relative z-10 py-15 md:py-30 lg:py-40" aria-labelledby="campaign-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
     <div class="absolute inset-0 bg-[#cecece]/5"></div>
   </div>
 

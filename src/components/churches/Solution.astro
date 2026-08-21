@@ -1,22 +1,21 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/churches-features.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 
 const {
   churches_features_eyebrow: eyebrow,
   churches_features_heading: heading,
   churches_features_text: text,
-  churches_features_bg: bg,
   churches_feature_cards: features,
 } = await getSingleton('website_content');
 ---
 
 <section id="solution" class="relative z-10 py-15 md:py-30 lg:py-37.5" aria-labelledby="solution-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
+    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 

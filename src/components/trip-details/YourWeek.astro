@@ -1,15 +1,13 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
 
 interface Props {
   trip: CollectionEntry<'trips'>;
 }
 
-const { itinerary: days, week_media: media } = Astro.props.trip.data;
-
-// `week_media` is a generic file: a video, or an image (Directus knows the size of images).
-const isVideo = media.type.startsWith('video/');
+// The photo next to the itinerary is the trip's card image — no separate upload.
+const { itinerary: days, card_image: media, title } = Astro.props.trip.data;
 const mediaClass = 'h-auto w-full rounded-lg object-cover lg:h-134.5 lg:flex-1';
 ---
 
@@ -32,15 +30,7 @@ const mediaClass = 'h-auto w-full rounded-lg object-cover lg:h-134.5 lg:flex-1';
         }
       </ul>
 
-      {
-        isVideo ? (
-          <video src={media.url} class={mediaClass} autoplay muted loop playsinline />
-        ) : media.width && media.height ? (
-          <Image src={media.url} width={media.width} height={media.height} alt="" widths={[800, 1600]} class={mediaClass} />
-        ) : (
-          <Image src={media.url} inferSize alt="" widths={[800, 1600]} class={mediaClass} />
-        )
-      }
+      <CmsImage image={media} alt={title} widths={[800, 1600]} class={mediaClass} />
     </div>
   </div>
 </section>

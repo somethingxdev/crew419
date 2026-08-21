@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/hero/trips.png';
 import decor from '@/assets/images/decor-bottom.png';
 import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
@@ -9,7 +10,6 @@ const {
   trips_hub_hero_eyebrow: eyebrow,
   trips_hub_hero_title: title,
   trips_hub_hero_description: description,
-  trips_hub_hero_image: image,
   trips_hub_hero_polaroid: polaroid,
 } = await getSingleton('website_content');
 const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
@@ -27,7 +27,7 @@ const tailText = tail.join(' ');
 
 <section class="relative flex min-h-150 flex-col pt-20 xl:min-h-226 xl:pt-26" aria-labelledby="trips-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={image} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom" />
+    <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom" />
   </div>
 
   <div class="relative w-full px-5 py-15 md:px-12 xl:pt-24 xl:pb-20">

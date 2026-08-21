@@ -1,7 +1,7 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
-import { MINISTRY_LABELS, tripDates, tripDuration } from '@/lib/trip';
+import { tripDates, tripDuration } from '@/lib/trip';
 
 interface Props {
   trip: CollectionEntry<'trips'>;
@@ -9,8 +9,14 @@ interface Props {
 
 const { trip } = Astro.props;
 
-// Every other published trip (the collection is already limited to published ones).
-const trips = await getCollection('trips', (entry) => entry.id !== trip.id);
+// Every other published trip (the collection is already limited to published ones), with its category name.
+const trips = await Promise.all(
+  (await getCollection('trips', (entry) => entry.id !== trip.id)).map(async (entry) => {
+    const category = await getEntry(entry.data.category);
+    if (!category) throw new Error(`trips/${entry.data.slug}: category "${entry.data.category.id}" does not exist`);
+    return { ...entry, categoryName: category.data.name };
+  }),
+);
 ---
 
 {
@@ -23,14 +29,14 @@ const trips = await getCollection('trips', (entry) => entry.id !== trip.id);
         </div>
 
         <ul class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {trips.map(({ data }) => (
+          {trips.map(({ data, categoryName }) => (
             <li>
               <article class="bg-cream flex h-full flex-col rounded-lg p-5">
                 <CmsImage image={data.card_image} alt={data.title} widths={[400, 800]} class="h-65 w-full rounded-lg object-cover" />
 
                 <div class="mt-5 flex flex-1 flex-col gap-6.5">
                   <div class="flex flex-col gap-2.5">
-                    <p class="text-muted-foreground leading-none font-bold uppercase">{MINISTRY_LABELS[data.ministry]}</p>
+                    <p class="text-muted-foreground leading-none font-bold uppercase">{categoryName}</p>
                     <h3 class="text-2xl  font-bold">{data.title}</h3>
                   </div>
 

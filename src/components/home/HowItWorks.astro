@@ -1,25 +1,13 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/how-it-works.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
-type HowItWorksPage = 'individuals' | 'school' | 'sports' | 'custom';
-
-interface Props {
-  /** Page-specific background — matches `how_it_works.page_backgrounds[].page`; without it the default `bg` is used. */
-  page?: HowItWorksPage;
-}
-
-const { page } = Astro.props;
-
-const { eyebrow, heading, text, steps, bg: defaultBg, page_backgrounds: pageBackgrounds, cta_label: ctaLabel, cta_href: ctaHref } = await getSingleton('how_it_works');
-
-const pageBg = page && pageBackgrounds.find((item) => item.page === page);
-if (page && !pageBg) throw new Error(`how_it_works.page_backgrounds has no entry for page "${page}"`);
-const bg = pageBg ? pageBg.image : defaultBg;
+// The background is part of the design and identical on every page that shows this section.
+const { eyebrow, heading, text, steps, cta_label: ctaLabel, cta_href: ctaHref } = await getSingleton('how_it_works');
 
 // Per-card colour/offset (styling only — content comes from the CMS).
 const cardClasses = ['bg-[#576d87] md:left-2.5 md:top-2 md:-rotate-3', 'bg-[#2b4767] md:left-30 md:top-12 md:rotate-3', 'bg-secondary md:left-16 md:top-20'];
@@ -27,7 +15,7 @@ const cardClasses = ['bg-[#576d87] md:left-2.5 md:top-2 md:-rotate-3', 'bg-[#2b4
 
 <section id="how-it-works" class="relative py-15 md:py-0" aria-labelledby="how-it-works-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
+    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/20"></div>
   </div>
   <div class="container">

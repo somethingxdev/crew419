@@ -1,8 +1,8 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/trips-compass.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import Dice from '@/components/shared/Dice.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
@@ -22,7 +22,6 @@ const {
   trips_hub_compass_heading: heading,
   trips_hub_compass_text: text,
   trips_hub_compass_cta_label: ctaLabel,
-  trips_hub_compass_bg: bg,
 } = await getSingleton('website_content');
 
 // "Not Sure Where God Is Calling You?" → three positioned lines: "Not Sure" / "Where God" / "Is Calling You?".
@@ -32,7 +31,7 @@ const [line1, line2, line3] = [words.slice(0, 2).join(' '), words.slice(2, 4).jo
 
 <section id="compass" class="relative overflow-x-clip" aria-labelledby="compass-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="absolute inset-0 size-full object-cover object-center" />
+    <Image src={bg} alt="" widths={[1600, 2400]} class="absolute inset-0 size-full object-cover object-center" />
     <div class="absolute inset-0 bg-black/20 backdrop-blur-xs"></div>
   </div>
 

@@ -1,11 +1,11 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/hero/home.png';
 import decor from '@/assets/images/decor-bottom.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
-const { home_hero_eyebrow: eyebrow, home_hero_title: title, home_hero_description: description, home_hero_image: image } = await getSingleton('website_content');
+const { home_hero_eyebrow: eyebrow, home_hero_title: title, home_hero_description: description } = await getSingleton('website_content');
 const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
 
 // "Live Missionally. Here I Am. Send Me." → three styled lines.
@@ -14,7 +14,7 @@ const [line1, line2, line3] = title.split(/(?<=\.)\s+/);
 
 <section class="relative flex min-h-150 flex-col pt-20 xl:min-h-220 xl:pt-26" aria-label="Hero">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={image} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom-right" />
+    <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom-right" />
   </div>
 
   <div class="relative w-full px-5 py-15 md:px-12 xl:pt-40 xl:pb-0">

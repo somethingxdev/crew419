@@ -1,21 +1,20 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/trips-why.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 
 const {
   trips_hub_why_eyebrow: eyebrow,
   trips_hub_why_heading: heading,
-  trips_hub_why_bg: bg,
   trips_hub_why_features: features,
 } = await getSingleton('website_content');
 ---
 
 <section id="why-different" class="relative z-20 py-15 md:py-30 lg:py-40" aria-labelledby="why-different-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
+    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/5"></div>
   </div>
 

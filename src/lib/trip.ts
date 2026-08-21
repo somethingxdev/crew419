@@ -2,16 +2,6 @@ import type { CollectionEntry } from 'astro:content';
 
 type TripData = CollectionEntry<'trips'>['data'];
 
-/** Labels of the `ministry` dropdown in Directus. */
-export const MINISTRY_LABELS: Record<TripData['ministry'], string> = {
-  general: 'General Mission',
-  sports: 'Sports',
-  children: 'Children',
-  construction: 'Construction',
-  evangelism: 'Evangelism',
-  medical: 'Medical',
-};
-
 const DAY = 24 * 60 * 60 * 1000;
 
 // Directus date fields are plain `YYYY-MM-DD`, so parse them as UTC to keep the day stable in every timezone.
@@ -38,6 +28,6 @@ export function tripDuration({ start_date, end_date }: Pick<TripData, 'start_dat
 }
 
 /** The fact strip under the trip hero. */
-export function tripFacts(trip: TripData): string[] {
-  return [tripDates(trip), trip.short_name, tripDuration(trip), MINISTRY_LABELS[trip.ministry], trip.price];
+export function tripFacts(trip: TripData, categoryName: string): string[] {
+  return [tripDates(trip), trip.short_name, tripDuration(trip), categoryName, trip.price];
 }

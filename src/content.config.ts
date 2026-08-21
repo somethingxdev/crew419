@@ -16,12 +16,12 @@ const query: Partial<Record<Name, Query>> = {
   partners: { sort: ['sort'] },
   regions: { sort: ['sort'] },
   testimonials: { sort: ['sort'] },
+  trip_categories: { sort: ['sort'] },
 };
 
-const loader = (name: Name) =>
-  directusLoader({ collection: name, singleton: (singletons as readonly string[]).includes(name), query: query[name] });
+const loader = (name: Name) =>  directusLoader({ collection: name, singleton: (singletons as readonly string[]).includes(name), query: query[name] });
 
-// One defineCollection per collection so Astro infers exact entry types (a generic helper widens the schema to `unknown`).
+
 export const collections = {
   faqs: defineCollection({ loader: loader('faqs'), schema: schemas.faqs }),
   global: defineCollection({ loader: loader('global'), schema: schemas.global }),
@@ -35,6 +35,7 @@ export const collections = {
   resources: defineCollection({ loader: loader('resources'), schema: schemas.resources }),
   stories: defineCollection({ loader: loader('stories'), schema: schemas.stories }),
   testimonials: defineCollection({ loader: loader('testimonials'), schema: schemas.testimonials }),
+  trip_categories: defineCollection({ loader: loader('trip_categories'), schema: schemas.trip_categories }),
   trips: defineCollection({ loader: loader('trips'), schema: schemas.trips }),
   website_content: defineCollection({ loader: loader('website_content'), schema: schemas.website_content }),
 };

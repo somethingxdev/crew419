@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/hero/churches.png';
 import decor from '@/assets/images/decor-bottom.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
@@ -9,13 +9,12 @@ const {
   churches_hero_eyebrow: eyebrow,
   churches_hero_title: title,
   churches_hero_description: description,
-  churches_hero_image: image,
 } = await getSingleton('website_content');
 ---
 
 <section class="relative" aria-labelledby="churches-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={image} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover object-bottom" />
+    <Image src={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/15"></div>
   </div>
 

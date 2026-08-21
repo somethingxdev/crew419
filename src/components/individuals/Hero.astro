@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/hero/individuals.png';
 import decor from '@/assets/images/decor-bottom.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
@@ -9,14 +9,13 @@ const {
   individuals_hero_eyebrow: eyebrow,
   individuals_hero_title: title,
   individuals_hero_description: description,
-  individuals_hero_image: image,
 } = await getSingleton('website_content');
 const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
 ---
 
 <section class="relative" aria-labelledby="individuals-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={image} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover" />
+    <Image src={bg} alt="" widths={[800, 1600]} loading="eager" class="size-full object-cover" />
     <div class="absolute inset-0 bg-black/5"></div>
   </div>
 

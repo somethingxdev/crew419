@@ -4,10 +4,11 @@ import CmsImage from '@/components/base/CmsImage.astro';
 import PhotoPairSection from '@/components/shared/PhotoPairSection.astro';
 
 interface Props {
-  trip: CollectionEntry<'trips'>;
+  category: CollectionEntry<'trip_categories'>;
 }
 
-const { about_text: text, about_photo_left: photoLeft, about_photo_right: photoRight } = Astro.props.trip.data;
+// The About content is shared by every trip of the category, so it lives on the category.
+const { about_text: text, about_photo_left: photoLeft, about_photo_right: photoRight } = Astro.props.category.data;
 ---
 
 <PhotoPairSection labelledBy="about-mission-heading">

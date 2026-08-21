@@ -1,8 +1,8 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/features.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 
 const {
@@ -10,7 +10,6 @@ const {
   custom_more_heading: heading,
   custom_more_text: text,
   custom_more_cards: features,
-  custom_features_bg: bg,
 } = await getSingleton('website_content');
 
 const paragraphs = text.split(/\n\s*\n/);
@@ -18,7 +17,7 @@ const paragraphs = text.split(/\n\s*\n/);
 
 <section id="difference" class="relative z-20 py-15 md:py-30 lg:py-40" aria-labelledby="difference-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
+    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover" />
     <div class="absolute inset-0 bg-black/15"></div>
   </div>
 

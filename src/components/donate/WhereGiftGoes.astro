@@ -1,21 +1,20 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/donate-gift.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 
 const {
   donate_gift_eyebrow: eyebrow,
   donate_gift_heading: heading,
-  donate_gift_bg: bg,
   donate_gift_features: features,
 } = await getSingleton('website_content');
 ---
 
 <section class="relative z-10 py-15 md:py-30 lg:py-37.5" aria-labelledby="where-gift-goes-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 

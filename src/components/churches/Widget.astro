@@ -1,12 +1,12 @@
 ---
-import CmsImage from '@/components/base/CmsImage.astro';
+import { Image } from 'astro:assets';
+import bg from '@/assets/images/backgrounds/churches-widget.png';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
 const {
   churches_widget_heading: heading,
   churches_widget_text: text,
-  churches_widget_bg: bg,
   churches_widget_cta_label: ctaLabel,
   churches_widget_cta_href: ctaHref,
 } = await getSingleton('website_content');
@@ -16,7 +16,7 @@ const {
   <div class="container">
     <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
       <div class="absolute inset-0 overflow-hidden">
-        <CmsImage image={bg} alt="" widths={[1600]} class="size-full object-cover" />
+        <Image src={bg} alt="" widths={[1600]} class="size-full object-cover" />
         <div class="absolute inset-0 bg-black/5"></div>
       </div>
 

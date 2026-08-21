@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
+import bg from '@/assets/images/hero/stories.png';
 import decor from '@/assets/images/decor-bottom.png';
-import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
@@ -9,13 +9,12 @@ const {
   stories_hub_hero_eyebrow: eyebrow,
   stories_hub_hero_title: title,
   stories_hub_hero_description: description,
-  stories_hub_hero_image: image,
 } = await getSingleton('website_content');
 ---
 
 <section class="relative flex min-h-150 flex-col pt-20 xl:min-h-222 xl:pt-26" aria-labelledby="stories-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <CmsImage image={image} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-center" />
+    <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-center" />
     <div class="absolute inset-0 bg-black/10"></div>
   </div>
 
