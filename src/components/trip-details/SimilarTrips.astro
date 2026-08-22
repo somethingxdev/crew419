@@ -1,7 +1,9 @@
 ---
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
-import { tripDates, tripDuration } from '@/lib/trip';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
+import { tripPath } from '@/lib/links';
+import { tripDates, tripDuration, tripSlug } from '@/lib/trip';
 
 interface Props {
   trip: CollectionEntry<'trips'>;
@@ -9,12 +11,19 @@ interface Props {
 
 const { trip } = Astro.props;
 
-// Every other published trip (the collection is already limited to published ones), with its category name.
+// Every other published trip (the collection is already limited to published ones), with its category name and region path.
 const trips = await Promise.all(
   (await getCollection('trips', (entry) => entry.id !== trip.id)).map(async (entry) => {
     const category = await getEntry(entry.data.category);
-    if (!category) throw new Error(`trips/${entry.data.slug}: category "${entry.data.category.id}" does not exist`);
-    return { ...entry, categoryName: category.data.name };
+    if (!category) throw new Error(`trips/${entry.data.title}: category "${entry.data.category.id}" does not exist`);
+
+    const region = await getEntry(entry.data.region);
+    if (!region) throw new Error(`trips/${entry.data.title}: region "${entry.data.region.id}" is not published`);
+
+    const country = await getEntry(entry.data.country);
+    if (!country) throw new Error(`trips/${entry.data.title}: country "${entry.data.country.id}" does not exist`);
+
+    return { ...entry, categoryName: category.data.name, href: tripPath(region.data.slug, tripSlug(country.data.name, entry.data.title)) };
   }),
 );
 ---
@@ -23,13 +32,10 @@ const trips = await Promise.all(
   trips.length > 0 && (
     <section class="py-15" aria-labelledby="similar-trips-heading">
       <div class="container">
-        <div class="flex flex-col items-center gap-4 text-center">
-          <p class="text-muted-foreground leading-none font-bold uppercase">Explore more</p>
-          <h2 id="similar-trips-heading" class="text-3xl  font-bold md:text-5xl">Similar Mission Trips</h2>
-        </div>
+        <SectionHeading id="similar-trips-heading" eyebrow="Explore more" heading="Similar Mission Trips" />
 
         <ul class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {trips.map(({ data, categoryName }) => (
+          {trips.map(({ data, categoryName, href }) => (
             <li>
               <article class="bg-cream flex h-full flex-col rounded-lg p-5">
                 <CmsImage image={data.card_image} alt={data.title} widths={[400, 800]} class="h-65 w-full rounded-lg object-cover" />
@@ -48,7 +54,7 @@ const trips = await Promise.all(
                 </div>
 
                 <a
-                  href={`/trips/${data.slug}`}
+                  href={href}
                   class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground mt-5 w-fit border-b pb-2 leading-none font-black uppercase transition-colors"
                 >
                   View trip

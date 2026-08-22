@@ -1,0 +1,55 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import PartnerLogos from '@/components/shared/PartnerLogos.astro';
+import CardGridSection from '@/components/shared/CardGridSection.astro';
+import Hero from '@/components/shared/Hero.astro';
+import heroBg from '@/assets/images/hero/about.png';
+import { MISSION_TRIPS } from '@/lib/links';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import Founder from '@/components/about/Founder.astro';
+import HowItStarted from '@/components/about/HowItStarted.astro';
+import MissionVisionMotto from '@/components/about/MissionVisionMotto.astro';
+import OurIdentity from '@/components/about/OurIdentity.astro';
+import StatementOfFaith from '@/components/about/StatementOfFaith.astro';
+import Team from '@/components/about/Team.astro';
+import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
+
+const {
+  about_seo_title,
+  about_seo_description,
+  about_og_image,
+  about_hero_eyebrow: heroEyebrow,
+  about_hero_title: heroTitle,
+  about_hero_description: heroDescription,
+  about_values_eyebrow: valuesEyebrow,
+  about_values_heading: valuesHeading,
+  about_values_cards: valuesCards,
+  about_partners_eyebrow: partnersEyebrow,
+  about_partners_heading: partnersHeading,
+  about_partners_text: partnersText,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
+---
+
+<Layout title={about_seo_title} description={about_seo_description} ogImage={about_og_image}>
+  <Hero id="about-hero" bg={heroBg} tone="foreground">
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={ctaHref}>{ctaLabel}</Button>
+      <Button size="lg" href={MISSION_TRIPS} variant="soft">Explore Mission Trips</Button>
+    </Fragment>
+  </Hero>
+  <HowItStarted />
+  <OurIdentity />
+  <MissionVisionMotto />
+  <CardGridSection id="what-we-believe" eyebrow={valuesEyebrow} heading={valuesHeading} cards={valuesCards} cols={3} class="py-15" headingClass="max-w-169" />
+  <Founder />
+  <Team />
+  <PartnerLogos where="about" heading={{ id: "partners", eyebrow: partnersEyebrow, heading: partnersHeading, text: partnersText }} />
+  <StatementOfFaith />
+  <Cta {...CTA.about} />
+</Layout>

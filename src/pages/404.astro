@@ -1,13 +1,53 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Hero from '@/components/not-found/Hero.astro';
+import CenteredHero from '@/components/shared/CenteredHero.astro';
+import CmsImage from '@/components/base/CmsImage.astro';
 import Compass from '@/components/trips/Compass.astro';
 import { getSingleton } from '@/lib/content';
 
-const { not_found_seo_title, not_found_seo_description, not_found_og_image } = await getSingleton('website_content');
+const {
+  not_found_seo_title,
+  not_found_seo_description,
+  not_found_og_image,
+  not_found_title_1: title1,
+  not_found_title_2: title2,
+  not_found_text: text,
+  not_found_image: image,
+  not_found_primary_label: primaryLabel,
+  not_found_primary_href: primaryHref,
+  not_found_secondary_label: secondaryLabel,
+  not_found_secondary_href: secondaryHref,
+} = await getSingleton('website_content');
+
+// "Looks Like This Boat Missed the Shore" → the last three words are highlighted.
+const words = title2.split(/\s+/);
+const title2Start = words.slice(0, -3).join(' ');
+const title2Highlight = words.slice(-3).join(' ');
 ---
 
 <Layout title={not_found_seo_title} description={not_found_seo_description} ogImage={not_found_og_image}>
-  <Hero />
-  <Compass href="/trips#destinations" />
+  <CenteredHero
+    id="not-found"
+    text={text}
+    class="max-w-261"
+    primary={{ label: primaryLabel, href: primaryHref }}
+    secondary={{ label: secondaryLabel, href: secondaryHref }}
+  >
+    <Fragment slot="title">
+      <span class="flex flex-col gap-4">
+        <span class="text-4xl md:text-6xl xl:text-7xl">{title1}</span>
+        <span class="text-2xl md:text-4xl xl:text-[52px]">
+          {title2Start} <span class="text-primary">{title2Highlight}</span>
+        </span>
+      </span>
+    </Fragment>
+    <CmsImage
+      slot="media"
+      image={image}
+      alt="An engraving of an empty wooden boat with fishing nets drifting on the water"
+      widths={[344, 688]}
+      class="h-auto w-64 md:w-86"
+    />
+  </CenteredHero>
+  <Compass href="/mission-trips#destinations" />
 </Layout>

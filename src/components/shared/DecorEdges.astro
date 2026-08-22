@@ -1,0 +1,27 @@
+---
+/**
+ * Torn-paper edges at the top and bottom of a full-bleed photo section.
+ * Place as a direct child of a `relative` section.
+ */
+import { Image } from 'astro:assets';
+import decorBottom from '@/assets/images/decor-bottom.png';
+import decorTop from '@/assets/images/decor-top.png';
+
+interface Props {
+  /** Offset classes for the top strip. */
+  top?: string;
+  /** Offset classes for the bottom strip. */
+  bottom?: string;
+  /** z-index of both strips. */
+  class?: string;
+}
+
+const { top = 'top-0', bottom = 'bottom-0 translate-y-[63%]', class: className = 'z-10' } = Astro.props;
+---
+
+<div class:list={['pointer-events-none absolute left-0 w-full -translate-y-1/2', top, className]}>
+  <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
+</div>
+<div class:list={['pointer-events-none absolute left-0 w-full', bottom, className]}>
+  <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
+</div>

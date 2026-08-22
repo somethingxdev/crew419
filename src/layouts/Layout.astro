@@ -6,7 +6,6 @@ import { getSingleton } from '@/lib/content';
 import type { DirectusImage } from '@/lib/directus-loader';
 import '@/styles/global.css';
 
-/** Page-level SEO — comes from the page's CMS entry (`*_seo_title`, `*_seo_description`, `*_og_image`). */
 interface Props {
   title: string;
   description: string;
@@ -16,7 +15,6 @@ interface Props {
 const { title, description, ogImage } = Astro.props;
 const { favicon, site_name } = await getSingleton('global');
 
-// Canonical URLs are derived from the route, not stored in the CMS (`site` lives in astro.config.mjs).
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -45,7 +43,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <body>
     <div class="flex flex-col min-h-screen">
       <Header />
-      <main class="flex-1">
+      <main class="flex-1 overflow-x-clip">
         <slot />
       </main>
       <Footer />

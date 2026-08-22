@@ -36,7 +36,7 @@ const cards = [...pathCards, ...pathCards].map((card, index) => ({ ...card, rota
     >
       {
         cards.map((card) => (
-          <article class:list={['bg-cream flex min-h-126.5 w-[min(380px,calc(100vw-2.5rem))] shrink-0 flex-col justify-between rounded-lg p-5 shadow-[0px_4px_7.5px_rgba(0,0,0,0.2)]', card.rotate]}>
+          <article class:list={['bg-cream flex min-h-126.5 w-[min(380px,calc(100vw-2.5rem))] shrink-0 flex-col justify-between rounded-lg p-5 shadow-polaroid', card.rotate]}>
             <div class="flex flex-col gap-5">
               <CmsImage image={card.image} alt={card.alt} widths={[680]} class="h-65 w-full rounded-lg object-cover" />
               <div class="text-foreground flex flex-col gap-5">

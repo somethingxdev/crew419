@@ -1,6 +1,7 @@
 ---
 import CmsImage from '@/components/base/CmsImage.astro';
 import PhotoPairSection from '@/components/shared/PhotoPairSection.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
@@ -20,10 +21,7 @@ const [lead, ...paragraphs] = text.split(/\n\s*\n/);
   <CmsImage slot="image-left" image={photoLeft} alt="A white country church with a steeple under an overcast sky" widths={[600, 1200]} />
   <CmsImage slot="image-right" image={photoRight} alt="School children in uniforms running toward the camera on a dirt path" widths={[600, 1200]} />
 
-  <div class="flex w-full flex-col items-start gap-4">
-    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-    <h2 id="custom-group-heading" class="max-w-158.25 text-3xl font-bold md:text-5xl">{heading}</h2>
-  </div>
+  <SectionHeading id="custom-group-heading" {eyebrow} {heading} align="start" class="w-full" headingClass="max-w-158.25" />
 
   <div class="flex w-full max-w-138 flex-col items-start gap-7.5">
     <div class="flex w-full flex-col items-start gap-4 text-foreground">
@@ -33,7 +31,7 @@ const [lead, ...paragraphs] = text.split(/\n\s*\n/);
 
     <div class="flex w-full flex-col items-stretch gap-4 sm:flex-row sm:items-start">
       <Button href="/contact" class="w-full sm:w-67">Plan a custom trip</Button>
-      <Button href="/trips/custom" variant="soft" class="w-full sm:w-67">Learn More</Button>
+      <Button href="/mission-trips/custom" variant="soft" class="w-full sm:w-67">Learn More</Button>
     </div>
   </div>
 </PhotoPairSection>

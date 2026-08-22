@@ -1,0 +1,91 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
+import CarouselArrows from '@/components/shared/CarouselArrows.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
+import { storyDate, STORY_TYPE_LABELS } from '@/lib/story';
+import { Button } from '@/shared/ui/button';
+
+interface Props {
+  /** Without a region the carousel shows every story. */
+  region?: CollectionEntry<'regions'>;
+  eyebrow?: string;
+  heading?: string;
+}
+
+const { region, eyebrow = 'Real Stories', heading = 'Featured Stories from This Region' } = Astro.props;
+
+const stories = region ? await getCollection('stories', ({ data }) => data.region.id === region.id) : await getCollection('stories');
+
+// Alternating card layout (decorative).
+const layouts = [
+  { photoClass: 'rotate-5', pairClass: 'items-center', itemClass: '' },
+  { photoClass: '-rotate-3', pairClass: 'items-end', itemClass: 'mt-4.5 sm:mt-9' },
+];
+---
+
+{
+  stories.length > 0 && (
+    <section class="relative z-20 py-15 md:py-30" aria-labelledby="stories-carousel-heading" data-stories-carousel>
+      <div class="container">
+        <div class="relative mb-10">
+          <SectionHeading id="stories-carousel-heading" {eyebrow} {heading} class="mb-6 max-w-2xl" />
+          <CarouselArrows prefix="stories-carousel" label="story" class="flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0" />
+        </div>
+
+        <div data-stories-carousel-viewport>
+          <ul class="flex w-max min-w-full touch-pan-y items-start justify-between gap-8 transition-[height] duration-200 motion-reduce:transition-none" data-stories-carousel-container>
+            {stories.map(({ data: story }, index) => {
+              const layout = layouts[index % layouts.length];
+              return (
+                <li class:list={['min-w-0 shrink-0', layout.itemClass]}>
+                  <div class:list={['relative isolate flex items-center', layout.pairClass]}>
+                    <article class="relative z-10 flex w-70 flex-col rounded-sm bg-cream p-3.75 shadow-polaroid sm:w-[min(480px,calc(100vw-2.5rem))] sm:p-5">
+                      <p class="text-muted-foreground text-xs leading-none font-bold uppercase sm:text-base">{STORY_TYPE_LABELS[story.type]}</p>
+                      <h3 class="mt-2.5 text-lg leading-[1.1] font-bold sm:text-2xl">{story.title}</h3>
+                      <p class="mt-3.75 text-xs leading-none sm:mt-6 sm:text-base">{story.excerpt}</p>
+                      <div class="mt-3.75 flex items-center justify-between sm:mt-7.5">
+                        <p class="text-muted-foreground text-xs leading-none sm:text-base">{storyDate(story.published_on)}</p>
+                        <a
+                          href={`/stories/${story.slug}`}
+                          class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground border-b pb-1.25 text-xs leading-none font-black uppercase transition-colors sm:pb-2 sm:text-base"
+                        >
+                          Read story
+                        </a>
+                      </div>
+                    </article>
+                    <figure class:list={['relative z-0 -ml-9.5 h-75 w-60.75 shrink-0 rounded-sm bg-cream p-1.25 shadow-polaroid sm:-ml-22 sm:h-112.5 sm:w-87.5 sm:p-2.5', layout.photoClass]}>
+                      <CmsImage image={story.card_image} alt={story.title} widths={[800]} class="size-full rounded-sm object-cover" />
+                    </figure>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <div class="mt-12.5 flex justify-center">
+          <Button href="/stories" size="lg" class="w-82.5 max-w-full">
+            View All stories
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+  import AutoHeight from 'embla-carousel-auto-height';
+  import { bindArrows, emblaOptions, prefersReducedMotion } from '@/lib/embla';
+
+  const section = document.querySelector<HTMLElement>('[data-stories-carousel]');
+  const viewport = section?.querySelector<HTMLElement>('[data-stories-carousel-viewport]');
+  const prev = section?.querySelector<HTMLButtonElement>('[data-stories-carousel-prev]');
+  const next = section?.querySelector<HTMLButtonElement>('[data-stories-carousel-next]');
+
+  if (section && viewport && prev && next) {
+    const embla = EmblaCarousel(viewport, emblaOptions(prefersReducedMotion(), { containScroll: false }), [AutoHeight()]);
+    bindArrows(embla, prev, next);
+  }
+</script>

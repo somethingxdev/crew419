@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 import { storyDate, STORY_TYPE_LABELS } from '@/lib/story';
 
 interface Props {
@@ -18,12 +19,7 @@ const stories = await getCollection('stories', ({ id }) => id !== entry.id);
   stories.length > 0 && (
     <section class="py-15" aria-labelledby="more-stories-heading">
       <div class="container">
-        <div class="mx-auto flex max-w-222.5 flex-col items-center gap-4 text-center">
-          <p class="text-muted-foreground text-base leading-none font-bold uppercase">More from the mission field</p>
-          <h2 id="more-stories-heading" class="text-3xl  font-bold md:text-5xl">
-            Discover More Stories of Transformation
-          </h2>
-        </div>
+        <SectionHeading id="more-stories-heading" eyebrow="More from the mission field" heading="Discover More Stories of Transformation" class="mx-auto max-w-222.5" />
 
         <ul class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {stories.map(({ data: story }) => (

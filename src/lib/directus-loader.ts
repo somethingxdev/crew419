@@ -139,7 +139,7 @@ export function directusLoader({ collection, singleton = false, query = {} }: Op
           // Singletons must be complete. Regular entries that fail validation
           // (e.g. stubs with empty required fields) are not published.
           if (singleton) throw error;
-          const label = String(raw.slug ?? raw.key ?? raw.name ?? id);
+          const label = String(raw.slug ?? raw.key ?? raw.name ?? raw.title ?? id);
           const missing = [...new Set([...(error as Error).message.matchAll(/^\s*\*\*([\w.]+)\*\*/gm)].map((m) => m[1]))];
           logger.warn(`${collection}/${label} skipped — invalid: ${missing.join(', ')}`);
         }

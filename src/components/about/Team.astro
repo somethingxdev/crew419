@@ -1,9 +1,8 @@
 ---
-import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
-import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import CmsImage from '@/components/base/CmsImage.astro';
+import CarouselArrows from '@/components/shared/CarouselArrows.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 import { getSingleton } from '@/lib/content';
-import { Button } from '@/shared/ui/button';
 
 const { about_team_eyebrow: eyebrow, about_team_heading: heading, about_team_members: members } = await getSingleton('website_content');
 
@@ -13,26 +12,16 @@ const rotations = ['-rotate-4', 'rotate-3', 'rotate-0', '-rotate-4', 'rotate-3']
 
 <section class="overflow-x-hidden py-15" aria-labelledby="team-heading" data-team>
   <div class="relative container">
-    <div class="mx-auto flex max-w-146.75 flex-col items-center gap-3.75 text-center">
-      <p class="text-muted-foreground text-base leading-none font-bold uppercase">{eyebrow}</p>
-      <h2 id="team-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
-    </div>
+    <SectionHeading id="team-heading" {eyebrow} {heading} class="mx-auto max-w-146.75" />
 
-    <div class="mt-6 flex justify-center gap-4 lg:absolute lg:top-0 lg:right-12 lg:mt-0">
-      <Button type="button" variant="secondary" size="icon" aria-label="Previous team member" data-team-prev>
-        <ArrowLeft />
-      </Button>
-      <Button type="button" variant="secondary" size="icon" aria-label="Next team member" data-team-next>
-        <ArrowRight />
-      </Button>
-    </div>
+    <CarouselArrows prefix="team" label="team member" class="mt-6 flex justify-center gap-4 lg:absolute lg:top-0 lg:right-12 lg:mt-0" />
   </div>
 
   <div class="mt-10 overflow-hidden py-6" data-team-viewport>
-    <ul class="flex touch-pan-y items-center gap-5 pl-5 md:pl-12" data-team-container>
+    <ul class="flex touch-pan-y items-center gap-5 px-5 md:px-12" data-team-container>
       {
         members.map((member, index) => (
-          <li class:list={['bg-cream flex w-81 shrink-0 flex-col gap-3.75 rounded-sm p-3 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]', rotations[index % rotations.length]]}>
+          <li class:list={['bg-cream flex w-81 shrink-0 flex-col gap-3.75 rounded-sm p-3 shadow-polaroid', rotations[index % rotations.length]]}>
             <CmsImage image={member.image} alt={member.alt} widths={[600, 1200]} class="aspect-square w-full rounded-sm object-cover" />
             <div class="flex flex-col gap-2.5">
               <p class="text-lg leading-none font-medium">{member.title}</p>
@@ -47,6 +36,7 @@ const rotations = ['-rotate-4', 'rotate-3', 'rotate-0', '-rotate-4', 'rotate-3']
 
 <script>
   import EmblaCarousel from 'embla-carousel';
+  import { bindArrows, emblaOptions, prefersReducedMotion } from '@/lib/embla';
 
   const section = document.querySelector<HTMLElement>('[data-team]');
   const viewport = section?.querySelector<HTMLElement>('[data-team-viewport]');
@@ -54,23 +44,38 @@ const rotations = ['-rotate-4', 'rotate-3', 'rotate-0', '-rotate-4', 'rotate-3']
   const next = section?.querySelector<HTMLButtonElement>('[data-team-next]');
 
   if (section && viewport && prev && next) {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const embla = EmblaCarousel(viewport, {
-      align: 'start',
-      containScroll: 'trimSnaps',
-      duration: reduced ? 0 : 25,
-      watchDrag: !reduced,
-    });
+    const embla = EmblaCarousel(viewport, emblaOptions(prefersReducedMotion()));
+    bindArrows(embla, prev, next);
 
-    const toggleButtons = () => {
-      prev.disabled = !embla.canScrollPrev();
-      next.disabled = !embla.canScrollNext();
+    const container = viewport.querySelector<HTMLElement>('[data-team-container]');
+
+    /** Whether every card is already visible, so there is nothing to scroll to. */
+    const cardsFit = () => {
+      if (!container) return false;
+      const style = getComputedStyle(container);
+      const gap = parseFloat(style.columnGap) || 0;
+      // offsetWidth, not the bounding box — the cards are tilted, which would inflate the measurement.
+      const cards = [...container.children] as HTMLElement[];
+      const cardsWidth = cards.reduce((total, card) => total + card.offsetWidth, 0) + gap * Math.max(cards.length - 1, 0);
+      const available = container.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      return cardsWidth <= available;
     };
 
-    prev.addEventListener('click', () => embla.scrollPrev());
-    next.addEventListener('click', () => embla.scrollNext());
-    embla.on('select', toggleButtons);
-    embla.on('reInit', toggleButtons);
-    toggleButtons();
+    // Too few cards to fill the row — centre them and keep the arrows off (runs after bindArrows' own toggle).
+    const syncFit = () => {
+      const fits = cardsFit();
+      container?.classList.toggle('justify-center', fits);
+      if (fits) {
+        prev.disabled = true;
+        next.disabled = true;
+      }
+    };
+
+    embla.on('select', syncFit);
+    embla.on('reInit', syncFit);
+    embla.on('resize', syncFit);
+    // Measure after the browser has laid the row out again, not while it is still resizing.
+    window.addEventListener('resize', () => requestAnimationFrame(syncFit));
+    syncFit();
   }
 </script>

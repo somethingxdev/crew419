@@ -27,7 +27,7 @@ export const button = tv({
     size: {
       sm: "h-9 px-4 text-sm has-[>svg]:px-3 [&_svg:not([class*='size-'])]:size-3.5",
       md: "h-12 px-5 text-base has-[>svg]:px-5 [&_svg:not([class*='size-'])]:size-4.5",
-      lg: "h-14 px-7.5 text-base has-[>svg]:px-6 [&_svg:not([class*='size-'])]:size-5",
+      lg: "h-12 md:h-14 px-7.5 text-base has-[>svg]:px-6 [&_svg:not([class*='size-'])]:size-5",
       'icon-sm': "size-9 [&_svg:not([class*='size-'])]:size-3.5",
       icon: "size-11 [&_svg:not([class*='size-'])]:size-4.5",
       'icon-lg': "size-12 [&_svg:not([class*='size-'])]:size-5",

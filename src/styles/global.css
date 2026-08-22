@@ -44,6 +44,10 @@
   --color-card-foreground: oklch(28.8% 0.05 252.9);
   --color-cream: #f5f0e8;
 
+  /* Cream polaroid frames */
+  --shadow-polaroid: 0 4px 7.5px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.2);
+
   --color-popover: oklch(95.7% 0.012 79.8);
   --color-popover-foreground: oklch(28.8% 0.05 252.9);
 

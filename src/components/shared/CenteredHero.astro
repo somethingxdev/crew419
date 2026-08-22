@@ -1,0 +1,40 @@
+---
+/**
+ * Centered hero without a photo (thank-you, 404): heading, optional media slot, text and two buttons.
+ */
+import { Button } from '@/shared/ui/button';
+
+interface Props {
+  id: string;
+  /** Plain heading; pass a `title` slot instead for custom markup. */
+  title?: string;
+  text: string;
+  primary: { label: string; href: string };
+  secondary: { label: string; href: string };
+  class?: string;
+}
+
+const { id, title, text, primary, secondary, class: className = 'max-w-242.5' } = Astro.props;
+const headingId = `${id}-heading`;
+---
+
+<section class="relative pt-32 pb-24 md:pt-40 xl:pt-52 xl:pb-30" aria-labelledby={headingId}>
+  <div class="container">
+    <div class:list={['mx-auto flex w-full flex-col items-center gap-8 text-center', className]}>
+      <h1 id={headingId} class="font-bold text-foreground">
+        <slot name="title"><span class="text-4xl md:text-6xl xl:text-7xl">{title}</span></slot>
+      </h1>
+
+      <slot name="media" />
+
+      <div class="flex w-full max-w-138 flex-col items-center gap-8">
+        <p class="max-w-132 text-lg leading-none font-medium text-foreground/80">{text}</p>
+
+        <div class="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
+          <Button href={primary.href} variant="primary" size="lg" class="w-full sm:w-67">{primary.label}</Button>
+          <Button href={secondary.href} variant="soft" size="lg" class="w-full sm:w-67">{secondary.label}</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

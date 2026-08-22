@@ -2,6 +2,7 @@
 import creation from '@/assets/images/about/beliefs/creation.png';
 import scripture from '@/assets/images/about/beliefs/scripture.png';
 import trinity from '@/assets/images/about/beliefs/trinity.png';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/shared/ui/dialog';
@@ -22,12 +23,7 @@ const beliefs = statements
 
 <section class="py-15" aria-labelledby="statement-of-faith-heading">
   <div class="container">
-    <div class="mx-auto flex max-w-217.75 flex-col items-center gap-7.5 text-center">
-      <div class="flex w-full flex-col items-center gap-3.75">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">{eyebrow}</p>
-        <h2 id="statement-of-faith-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
-      </div>
-      <p class="max-w-107.25 text-base leading-none">{intro}</p>
+    <SectionHeading id="statement-of-faith-heading" {eyebrow} {heading} text={intro} textClass="max-w-107.25" class="mx-auto max-w-217.75">
       <Dialog id="statement-of-faith-dialog">
         <DialogTrigger asChild class="w-82.5 max-w-full">
           <Button size="lg" class="w-full">Read Full Statement of Faith</Button>
@@ -51,7 +47,7 @@ const beliefs = statements
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </SectionHeading>
 
     <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
       {

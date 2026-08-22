@@ -1,10 +1,8 @@
 ---
-import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
-import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import { getCollection } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
+import CarouselArrows from '@/components/shared/CarouselArrows.astro';
 import Quote from '@/icons/quote.svg';
-import { Button } from '@/shared/ui/button';
 
 interface Props {
   eyebrow: string;
@@ -29,14 +27,7 @@ const stories = (await getCollection('testimonials', ({ data }) => data.kind ===
     </div>
 
     <!-- Swipe-only below lg — the design has no arrows on mobile or tablet. -->
-    <div class="hidden lg:absolute lg:right-12 lg:bottom-0 lg:flex lg:gap-4">
-      <Button type="button" variant="secondary" size="icon" aria-label="Previous story" data-stories-prev>
-        <ArrowLeft class="size-6" />
-      </Button>
-      <Button type="button" variant="secondary" size="icon" aria-label="Next story" data-stories-next>
-        <ArrowRight class="size-6" />
-      </Button>
-    </div>
+    <CarouselArrows prefix="stories" label="story" class="hidden lg:absolute lg:right-12 lg:bottom-0 lg:flex lg:gap-4" />
   </div>
 
   <div class="mt-10 px-5" data-stories-viewport>
@@ -76,6 +67,7 @@ const stories = (await getCollection('testimonials', ({ data }) => data.kind ===
 <script>
   import EmblaCarousel from 'embla-carousel';
   import AutoHeight from 'embla-carousel-auto-height';
+  import { bindArrows, emblaOptions, prefersReducedMotion } from '@/lib/embla';
 
   const section = document.querySelector<HTMLElement>('[data-stories]');
   const viewport = section?.querySelector<HTMLElement>('[data-stories-viewport]');
@@ -83,27 +75,7 @@ const stories = (await getCollection('testimonials', ({ data }) => data.kind ===
   const next = section?.querySelector<HTMLButtonElement>('[data-stories-next]');
 
   if (section && viewport && prev && next) {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const embla = EmblaCarousel(
-      viewport,
-      {
-        align: 'start',
-        containScroll: 'trimSnaps',
-        duration: reduced ? 0 : 25,
-        watchDrag: !reduced,
-      },
-      [AutoHeight()],
-    );
-
-    const toggleButtons = () => {
-      prev.disabled = !embla.canScrollPrev();
-      next.disabled = !embla.canScrollNext();
-    };
-
-    prev.addEventListener('click', () => embla.scrollPrev());
-    next.addEventListener('click', () => embla.scrollNext());
-    embla.on('select', toggleButtons);
-    embla.on('reInit', toggleButtons);
-    toggleButtons();
+    const embla = EmblaCarousel(viewport, emblaOptions(prefersReducedMotion()), [AutoHeight()]);
+    bindArrows(embla, prev, next);
   }
 </script>

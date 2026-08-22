@@ -1,0 +1,29 @@
+---
+/**
+ * Eyebrow + h2 (+ optional intro text) used at the top of most sections.
+ * `tone="cream"` is for headings placed over a photo background.
+ */
+interface Props {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  text?: string | null;
+  align?: 'center' | 'start';
+  tone?: 'default' | 'cream';
+  /** Extra wrapper classes (max-w, margins). */
+  class?: string;
+  /** Extra classes for the intro paragraph (max-w). */
+  textClass?: string;
+  headingClass?: string;
+}
+
+const { id, eyebrow, heading, text, align = 'center', tone = 'default', class: className, textClass, headingClass } = Astro.props;
+const cream = tone === 'cream';
+---
+
+<div class:list={['flex flex-col mx-auto gap-4', align === 'center' && 'items-center text-center', cream && 'text-cream', className]}>
+  <p class:list={['leading-none font-bold uppercase', cream ? 'opacity-80' : 'text-muted-foreground']}>{eyebrow}</p>
+  <h2 id={id} class:list={['text-3xl font-bold md:text-5xl', cream && 'text-shadow-2xs', headingClass]}>{heading}</h2>
+  {text && <p class:list={['leading-none', textClass]}>{text}</p>}
+  <slot />
+</div>

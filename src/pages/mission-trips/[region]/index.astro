@@ -1,0 +1,52 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
+import Layout from '@/layouts/Layout.astro';
+import Hero from '@/components/shared/Hero.astro';
+import PhotoStripSlider from '@/components/shared/PhotoStripSlider.astro';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { SITE_LINKS } from '@/lib/links';
+import Cta from '@/components/shared/Cta.astro';
+import { regionCta } from '@/lib/cta';
+import RegionAbout from '@/components/regions/About.astro';
+import Ministry from '@/components/regions/Ministry.astro';
+import StoriesCarousel from '@/components/shared/StoriesCarousel.astro';
+
+/** `/mission-trips/[region]` — the region landing page; its trips live one level deeper. */
+export async function getStaticPaths() {
+  const regions = await getCollection('regions');
+  return regions.map((region) => ({ params: { region: region.data.slug }, props: { region } }));
+}
+
+interface Props {
+  region: CollectionEntry<'regions'>;
+}
+
+const { region } = Astro.props;
+const { seo_title, seo_description, name, hero_title, hero_description, hero_image, map_image, field_bg } = region.data;
+// "Serve across\nAfrica" → first line regular, the rest uppercase.
+const heroLines = hero_title.split('\n');
+// Regions have no OG image of their own — the site-wide default is used.
+const { og_image } = await getSingleton('global');
+---
+
+<Layout title={seo_title} description={seo_description} ogImage={og_image}>
+  <Hero id="region-hero" bg={hero_image}>
+    <Fragment slot="eyebrow">Discover {name}</Fragment>
+    <Fragment slot="title">
+      {heroLines.map((line, index) => <span class:list={['block', index > 0 && 'uppercase']}>{line}</span>)}
+    </Fragment>
+    <Fragment slot="description">{hero_description}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={SITE_LINKS.call.href} variant="cream">{SITE_LINKS.call.label}</Button>
+      <Button size="lg" href={SITE_LINKS.destinations.href} variant="glass">{SITE_LINKS.destinations.label}</Button>
+    </Fragment>
+    <CmsImage slot="aside" image={map_image} alt="" widths={[640, 1280]} class="hidden xl:block" />
+  </Hero>
+  <RegionAbout region={region} />
+  <Ministry region={region} />
+  <PhotoStripSlider id="in-field" eyebrow="In the field" heading="See the Mission in Action" bg={field_bg} />
+  <StoriesCarousel region={region} />
+  <Cta {...regionCta(region.data.name)} />
+</Layout>

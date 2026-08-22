@@ -1,0 +1,87 @@
+---
+/**
+ * Full-bleed photo section with a heading and a draggable strip of tilted polaroid photos.
+ * Photos have no CMS field yet, so the default set is local; pass `photos` to override.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import photo1 from '@/assets/images/regions/africa/in-field/photo-1.png';
+import photo2 from '@/assets/images/regions/africa/in-field/photo-2.png';
+import photo3 from '@/assets/images/regions/africa/in-field/photo-3.png';
+import photo4 from '@/assets/images/regions/africa/in-field/photo-4.png';
+import photo5 from '@/assets/images/regions/africa/in-field/photo-5.png';
+import photo6 from '@/assets/images/regions/africa/in-field/photo-6.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import CarouselArrows from '@/components/shared/CarouselArrows.astro';
+import DecorEdges from '@/components/shared/DecorEdges.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
+import type { DirectusImage } from '@/lib/directus-loader';
+
+export interface StripPhoto {
+  image: ImageMetadata;
+  alt: string;
+  class: string;
+}
+
+interface Props {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  bg: DirectusImage;
+  photos?: StripPhoto[];
+}
+
+/** Tilt/height pattern shared by every strip — six slots. */
+export const STRIP_LAYOUT = ['h-93 -rotate-6', 'h-65 rotate-6', 'h-93 -rotate-3', 'h-93 rotate-6', 'h-65 -rotate-3', 'h-93 -rotate-10'];
+
+const defaultPhotos: StripPhoto[] = [
+  { image: photo1, alt: 'A mission team praying with a local family', class: STRIP_LAYOUT[0] },
+  { image: photo5, alt: 'Volunteers handing out supplies in a village', class: STRIP_LAYOUT[1] },
+  { image: photo6, alt: 'A volunteer laughing with local children', class: STRIP_LAYOUT[2] },
+  { image: photo2, alt: 'Team members serving a meal outdoors', class: STRIP_LAYOUT[3] },
+  { image: photo4, alt: 'A worship gathering under an open sky', class: STRIP_LAYOUT[4] },
+  { image: photo3, alt: 'A mission team walking through a rural community', class: STRIP_LAYOUT[5] },
+];
+
+const { id, eyebrow, heading, bg, photos = defaultPhotos } = Astro.props;
+---
+
+<section class="relative py-15 md:py-30" aria-labelledby={`${id}-heading`} data-photo-strip>
+  <div class="absolute inset-0 overflow-hidden">
+    <CmsImage image={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-center" />
+    <div class="absolute inset-0 bg-black/20"></div>
+  </div>
+
+  <div class="relative container z-10">
+    <SectionHeading id={`${id}-heading`} {eyebrow} {heading} tone="cream" class="mx-auto max-w-2xl" />
+    <CarouselArrows prefix="photo-strip" label="photo" variant="cream" class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0" />
+  </div>
+
+  <div class="relative z-10 mt-15 overflow-hidden py-6" data-photo-strip-viewport>
+    <ul class="flex touch-pan-y items-center gap-8 pl-5 md:pl-12">
+      {
+        photos.map((photo) => (
+          <li class:list={['w-81 shrink-0 rounded-sm bg-cream px-3 pt-3 pb-15 shadow-polaroid', photo.class]}>
+            <Image src={photo.image} alt={photo.alt} widths={[800]} class="size-full rounded-sm object-cover" />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <DecorEdges />
+</section>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+  import { bindArrows, emblaOptions, prefersReducedMotion } from '@/lib/embla';
+
+  document.querySelectorAll<HTMLElement>('[data-photo-strip]').forEach((section) => {
+    const viewport = section.querySelector<HTMLElement>('[data-photo-strip-viewport]');
+    const prev = section.querySelector<HTMLButtonElement>('[data-photo-strip-prev]');
+    const next = section.querySelector<HTMLButtonElement>('[data-photo-strip-next]');
+    if (!viewport || !prev || !next) return;
+
+    bindArrows(EmblaCarousel(viewport, emblaOptions(prefersReducedMotion())), prev, next);
+  });
+</script>

@@ -1,0 +1,29 @@
+---
+/**
+ * Prev/next buttons for an Embla carousel. Buttons carry `data-{prefix}-prev` / `data-{prefix}-next`
+ * so the parent script can find them; wire them with `bindArrows` from `@/lib/embla`.
+ */
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import { Button } from '@/shared/ui/button';
+
+interface Props {
+  prefix: string;
+  /** What the arrows page through, for the accessible label ("photo" → "Previous photo"). */
+  label: string;
+  variant?: 'secondary' | 'cream';
+  class?: string;
+}
+
+const { prefix, label, variant = 'secondary', class: className = 'flex justify-center gap-4' } = Astro.props;
+const attrs = (dir: 'prev' | 'next') => ({ [`data-${prefix}-${dir}`]: true });
+---
+
+<div class={className}>
+  <Button type="button" {variant} size="icon" aria-label={`Previous ${label}`} {...attrs('prev')}>
+    <ArrowLeft />
+  </Button>
+  <Button type="button" {variant} size="icon" aria-label={`Next ${label}`} {...attrs('next')}>
+    <ArrowRight />
+  </Button>
+</div>

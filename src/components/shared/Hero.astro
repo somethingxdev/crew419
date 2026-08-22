@@ -1,0 +1,61 @@
+---
+/**
+ * Page hero: full-bleed photo with paper decor at the bottom. Copy comes through named slots —
+ * `eyebrow`, `title`, `description`, `actions` (buttons) and optional `aside` (e.g. a region map).
+ * `tone="foreground"` switches to dark text for light photos (about page).
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import decor from '@/assets/images/decor-bottom.png';
+import CmsImage from '@/components/base/CmsImage.astro';
+import type { DirectusImage } from '@/lib/directus-loader';
+
+interface Props {
+  id: string;
+  bg: ImageMetadata | DirectusImage;
+  tone?: 'cream' | 'foreground';
+}
+
+const { id, bg, tone = 'cream' } = Astro.props;
+
+const headingId = `${id}-heading`;
+const cream = tone === 'cream';
+---
+
+<section id={id} class="relative flex min-h-161.25 flex-col pt-33.75 pb-14 md:min-h-201.75 md:pt-42.25 md:pb-24 xl:min-h-222 xl:pt-26 xl:pb-0" aria-labelledby={headingId}>
+  <div class="absolute inset-0 overflow-hidden">
+    {
+      'url' in bg ? (
+        <CmsImage image={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-center" />
+      ) : (
+        <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-center" />
+      )
+    }
+    <div class="absolute inset-0 bg-black/25"></div>
+  </div>
+
+  <div class="relative container flex w-full flex-1 flex-col xl:flex-none xl:pt-24 xl:pb-20">
+    <div class="flex w-full flex-1 items-stretch justify-between xl:flex-none xl:items-start">
+      <div class:list={['flex w-full max-w-242.5 flex-1 flex-col items-start xl:flex-none', cream ? 'text-cream' : 'text-foreground']}>
+        <p class:list={['text-xs leading-none font-bold uppercase md:text-[15px] xl:text-base', cream ? 'text-cream/80' : 'text-foreground/80']}>
+          <slot name="eyebrow" />
+        </p>
+        <h1 id={headingId} class="mt-2.5 text-4xl leading-[1.1] font-bold text-shadow-2xs md:mt-3 md:text-6xl xl:text-7xl">
+          <slot name="title" />
+        </h1>
+        <p class="mt-5 text-sm leading-none font-medium md:mt-7.5 md:max-w-115.5 md:text-base xl:max-w-137.5 xl:text-lg">
+          <slot name="description" />
+        </p>
+        <div class="mt-auto flex w-full max-w-137.5 flex-col gap-2.5 max-md:[&>*]:w-full md:mt-6.25 md:flex-row md:gap-4 xl:mt-7.5">
+          <slot name="actions" />
+        </div>
+      </div>
+
+      <slot name="aside" />
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute -bottom-3 left-0 z-10 w-full translate-y-1/2 md:-bottom-5">
+    <Image src={decor} alt="" widths={[1600, 3200]} class="h-auto w-full" />
+  </div>
+</section>

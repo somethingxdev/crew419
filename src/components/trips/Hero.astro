@@ -39,18 +39,21 @@ const tailText = `${tailStart} ${tailAccent} ${tailEnd}`;
 
         {/* Second and third heading lines: centred, then right-aligned. */}
         <div
-          class="text-secondary text-shadow-2xs z-10 order-2 flex w-full flex-col text-[35px] leading-[1.1] font-bold md:text-6xl xl:order-3 xl:w-auto xl:self-end xl:text-right xl:text-7xl"
+          class="text-secondary text-shadow-2xs z-10 order-2 flex w-full flex-col items-center text-[35px] leading-[1.1] font-bold md:text-6xl xl:order-3 xl:w-auto xl:items-end xl:self-end xl:text-7xl"
           aria-hidden="true"
         >
-          <span class="self-center xl:self-auto">
-            <span>{tailStart} </span>
-            <span class="text-primary">{tailAccent}</span>
+          {/* w-fit ties the last line to the line above it instead of the container; the shift keeps it clear of the polaroid. */}
+          <span class="block w-fit">
+            <span class="block">
+              <span>{tailStart} </span>
+              <span class="text-primary">{tailAccent}</span>
+            </span>
+            <span class="block translate-x-[1.25em] text-right md:translate-x-[2.4em] xl:translate-x-0">{tailEnd}</span>
           </span>
-          <span class="self-end xl:self-auto">{tailEnd}</span>
         </div>
 
         <figure class="order-3 -mt-20 w-54 shrink-0 translate-x-3 rotate-6 self-center md:-mt-32 md:w-62 xl:order-2 xl:mt-0 xl:w-80 xl:self-auto">
-          <div class="bg-cream flex flex-col gap-2.5 rounded-sm p-1.25 pb-7.5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] md:p-2.5 md:pb-7.5 xl:p-3 xl:pb-7.5">
+          <div class="bg-cream flex flex-col gap-2.5 rounded-sm p-1.25 pb-7.5 shadow-polaroid md:p-2.5 md:pb-7.5 xl:p-3 xl:pb-7.5">
             <Image src={polaroid} alt="A mission team standing together on a hillside overlooking mountains" widths={[600, 1200]} class="aspect-297/245 w-full rounded-sm object-cover" />
             <p class="text-secondary text-sm leading-none font-medium text-justify">{description}</p>
           </div>
@@ -64,7 +67,7 @@ const tailText = `${tailStart} ${tailAccent} ${tailEnd}`;
     </div>
   </div>
 
-  <div class="pointer-events-none absolute -bottom-5 left-0 z-10 w-full translate-y-1/2">
+  <div class="pointer-events-none absolute -bottom-3 left-0 z-10 w-full translate-y-1/2">
     <Image src={decor} alt="" widths={[1600, 3200]} class="h-auto w-full bg-top" />
   </div>
 </section>

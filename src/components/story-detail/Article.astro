@@ -8,21 +8,12 @@ interface Props {
   entry: CollectionEntry<'stories'>;
 }
 
-const { title, type, published_on, excerpt, hero_image, body, inline_image } = Astro.props.entry.data;
-
-// `inline_image` is rendered as an optimized <CmsImage> at the spot where the rich text
-// references it (`<img src="…/assets/<id>">`); if the body does not reference it, it follows the body.
-const inlineImageTag = new RegExp(`<img\\b[^>]*/assets/${inline_image.id}[^>]*>`, 'g');
-const [bodyBefore, ...bodyRest] = body.split(inlineImageTag);
-const bodyAfter = bodyRest.join('');
-
-// The inline image keeps the alt text written on it in the body.
-const inlineImageAlt = body.match(inlineImageTag)?.[0].match(/\balt="([^"]*)"/)?.[1] ?? '';
+const { title, type, published_on, excerpt, card_image, body } = Astro.props.entry.data;
 ---
 
 <article class="pt-32 pb-15 md:pb-20 xl:pt-52" aria-labelledby="story-heading">
   <div class="container">
-    <header class="flex flex-col items-center gap-7.5">
+    <header class="flex flex-col items-center gap-7.5 mb-15">
       <div class="flex w-full max-w-200 flex-col items-center gap-7.5 text-center">
         <h1 id="story-heading" class="text-4xl font-bold md:text-5xl xl:text-[52px]">{title}</h1>
         <div class="text-muted-foreground flex items-center justify-center gap-2.5 text-base leading-none">
@@ -34,18 +25,12 @@ const inlineImageAlt = body.match(inlineImageTag)?.[0].match(/\balt="([^"]*)"/)?
       </div>
 
       <div class="bg-cream h-64 w-full rounded-lg p-1.25 sm:h-96 xl:h-150">
-        <CmsImage image={hero_image} alt={title} widths={[800, 1600, 2400]} loading="eager" class="size-full rounded-lg object-cover" />
+        <CmsImage image={card_image} alt={title} widths={[800, 1600, 2400]} loading="eager" class="size-full rounded-lg object-cover" />
       </div>
     </header>
 
-    <Prose class="mx-auto mt-15 w-full max-w-200 md:mt-20">
-      <Fragment set:html={bodyBefore} />
-
-      <div class="not-sw-prose bg-cream h-60 w-full rounded-lg p-1.25 sm:h-115">
-        <CmsImage image={inline_image} alt={inlineImageAlt} widths={[800, 1600]} class="size-full rounded-lg object-cover" />
-      </div>
-
-      <Fragment set:html={bodyAfter} />
+    <Prose class="mx-auto w-full max-w-200">
+      <Fragment set:html={body} />
     </Prose>
   </div>
 </article>

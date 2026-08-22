@@ -1,0 +1,63 @@
+---
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import { getSingleton } from '@/lib/content';
+import { tripSlug } from '@/lib/trip';
+import Layout from '@/layouts/Layout.astro';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import Faq from '@/components/home/Faq.astro';
+import PhotoStripSlider from '@/components/shared/PhotoStripSlider.astro';
+import StoriesCarousel from '@/components/shared/StoriesCarousel.astro';
+import AboutMission from '@/components/trip-details/AboutMission.astro';
+import AtAGlance from '@/components/trip-details/AtAGlance.astro';
+import TripHero from '@/components/trip-details/Hero.astro';
+import SimilarTrips from '@/components/trip-details/SimilarTrips.astro';
+import WhatsIncluded from '@/components/trip-details/WhatsIncluded.astro';
+import YourWeek from '@/components/trip-details/YourWeek.astro';
+
+/** `/mission-trips/[region]/[trip]` — a trip detail page, nested under the region it belongs to. */
+export async function getStaticPaths() {
+  const trips = await getCollection('trips');
+
+  return Promise.all(
+    trips.map(async (trip) => {
+      // The region carries the "In the field" and stories sections; the category carries the shared About the Mission content.
+      const region = await getEntry(trip.data.region);
+      if (!region) throw new Error(`trips/${trip.data.title}: region "${trip.data.region.id}" is not published`);
+
+      const category = await getEntry(trip.data.category);
+      if (!category) throw new Error(`trips/${trip.data.title}: category "${trip.data.category.id}" does not exist`);
+
+      // The URL is built from the country and the title, so a trip has no slug of its own.
+      const country = await getEntry(trip.data.country);
+      if (!country) throw new Error(`trips/${trip.data.title}: country "${trip.data.country.id}" does not exist`);
+
+      return { params: { region: region.data.slug, trip: tripSlug(country.data.name, trip.data.title) }, props: { trip, region, category } };
+    }),
+  );
+}
+
+interface Props {
+  trip: CollectionEntry<'trips'>;
+  region: CollectionEntry<'regions'>;
+  category: CollectionEntry<'trip_categories'>;
+}
+
+const { trip, region, category } = Astro.props;
+const { seo_title, seo_description } = trip.data;
+// Trips have no OG image of their own — the site-wide default is used.
+const { og_image } = await getSingleton('global');
+---
+
+<Layout title={seo_title} description={seo_description} ogImage={og_image}>
+  <TripHero trip={trip} category={category} />
+  <AtAGlance trip={trip} />
+  <AboutMission category={category} />
+  <YourWeek trip={trip} />
+  <WhatsIncluded trip={trip} />
+  <PhotoStripSlider id="in-field" eyebrow="In the field" heading="See the Mission in Action" bg={region.data.field_bg} />
+  <StoriesCarousel region={region} />
+  <SimilarTrips trip={trip} />
+  <Faq />
+  <Cta {...CTA.trip} />
+</Layout>

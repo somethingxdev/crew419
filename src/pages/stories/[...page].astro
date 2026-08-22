@@ -1,0 +1,233 @@
+---
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import ChevronDown from '@tabler/icons/outline/chevron-down.svg';
+import Layout from '@/layouts/Layout.astro';
+import Hero from '@/components/shared/Hero.astro';
+import Cta from '@/components/shared/Cta.astro';
+import CmsImage from '@/components/base/CmsImage.astro';
+import { MISSION_TRIPS, SITE_LINKS } from '@/lib/links';
+import { CTA } from '@/lib/cta';
+import { getSingleton } from '@/lib/content';
+import { storyDate, STORY_TYPE_LABELS } from '@/lib/story';
+import { Button } from '@/shared/ui/button';
+import { Dropdown, DropdownContent, DropdownRadioGroup, DropdownRadioItem, DropdownTrigger } from '@/shared/ui/dropdown';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/shared/ui/pagination';
+import heroBg from '@/assets/images/hero/stories.png';
+
+/** `/stories`, `/stories/2`, … — the catalog is split into static pages. */
+export const getStaticPaths = (async ({ paginate }) => {
+  const stories = await getCollection('stories');
+  return paginate(stories, { pageSize: 8 });
+}) satisfies GetStaticPaths;
+
+type StoryData = CollectionEntry<'stories'>['data'];
+
+const ministryLabels: Record<StoryData['ministry'], string> = {
+  children: 'Children',
+  construction: 'Construction',
+  evangelism: 'Evangelism',
+  medical: 'Medical',
+  sports: 'Sports',
+};
+
+const { page } = Astro.props;
+
+const {
+  stories_hub_seo_title,
+  stories_hub_seo_description,
+  stories_hub_og_image,
+  stories_hub_hero_eyebrow: heroEyebrow,
+  stories_hub_hero_title: heroTitle,
+  stories_hub_hero_description: heroDescription,
+} = await getSingleton('website_content');
+
+const regions = await getCollection('regions');
+
+const filters = [
+  {
+    key: 'type',
+    label: 'Story Type',
+    options: [{ label: 'All Types', value: 'all' }, ...Object.entries(STORY_TYPE_LABELS).map(([value, label]) => ({ label, value }))],
+  },
+  {
+    key: 'region',
+    label: 'Region',
+    options: [{ label: 'All Regions', value: 'all' }, ...regions.map(({ data }) => ({ label: data.name, value: data.slug }))],
+  },
+  {
+    key: 'ministry',
+    label: 'Ministry',
+    options: [{ label: 'All Ministries', value: 'all' }, ...Object.entries(ministryLabels).map(([value, label]) => ({ label, value }))],
+  },
+];
+
+const stories = await Promise.all(
+  page.data.map(async ({ data }) => ({
+    ...data,
+    href: `/stories/${data.slug}`,
+    regionSlug: (await getEntry(data.region))?.data.slug,
+  })),
+);
+
+const pages = Array.from({ length: page.lastPage }, (_, i) => i + 1);
+// `/stories` for page 1, `/stories/N` otherwise (mirrors what `paginate()` generates). `url.first` is undefined on page 1.
+const base = page.url.current.replace(new RegExp(`/${page.currentPage}$`), '');
+const pageHref = (n: number) => (n === 1 ? base : `${base}/${n}`);
+---
+
+<Layout title={stories_hub_seo_title} description={stories_hub_seo_description} ogImage={stories_hub_og_image}>
+  <Hero id="stories-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={SITE_LINKS.call.href} variant="cream">{SITE_LINKS.call.label}</Button>
+      <Button size="lg" href={MISSION_TRIPS} variant="glass">Explore mission trips</Button>
+    </Fragment>
+  </Hero>
+
+  <section class="pt-20 pb-15 xl:pt-30" aria-labelledby="stories-catalog-heading" data-stories-catalog>
+    <div class="container">
+      <h2 id="stories-catalog-heading" class="sr-only">All stories</h2>
+
+      <div class="flex flex-wrap items-center gap-5" role="group" aria-label="Filter stories">
+        {
+          filters.map((filter) => (
+            <Dropdown>
+              <DropdownTrigger class="gap-2.5 text-lg leading-none font-medium text-foreground transition-colors hover:text-primary data-[state=open]:text-primary [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:transition-transform data-[state=open]:[&>svg]:rotate-180">
+                <span data-filter-label={filter.key}>{filter.label}</span>
+                <ChevronDown aria-hidden="true" />
+              </DropdownTrigger>
+              <DropdownContent align="start" sideOffset={12} class="bg-cream text-foreground min-w-50 rounded-lg border-0 p-2 shadow-card">
+                <DropdownRadioGroup defaultValue="all" data-filter={filter.key} data-filter-default-label={filter.label}>
+                  {filter.options.map((option) => (
+                    <DropdownRadioItem
+                      value={option.value}
+                      closeOnClick
+                      class="cursor-pointer py-2 pr-9 pl-3 text-base leading-none font-medium hover:bg-primary/20 focus:bg-primary/20 data-highlighted:bg-primary/20 data-checked:text-primary"
+                      indicatorClass="right-3"
+                    >
+                      {option.label}
+                    </DropdownRadioItem>
+                  ))}
+                </DropdownRadioGroup>
+              </DropdownContent>
+            </Dropdown>
+          ))
+        }
+      </div>
+
+      <ul class="mt-7.5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4" data-stories-grid>
+        {
+          stories.map((story) => (
+            <li data-story data-type={story.type} data-region={story.regionSlug} data-ministry={story.ministry}>
+              <article class="bg-cream flex h-full flex-col rounded-lg px-4 pt-4 pb-5">
+                <a href={story.href} class="block overflow-hidden rounded-lg" tabindex="-1" aria-hidden="true">
+                  <CmsImage image={story.card_image} alt={story.title} widths={[400, 800]} class="h-65 w-full object-cover transition-transform duration-500 hover:scale-105" />
+                </a>
+                <div class="mt-5 flex flex-1 flex-col">
+                  <p class="text-muted-foreground text-base leading-none font-bold uppercase">{STORY_TYPE_LABELS[story.type]}</p>
+                  <h3 class="mt-2.5 line-clamp-2 min-h-13 text-2xl font-bold">
+                    <a href={story.href} class="hover:text-primary transition-colors">
+                      {story.title}
+                    </a>
+                  </h3>
+                  <p class="text-muted-foreground mt-5 text-base leading-none">{storyDate(story.published_on)}</p>
+                </div>
+                <a
+                  href={story.href}
+                  class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground mt-5 self-start border-b pb-2 text-base leading-none font-black uppercase transition-colors"
+                >
+                  Read Story<span class="sr-only">: {story.title}</span>
+                </a>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="text-muted-foreground mt-10 hidden text-center text-lg leading-none font-medium" data-stories-empty>No stories match the selected filters yet.</p>
+
+      {
+        page.lastPage > 1 && (
+          <Pagination class="mt-12.5 justify-between gap-5" data-stories-pagination>
+            <PaginationPrevious
+              href={page.url.prev}
+              aria-disabled={!page.url.prev}
+              class="h-auto px-0 text-base font-black uppercase text-foreground hover:bg-transparent hover:text-primary aria-disabled:text-muted-foreground aria-disabled:pointer-events-none"
+            >
+              <Fragment slot="icon" />
+              Previous
+            </PaginationPrevious>
+            <PaginationContent class="gap-5">
+              {pages.map((n) => (
+                <PaginationItem>
+                  <PaginationLink
+                    href={pageHref(n)}
+                    isActive={n === page.currentPage}
+                    class="size-12.5 pt-1 text-base font-black hover:bg-transparent hover:text-primary aria-[current=page]:bg-secondary aria-[current=page]:text-secondary-foreground aria-[current=page]:border-0 aria-[current=page]:shadow-none"
+                  >
+                    {n}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+            </PaginationContent>
+            <PaginationNext
+              href={page.url.next}
+              aria-disabled={!page.url.next}
+              class="h-auto px-0 text-base font-black uppercase text-foreground hover:bg-transparent hover:text-primary aria-disabled:text-muted-foreground aria-disabled:pointer-events-none"
+            >
+              Next
+              <Fragment slot="icon" />
+            </PaginationNext>
+          </Pagination>
+        )
+      }
+    </div>
+  </section>
+
+  <Cta {...CTA.stories} />
+</Layout>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-stories-catalog]');
+
+  if (section) {
+    const cards = Array.from(section.querySelectorAll<HTMLElement>('[data-story]'));
+    const empty = section.querySelector<HTMLElement>('[data-stories-empty]');
+    const pagination = section.querySelector<HTMLElement>('[data-stories-pagination]');
+    const selected: Record<string, string> = { type: 'all', region: 'all', ministry: 'all' };
+
+    // Filters narrow the stories on the current page; pagination is hidden while a filter is active.
+    const applyFilters = () => {
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const match = Object.entries(selected).every(([key, value]) => value === 'all' || card.dataset[key] === value);
+        card.hidden = !match;
+        if (match) visible += 1;
+      });
+
+      const filtered = Object.values(selected).some((value) => value !== 'all');
+      empty?.classList.toggle('hidden', visible > 0);
+      pagination?.classList.toggle('hidden', filtered);
+    };
+
+    // Dropdown content is portaled outside the section, so listen on the document.
+    document.addEventListener('starwind:value-change', (event) => {
+      const group = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-filter]');
+      if (!group) return;
+
+      const key = group.dataset.filter!;
+      const value = String((event as CustomEvent<{ value?: string | null }>).detail?.value ?? 'all');
+      selected[key] = value;
+
+      const item = group.querySelector<HTMLElement>(`[data-sw-menu-radio-item][data-value="${value}"]`);
+      const label = section.querySelector<HTMLElement>(`[data-filter-label="${key}"]`);
+      if (label) label.textContent = value === 'all' ? group.dataset.filterDefaultLabel! : (item?.textContent?.trim() ?? group.dataset.filterDefaultLabel!);
+
+      applyFilters();
+    });
+  }
+</script>

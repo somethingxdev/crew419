@@ -3,13 +3,14 @@ import ChevronRight from '@tabler/icons/outline/chevron-right.svg';
 import { getCollection } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
+import { regionPath } from '@/lib/links';
 
 const { trips_hub_locations_eyebrow: eyebrow, trips_hub_locations_heading: heading } = await getSingleton('website_content');
 
 const locations = (await getCollection('regions'))
   .map(({ data }) => data)
   .sort((a, b) => a.sort - b.sort)
-  .map((region) => ({ ...region, href: `/trips/${region.slug}` }));
+  .map((region) => ({ ...region, href: regionPath(region.slug) }));
 
 // Coverflow position of every card on first paint; the carousel takes over after hydration.
 const position = (index: number) => {
@@ -33,7 +34,7 @@ const position = (index: number) => {
         {
           locations.map((location, index) => (
             <a href={location.href} data-locations-slide data-pos={position(index)} aria-label={`${location.name} — explore region`}>
-              <article class="border-background relative size-full overflow-hidden rounded-lg border-5 shadow-[0px_4px_15px_rgba(0,0,0,0.2)]">
+              <article class="border-background relative size-full overflow-hidden rounded-lg border-5 shadow-card">
                 <CmsImage image={location.card_image} alt="" widths={[600, 1200]} class="absolute inset-0 size-full object-cover" />
                 <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#4e515a]/70"></div>
                 <div class="absolute inset-0 bg-black/0" data-locations-dim></div>

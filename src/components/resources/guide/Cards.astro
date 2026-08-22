@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 
 interface Props {
   resource: CollectionEntry<'resources'>;
@@ -13,12 +14,7 @@ const { cards_eyebrow: eyebrow, cards_heading: heading, cards } = Astro.props.re
   eyebrow && heading && cards && (
     <section class="pt-40 pb-15" aria-labelledby="guide-cards-heading">
       <div class="container">
-        <div class="mx-auto flex max-w-169 flex-col gap-4 text-center">
-          <p class="leading-none font-bold text-muted-foreground uppercase">{eyebrow}</p>
-          <h2 id="guide-cards-heading" class="text-3xl leading-none font-bold md:text-5xl">
-            {heading}
-          </h2>
-        </div>
+        <SectionHeading id="guide-cards-heading" {eyebrow} {heading} headingClass="leading-none" class="mx-auto max-w-169" />
 
         <ul class="mt-12.5 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {cards.map((card) => (

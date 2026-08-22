@@ -1,8 +1,10 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 import { getSingleton } from '@/lib/content';
-import { tripDates, tripDuration } from '@/lib/trip';
+import { tripPath } from '@/lib/links';
+import { tripDates, tripDuration, tripSlug } from '@/lib/trip';
 
 const {
   individuals_more_eyebrow: eyebrow,
@@ -15,21 +17,19 @@ const trips = await Promise.all(
     .sort((a, b) => a.data.start_date.localeCompare(b.data.start_date))
     .map(async ({ data }) => {
       const region = await getEntry(data.region);
-      if (!region) throw new Error(`trips/${data.slug}: region "${data.region.id}" is not published`);
-      return { ...data, region: region.data, href: `/trips/${data.slug}` };
+      if (!region) throw new Error(`trips/${data.title}: region "${data.region.id}" is not published`);
+
+      const country = await getEntry(data.country);
+      if (!country) throw new Error(`trips/${data.title}: country "${data.country.id}" does not exist`);
+
+      return { ...data, region: region.data, href: tripPath(region.data.slug, tripSlug(country.data.name, data.title)) };
     }),
 );
 ---
 
 <section class="relative z-20 py-15" aria-labelledby="upcoming-trips-heading">
   <div class="container flex flex-col items-center gap-10">
-    <div class="flex max-w-195 flex-col items-center gap-7.5 text-center">
-      <div class="flex flex-col items-center gap-4">
-        <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-        <h2 id="upcoming-trips-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
-      </div>
-      <p class="max-w-110 leading-none">{text}</p>
-    </div>
+    <SectionHeading id="upcoming-trips-heading" {eyebrow} {heading} {text} textClass="max-w-110" class="max-w-195" />
 
     <div class="grid w-full gap-5 md:grid-cols-2 xl:grid-cols-4">
       {

@@ -1,0 +1,80 @@
+---
+/**
+ * Partner logo tiles from the `partners` collection. Static centered row by default;
+ * with `heading` props it becomes a titled section with an infinite marquee (about page).
+ */
+import { getCollection } from 'astro:content';
+import CmsImage from '@/components/base/CmsImage.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
+
+interface Props {
+  /** Which partner set to show — `partners.show_on_about` / `partners.show_on_audience_pages` in Directus. */
+  where: 'about' | 'audience';
+  /** Titled + marquee variant. */
+  heading?: { id: string; eyebrow: string; heading: string; text?: string | null };
+}
+
+const { where, heading } = Astro.props;
+
+const partners = (await getCollection('partners', ({ data }) => (where === 'about' ? data.show_on_about : data.show_on_audience_pages)))
+  .map(({ data }) => data)
+  .sort((a, b) => a.sort - b.sort);
+
+// The marquee needs a second copy of the row to loop seamlessly.
+const tiles = heading ? [...partners, ...partners] : partners;
+---
+
+<section class:list={['overflow-x-clip', heading ? 'py-15' : 'pb-15']} aria-labelledby={heading ? `${heading.id}-heading` : undefined} aria-label={heading ? undefined : 'Partners'}>
+  {
+    heading && (
+      <div class="container">
+        <SectionHeading id={`${heading.id}-heading`} eyebrow={heading.eyebrow} heading={heading.heading} text={heading.text} class="mx-auto max-w-228.5" textClass="max-w-120.5" />
+      </div>
+    )
+  }
+
+  <div class:list={heading ? 'mt-12.5 overflow-hidden' : undefined}>
+    <ul class:list={['flex gap-5', heading ? 'w-max' : 'justify-center']} data-partners-track={heading ? true : undefined}>
+      {
+        tiles.map((partner, index) => {
+          const Tag = partner.url ? 'a' : 'div';
+          return (
+            <li class="flex h-40 w-75 shrink-0 items-center justify-center rounded-lg bg-cream" aria-hidden={index >= partners.length ? 'true' : undefined}>
+              <Tag
+                class="flex size-full items-center justify-center p-6"
+                {...(partner.url ? { href: partner.url, target: '_blank', rel: 'noopener noreferrer', 'aria-label': partner.name } : {})}
+              >
+                {partner.logo ? (
+                  <CmsImage image={partner.logo} alt={partner.name} widths={[300, 600]} class="max-h-full max-w-full object-contain" />
+                ) : (
+                  <span class="text-muted-foreground leading-none font-bold uppercase">{partner.name}</span>
+                )}
+              </Tag>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  @keyframes partners-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-50% - 0.625rem));
+    }
+  }
+
+  [data-partners-track] {
+    animation: partners-marquee 30s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-partners-track] {
+      animation: none;
+    }
+  }
+</style>

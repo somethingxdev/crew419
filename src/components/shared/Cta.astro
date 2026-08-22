@@ -1,0 +1,65 @@
+---
+/**
+ * Closing call-to-action card: full-bleed photo in a rounded box with a centered heading,
+ * body copy, optional emphasized lead-in and one or two buttons.
+ * Copy presets live in `@/lib/cta` — pages do `<Cta {...CTA.churches} />`.
+ */
+import { Image } from 'astro:assets';
+import bg1 from '@/assets/images/cta/bg-1.png';
+import bg2 from '@/assets/images/cta/bg-2.png';
+import bg3 from '@/assets/images/cta/bg-3.png';
+import bg4 from '@/assets/images/cta/bg-4.png';
+import type { CtaCopy } from '@/lib/cta';
+import { Button } from '@/shared/ui/button';
+
+interface Props extends CtaCopy {
+  /** Section classes (vertical padding). */
+  class?: string;
+}
+
+const { title, text, lead, primary, secondary, bg, class: className = 'py-15' } = Astro.props;
+
+const backgrounds = {
+  'bg-1': { src: bg1, class: 'object-[center_72%]' },
+  'bg-2': { src: bg2, class: 'object-center' },
+  'bg-3': { src: bg3, class: 'object-center' },
+  'bg-4': { src: bg4, class: 'object-center' },
+};
+const background = backgrounds[bg];
+
+const paragraphs = text.split(/\n\s*\n/);
+---
+
+<section class={className} aria-labelledby="cta-heading">
+  <div class="container">
+    <div class="relative flex min-h-125 overflow-hidden rounded-2xl md:h-150">
+      <div class="absolute inset-0 overflow-hidden">
+        <Image src={background.src} alt="" widths={[1600, 3000]} class:list={['size-full object-cover', background.class]} />
+        <div class="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      <div class="relative z-10 mx-auto flex w-full max-w-160 flex-col items-center justify-center gap-7.5 px-5 py-15 text-center text-cream md:py-0">
+        <div class="flex w-full flex-col items-center gap-6">
+          <h2 id="cta-heading" class="text-3xl leading-none font-bold md:text-5xl">{title}</h2>
+          <div class="flex max-w-137.5 flex-col gap-2.5 leading-none whitespace-pre-line">
+            {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </div>
+
+        <div class="flex w-full flex-col items-center gap-8">
+          {lead && <p class="max-w-108 text-lg leading-none font-medium">{lead}</p>}
+          <div class="flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row">
+            <Button href={primary.href} variant="cream" size="lg" class="w-full sm:w-auto sm:min-w-62">{primary.label}</Button>
+            {
+              secondary && (
+                <Button href={secondary.href} variant="glass" size="lg" class="w-full sm:w-auto sm:min-w-62">
+                  {secondary.label}
+                </Button>
+              )
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

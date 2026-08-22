@@ -1,0 +1,65 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import CardGridSection from '@/components/shared/CardGridSection.astro';
+import Hero from '@/components/shared/Hero.astro';
+import heroBg from '@/assets/images/hero/custom.png';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import differenceBg from '@/assets/images/backgrounds/features.png';
+import Challenge from '@/components/custom/Challenge.astro';
+import Included from '@/components/custom/Included.astro';
+import Faq from '@/components/home/Faq.astro';
+import FindYourMissionPath from '@/components/home/FindYourMissionPath.astro';
+import HowItWorks from '@/components/home/HowItWorks.astro';
+import Impact from '@/components/home/Impact.astro';
+import FeaturesSection from '@/components/shared/FeaturesSection.astro';
+import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
+
+const {
+  custom_seo_title,
+  custom_seo_description,
+  custom_og_image,
+  custom_hero_eyebrow: heroEyebrow,
+  custom_hero_title: heroTitle,
+  custom_hero_description: heroDescription,
+  custom_more_eyebrow: differenceEyebrow,
+  custom_more_heading: differenceHeading,
+  custom_more_text: differenceText,
+  custom_more_cards: differenceFeatures,
+  custom_features_eyebrow: featuresEyebrow,
+  custom_features_heading: featuresHeading,
+  custom_challenge_cards: challengeCards,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
+---
+
+<Layout title={custom_seo_title} description={custom_seo_description} ogImage={custom_og_image}>
+  <Hero id="custom-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={ctaHref} variant="cream">{ctaLabel}</Button>
+      <Button size="lg" href="#how-it-works" variant="glass">See how it works</Button>
+    </Fragment>
+  </Hero>
+  <Challenge />
+  <CardGridSection id="planning-challenges" eyebrow={featuresEyebrow} heading={featuresHeading} cards={challengeCards} class="py-30" headingClass="max-w-177" />
+  <FeaturesSection
+    id="difference"
+    eyebrow={differenceEyebrow}
+    heading={differenceHeading}
+    text={differenceText}
+    features={differenceFeatures}
+    bg={differenceBg}
+    overlay="bg-black/15"
+    class="z-20"
+  />
+  <FindYourMissionPath class="py-30" />
+  <HowItWorks />
+  <Included />
+  <Impact heading="Trusted by Churches Across Multiple Countries" />
+  <Faq page="custom" />
+  <Cta {...CTA.custom} />
+</Layout>

@@ -1,27 +1,57 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Partners from '@/components/churches/Partners.astro';
+import PartnerLogos from '@/components/shared/PartnerLogos.astro';
+import CardGridSection from '@/components/shared/CardGridSection.astro';
+import Hero from '@/components/shared/Hero.astro';
+import heroBg from '@/assets/images/hero/sports.png';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import detailsBg from '@/assets/images/backgrounds/sports-features.png';
 import Faq from '@/components/home/Faq.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
 import Impact from '@/components/home/Impact.astro';
-import SportsCta from '@/components/sports/Cta.astro';
-import Details from '@/components/sports/Details.astro';
-import EveryGame from '@/components/sports/EveryGame.astro';
-import Hero from '@/components/sports/Hero.astro';
-import MoreThanTheGame from '@/components/sports/MoreThanTheGame.astro';
+import FeaturesSection from '@/components/shared/FeaturesSection.astro';
 import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
 
-const { sports_seo_title, sports_seo_description, sports_og_image } = await getSingleton('website_content');
+const {
+  sports_seo_title,
+  sports_seo_description,
+  sports_og_image,
+  sports_hero_eyebrow: heroEyebrow,
+  sports_hero_title: heroTitle,
+  sports_hero_description: heroDescription,
+  sports_features_eyebrow: detailsEyebrow,
+  sports_features_heading: detailsHeading,
+  sports_features_text: detailsText,
+  sports_feature_cards: detailsFeatures,
+  sports_intro_eyebrow: introEyebrow,
+  sports_intro_heading: introHeading,
+  sports_intro_text: introText,
+  sports_challenge_cards: introCards,
+  sports_more_eyebrow: moreEyebrow,
+  sports_more_heading: moreHeading,
+  sports_more_cards: moreCards,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
 ---
 
 <Layout title={sports_seo_title} description={sports_seo_description} ogImage={sports_og_image}>
-  <Hero />
-  <MoreThanTheGame />
-  <Details />
-  <EveryGame />
+  <Hero id="sports-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={ctaHref} variant="cream">{ctaLabel}</Button>
+      <Button size="lg" href="#how-it-works" variant="glass">See how it works</Button>
+    </Fragment>
+  </Hero>
+  <CardGridSection id="more-than-the-game" eyebrow={introEyebrow} heading={introHeading} text={introText} cards={introCards} headingClass="max-w-170" />
+  <FeaturesSection id="details" eyebrow={detailsEyebrow} heading={detailsHeading} text={detailsText} features={detailsFeatures} bg={detailsBg} />
+  <CardGridSection id="every-game" eyebrow={moreEyebrow} heading={moreHeading} cards={moreCards} />
   <HowItWorks />
   <Impact heading="Trusted by Churches Across Multiple Countries" class="py-30" />
-  <Partners where="audience" />
+  <PartnerLogos where="audience" />
   <Faq page="sports" />
-  <SportsCta />
+  <Cta {...CTA.sports} />
 </Layout>

@@ -1,11 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
-import InTheField from '@/components/regions/InTheField.astro';
-import Hero from '@/components/thank-you/Hero.astro';
+import CenteredHero from '@/components/shared/CenteredHero.astro';
+import PhotoStripSlider from '@/components/shared/PhotoStripSlider.astro';
 import { getSingleton } from '@/lib/content';
 
-const { thank_you_seo_title, thank_you_seo_description, thank_you_og_image } = await getSingleton('website_content');
+const {
+  thank_you_seo_title,
+  thank_you_seo_description,
+  thank_you_og_image,
+  thank_you_title: title,
+  thank_you_text: text,
+  thank_you_primary_label: primaryLabel,
+  thank_you_primary_href: primaryHref,
+  thank_you_secondary_label: secondaryLabel,
+  thank_you_secondary_href: secondaryHref,
+} = await getSingleton('website_content');
 
 // The thank-you page has no "In the field" fields of its own — it reuses the Africa region's section.
 const africa = (await getCollection('regions')).find(({ data }) => data.slug === 'africa');
@@ -14,6 +24,12 @@ const { field_bg } = africa.data;
 ---
 
 <Layout title={thank_you_seo_title} description={thank_you_seo_description} ogImage={thank_you_og_image}>
-  <Hero />
-  <InTheField bg={field_bg} />
+  <CenteredHero
+    id="thank-you"
+    title={title}
+    text={text}
+    primary={{ label: primaryLabel, href: primaryHref }}
+    secondary={{ label: secondaryLabel, href: secondaryHref }}
+  />
+  <PhotoStripSlider id="in-field" eyebrow="In the field" heading="See the Mission in Action" bg={field_bg} />
 </Layout>

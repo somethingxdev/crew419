@@ -1,6 +1,7 @@
 ---
 import CmsImage from '@/components/base/CmsImage.astro';
 import PhotoPairSection from '@/components/shared/PhotoPairSection.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 import { getSingleton } from '@/lib/content';
 
 const {
@@ -12,17 +13,11 @@ const {
 } = await getSingleton('website_content');
 ---
 
-<PhotoPairSection labelledBy="how-it-started-heading" class="py-30">
+<PhotoPairSection labelledBy="how-it-started-heading" class="py-15 md:py-30">
   <CmsImage slot="image-left" image={photoLeft} alt="An early Crew419 mission team standing together with local children" widths={[600, 1200]} />
   <CmsImage slot="image-right" image={photoRight} alt="Kevin Grubinski with fellow missionaries in the Dominican Republic" widths={[600, 1200]} />
 
-  <div class="flex w-full flex-col items-start gap-4">
-    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-    <h2 id="how-it-started-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
-  </div>
+  <SectionHeading id="how-it-started-heading" {eyebrow} {heading} align="start" class="w-full" />
 
-  <div
-    class="flex w-full max-w-137.5 flex-col items-start gap-7.5 leading-none text-foreground [&>p:not(:first-child)]:text-lg [&>p:not(:first-child)]:font-medium"
-    set:html={text}
-  />
+  <div class="flex w-full max-w-137.5 flex-col items-start gap-7.5 leading-none text-foreground [&>p:not(:first-child)]:text-lg [&>p:not(:first-child)]:font-medium" set:html={text} />
 </PhotoPairSection>

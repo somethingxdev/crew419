@@ -1,27 +1,59 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Partners from '@/components/churches/Partners.astro';
+import PartnerLogos from '@/components/shared/PartnerLogos.astro';
+import CardGridSection from '@/components/shared/CardGridSection.astro';
+import BeyondTheTrip from '@/components/shared/BeyondTheTrip.astro';
+import Hero from '@/components/shared/Hero.astro';
+import { SITE_LINKS } from '@/lib/links';
+import heroBg from '@/assets/images/hero/school.png';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import whyBg from '@/assets/images/backgrounds/features.png';
 import Faq from '@/components/home/Faq.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
 import Impact from '@/components/home/Impact.astro';
-import BeyondTheTrip from '@/components/school/BeyondTheTrip.astro';
-import SchoolCta from '@/components/school/Cta.astro';
-import Hero from '@/components/school/Hero.astro';
-import WhyCrew419 from '@/components/school/WhyCrew419.astro';
-import WhySchools from '@/components/school/WhySchools.astro';
+import FeaturesSection from '@/components/shared/FeaturesSection.astro';
 import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
 
-const { school_seo_title, school_seo_description, school_og_image } = await getSingleton('website_content');
+const {
+  school_seo_title,
+  school_seo_description,
+  school_og_image,
+  school_hero_eyebrow: heroEyebrow,
+  school_hero_title: heroTitle,
+  school_hero_description: heroDescription,
+  school_features_eyebrow: whyEyebrow,
+  school_features_heading: whyHeading,
+  school_features_text: whyText,
+  school_feature_cards: whyFeatures,
+  school_intro_eyebrow: introEyebrow,
+  school_intro_heading: introHeading,
+  school_intro_text: introText,
+  school_challenge_cards: introCards,
+  school_more_eyebrow: moreEyebrow,
+  school_more_heading: moreHeading,
+  school_more_text: moreText,
+  school_more_cards: moreCards,
+} = await getSingleton('website_content');
 ---
 
 <Layout title={school_seo_title} description={school_seo_description} ogImage={school_og_image}>
-  <Hero />
-  <WhySchools />
-  <WhyCrew419 />
-  <BeyondTheTrip />
+  <Hero id="school-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={SITE_LINKS.call.href} variant="cream">{SITE_LINKS.call.label}</Button>
+      <Button size="lg" href="#how-it-works" variant="glass">See how it works</Button>
+    </Fragment>
+  </Hero>
+  <CardGridSection id="why-schools" eyebrow={introEyebrow} heading={introHeading} text={introText} cards={introCards} />
+  <FeaturesSection id="why-crew419" eyebrow={whyEyebrow} heading={whyHeading} text={whyText} features={whyFeatures} bg={whyBg} />
+  <BeyondTheTrip id="school-beyond" eyebrow={moreEyebrow} heading={moreHeading} text={moreText} cards={moreCards} />
   <HowItWorks />
   <Impact heading="Trusted by Churches Across Multiple Countries" class="py-30" />
-  <Partners where="audience" />
+  <PartnerLogos where="audience" />
   <Faq page="school" />
-  <SchoolCta />
+  <Cta {...CTA.school} />
 </Layout>

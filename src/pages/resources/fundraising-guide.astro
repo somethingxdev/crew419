@@ -1,8 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
 import { getSingleton } from '@/lib/content';
-import ResourcesCta from '@/components/resources/Cta.astro';
 import GuideCards from '@/components/resources/guide/Cards.astro';
 import GetYourCopy from '@/components/resources/guide/GetYourCopy.astro';
 import GuideHero from '@/components/resources/guide/Hero.astro';
@@ -22,5 +23,5 @@ const { og_image } = await getSingleton('global');
   <GuideCards resource={guide} />
   <GuideIntro resource={guide} />
   <GetYourCopy resource={guide} />
-  <ResourcesCta class="py-30" />
+  <Cta {...CTA.resources} class="py-30" />
 </Layout>

@@ -1,11 +1,18 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
+import Cta from '@/components/shared/Cta.astro';
+import PhotoStripSlider, { STRIP_LAYOUT } from '@/components/shared/PhotoStripSlider.astro';
+import photo1 from '@/assets/images/resources/travel-guides/kenya/slider/photo-1.png';
+import photo2 from '@/assets/images/resources/travel-guides/kenya/slider/photo-2.png';
+import photo3 from '@/assets/images/resources/travel-guides/kenya/slider/photo-3.png';
+import photo4 from '@/assets/images/resources/travel-guides/kenya/slider/photo-4.png';
+import photo5 from '@/assets/images/resources/travel-guides/kenya/slider/photo-5.png';
+import photo6 from '@/assets/images/resources/travel-guides/kenya/slider/photo-6.png';
+import { CTA } from '@/lib/cta';
 import { getSingleton } from '@/lib/content';
-import ResourcesCta from '@/components/resources/Cta.astro';
 import GuideHero from '@/components/resources/guide/Hero.astro';
 import Details from '@/components/resources/travel-guides/detail/Details.astro';
-import MissionSlider from '@/components/resources/travel-guides/detail/MissionSlider.astro';
 
 export async function getStaticPaths() {
   const guides = await getCollection('resources', ({ data }) => data.kind === 'travel_guide');
@@ -17,7 +24,18 @@ interface Props {
 }
 
 const { guide } = Astro.props;
-const { seo_title, seo_description } = guide.data;
+// Only travel guides have the mission slider — guides (discipleship / fundraising) leave these fields empty.
+const { seo_title, seo_description, slider_eyebrow, slider_heading, slider_bg } = guide.data;
+
+// Slider photos have no CMS field yet — they stay local.
+const sliderPhotos = [
+  { image: photo1, alt: 'A mission team member greeting local children in Kenya', class: STRIP_LAYOUT[0] },
+  { image: photo5, alt: 'Volunteers sharing a meal with community members', class: STRIP_LAYOUT[1] },
+  { image: photo6, alt: 'A team praying together with a local congregation', class: STRIP_LAYOUT[2] },
+  { image: photo2, alt: 'Mission participants serving in a Kenyan village', class: STRIP_LAYOUT[3] },
+  { image: photo3, alt: 'A volunteer laughing with local kids outdoors', class: STRIP_LAYOUT[4] },
+  { image: photo4, alt: 'Team members walking through a rural Kenyan community', class: STRIP_LAYOUT[5] },
+];
 // Resources have no OG image of their own — the site-wide default is used.
 const { og_image } = await getSingleton('global');
 ---
@@ -25,6 +43,6 @@ const { og_image } = await getSingleton('global');
 <Layout title={seo_title} description={seo_description} ogImage={og_image}>
   <GuideHero resource={guide} />
   <Details resource={guide} />
-  <MissionSlider resource={guide} />
-  <ResourcesCta class="py-30" />
+  {slider_eyebrow && slider_heading && slider_bg && <PhotoStripSlider id="guide-mission" eyebrow={slider_eyebrow} heading={slider_heading} bg={slider_bg} photos={sliderPhotos} />}
+  <Cta {...CTA.resources} class="py-30" />
 </Layout>

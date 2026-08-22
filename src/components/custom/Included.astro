@@ -1,4 +1,5 @@
 ---
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 import { getSingleton } from '@/lib/content';
 
 const {
@@ -10,10 +11,7 @@ const {
 
 <section class="py-30" aria-labelledby="included-heading">
   <div class="container">
-    <div class="mx-auto flex max-w-177 flex-col items-center gap-4 text-center">
-      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-      <h2 id="included-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
-    </div>
+    <SectionHeading id="included-heading" {eyebrow} {heading} class="mx-auto max-w-177" />
 
     <ul class="mt-12.5 flex flex-wrap items-center justify-center gap-5">
       {items.map((item) => <li class="bg-cream rounded-2xl px-7.5 pt-7.5 pb-6 leading-none font-bold uppercase">{item}</li>)}

@@ -1,0 +1,53 @@
+---
+/**
+ * Centered heading (+ optional intro) above a grid of cream info cards.
+ * Cards without `text` render as a centered title tile. Omit `cards` for a heading-only section.
+ */
+import SectionHeading from '@/components/shared/SectionHeading.astro';
+
+interface Card {
+  title: string;
+  text?: string | null;
+}
+
+interface Props {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  text?: string | null;
+  cards?: Card[];
+  cols?: 3 | 4;
+  /** Section classes (padding / z-index). */
+  class?: string;
+  /** Width of the heading block. */
+  headingClass?: string;
+  textClass?: string;
+}
+
+const { id, eyebrow, heading, text, cards, cols = 4, class: className = 'relative z-20 py-30', headingClass = 'max-w-195', textClass = 'max-w-130' } = Astro.props;
+---
+
+<section class={className} aria-labelledby={`${id}-heading`}>
+  <div class="container flex flex-col items-center gap-12.5">
+    <SectionHeading id={`${id}-heading`} {eyebrow} {heading} {text} class={headingClass} textClass={textClass} />
+
+    {
+      cards && cards.length > 0 && (
+        <div class:list={['grid w-full gap-5 md:grid-cols-2', cols === 3 ? 'xl:grid-cols-3' : 'xl:grid-cols-4']}>
+          {cards.map((card) =>
+            card.text ? (
+              <article class="flex min-h-49 flex-col justify-between gap-7.5 rounded-lg bg-cream p-7.5">
+                <h3 class="text-2xl font-bold text-muted-foreground">{card.title}</h3>
+                <p class="text-lg leading-none font-medium">{card.text}</p>
+              </article>
+            ) : (
+              <article class="flex min-h-45 items-center justify-center rounded-lg bg-cream p-7.5">
+                <h3 class="text-center text-2xl font-bold">{card.title}</h3>
+              </article>
+            ),
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>

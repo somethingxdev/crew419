@@ -1,10 +1,8 @@
 ---
 import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
 import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
-import { Image } from 'astro:assets';
-import decorBottom from '@/assets/images/decor-bottom.png';
-import decorTop from '@/assets/images/decor-top.png';
 import CmsImage from '@/components/base/CmsImage.astro';
+import DecorEdges from '@/components/shared/DecorEdges.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
@@ -77,12 +75,7 @@ const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_proble
     </div>
   </div>
 
-  <div class="pointer-events-none absolute top-0 left-0 z-20 w-full -translate-y-1/2">
-    <Image src={decorTop} alt="" widths={[1600]} class="h-auto w-full" />
-  </div>
-  <div class="pointer-events-none absolute bottom-0 left-0 z-20 w-full translate-y-[63%]">
-    <Image src={decorBottom} alt="" widths={[1600]} class="h-auto w-full" />
-  </div>
+  <DecorEdges class="z-20" />
 </section>
 
 <script>

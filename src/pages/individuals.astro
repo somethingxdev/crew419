@@ -1,27 +1,49 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Partners from '@/components/churches/Partners.astro';
+import PartnerLogos from '@/components/shared/PartnerLogos.astro';
+import CardGridSection from '@/components/shared/CardGridSection.astro';
+import Hero from '@/components/shared/Hero.astro';
+import heroBg from '@/assets/images/hero/individuals.png';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
 import Faq from '@/components/home/Faq.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
 import Impact from '@/components/home/Impact.astro';
-import IndividualsCta from '@/components/individuals/Cta.astro';
-import Hero from '@/components/individuals/Hero.astro';
 import UpcomingTrips from '@/components/individuals/UpcomingTrips.astro';
-import WhatToExpect from '@/components/individuals/WhatToExpect.astro';
 import WhyJoin from '@/components/individuals/WhyJoin.astro';
 import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
 
-const { individuals_seo_title, individuals_seo_description, individuals_og_image } = await getSingleton('website_content');
+const {
+  individuals_seo_title,
+  individuals_seo_description,
+  individuals_og_image,
+  individuals_hero_eyebrow: heroEyebrow,
+  individuals_hero_title: heroTitle,
+  individuals_hero_description: heroDescription,
+  individuals_features_eyebrow: featuresEyebrow,
+  individuals_features_heading: featuresHeading,
+  individuals_feature_cards: featureCards,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
 ---
 
 <Layout title={individuals_seo_title} description={individuals_seo_description} ogImage={individuals_og_image}>
-  <Hero />
+  <Hero id="individuals-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={ctaHref} variant="cream">{ctaLabel}</Button>
+      <Button size="lg" href="#how-it-works" variant="glass">See how it works</Button>
+    </Fragment>
+  </Hero>
   <WhyJoin />
   <UpcomingTrips />
-  <WhatToExpect />
+  <CardGridSection id="what-to-expect" eyebrow={featuresEyebrow} heading={featuresHeading} cards={featureCards} headingClass="max-w-169" />
   <HowItWorks />
   <Impact heading="Trusted by Churches Across Multiple Countries" class="py-30" />
-  <Partners where="audience" />
+  <PartnerLogos where="audience" />
   <Faq page="individuals" />
-  <IndividualsCta />
+  <Cta {...CTA.individuals} />
 </Layout>

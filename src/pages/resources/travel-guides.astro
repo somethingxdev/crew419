@@ -1,15 +1,34 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import ResourcesCta from '@/components/resources/Cta.astro';
+import Hero from '@/components/shared/Hero.astro';
+import heroBg from '@/assets/images/hero/resources.png';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
 import Destinations from '@/components/resources/travel-guides/Destinations.astro';
-import Hero from '@/components/resources/travel-guides/Hero.astro';
 import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
 
-const { resources_hub_seo_title, resources_hub_seo_description, resources_hub_og_image } = await getSingleton('website_content');
+const {
+  resources_hub_seo_title,
+  resources_hub_seo_description,
+  resources_hub_og_image,
+  resources_hub_hero_eyebrow: heroEyebrow,
+  resources_hub_hero_title: heroTitle,
+  resources_hub_hero_description: heroDescription,
+} = await getSingleton('website_content');
+const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
 ---
 
 <Layout title={resources_hub_seo_title} description={resources_hub_seo_description} ogImage={resources_hub_og_image}>
-  <Hero />
+  <Hero id="travel-guides-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href="#destinations" variant="cream">Browse Destinations</Button>
+      <Button size="lg" href={ctaHref} variant="glass">{ctaLabel}</Button>
+    </Fragment>
+  </Hero>
   <Destinations />
-  <ResourcesCta />
+  <Cta {...CTA.resources} />
 </Layout>

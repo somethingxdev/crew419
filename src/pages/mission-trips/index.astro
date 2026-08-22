@@ -1,0 +1,34 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import whyBg from '@/assets/images/backgrounds/trips-why.png';
+import Compass from '@/components/trips/Compass.astro';
+import CustomGroup from '@/components/trips/CustomGroup.astro';
+import Hero from '@/components/trips/Hero.astro';
+import Locations from '@/components/trips/Locations.astro';
+import Impact from '@/components/home/Impact.astro';
+import Faq from '@/components/home/Faq.astro';
+import FeaturesSection from '@/components/shared/FeaturesSection.astro';
+import { getSingleton } from '@/lib/content';
+
+const {
+  trips_hub_seo_title,
+  trips_hub_seo_description,
+  trips_hub_og_image,
+  trips_hub_why_eyebrow: whyEyebrow,
+  trips_hub_why_heading: whyHeading,
+  trips_hub_why_features: whyFeatures,
+} = await getSingleton('website_content');
+---
+
+<Layout title={trips_hub_seo_title} description={trips_hub_seo_description} ogImage={trips_hub_og_image}>
+  <Hero />
+  <Locations />
+  <Compass />
+  <CustomGroup />
+  <FeaturesSection id="why-different" eyebrow={whyEyebrow} heading={whyHeading} features={whyFeatures} bg={whyBg} bgPosition="bottom" overlay="bg-black/5" class="z-20" />
+  <Impact />
+  <Faq />
+  <Cta {...CTA.home} />
+</Layout>

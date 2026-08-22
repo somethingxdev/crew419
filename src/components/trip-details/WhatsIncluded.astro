@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
 
 interface Props {
   trip: CollectionEntry<'trips'>;
@@ -13,12 +14,9 @@ const lists = [
 ];
 ---
 
-<section class="py-30" aria-labelledby="whats-included-heading">
+<section class="py-15 md:py-30" aria-labelledby="whats-included-heading">
   <div class="container flex flex-col gap-12.5 xl:flex-row xl:justify-between xl:gap-20">
-    <div class="flex flex-col gap-4">
-      <p class="text-muted-foreground leading-none font-bold uppercase">What’s included</p>
-      <h2 id="whats-included-heading" class="text-3xl  font-bold md:text-5xl">What’s Covered</h2>
-    </div>
+    <SectionHeading id="whats-included-heading" eyebrow="What’s included" heading="What’s Covered" align="start" />
 
     <div class="grid gap-12.5 sm:grid-cols-2 sm:gap-25 xl:w-full xl:max-w-185">
       {

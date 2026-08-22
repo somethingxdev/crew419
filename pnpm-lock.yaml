@@ -15,8 +15,8 @@ importers:
         specifier: ^24.0.0
         version: 24.0.0
       '@starwind-ui/astro':
-        specifier: 1.0.0
-        version: 1.0.0(astro@7.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)(yaml@2.9.0))
+        specifier: 1.2.0
+        version: 1.2.0(astro@7.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)(yaml@2.9.0))
       '@tabler/icons':
         specifier: ^3.46.0
         version: 3.46.0
@@ -800,14 +800,14 @@ packages:
     engines: {node: '>=22.0.0'}
     hasBin: true
 
-  '@starwind-ui/astro@1.0.0':
-    resolution: {integrity: sha512-CEnYxqbFTUM52D9asgVjJFprYpQREIk8b/HXR0/kweCKb8T/5mumlIStJKYUVY7vQuzgbrUWscjd87n9H70a4w==}
+  '@starwind-ui/astro@1.2.0':
+    resolution: {integrity: sha512-PcNwPGa7jz4EyC6QIPduRynitRGM6xXdARiXQkpCEz6OeH1CAdH4Fv7WQCedygsSdu1N1rgfVehqK3Xc4iRNuQ==}
     engines: {node: '>=22.12.0'}
     peerDependencies:
       astro: '>=5'
 
-  '@starwind-ui/runtime@1.0.0':
-    resolution: {integrity: sha512-C//e9iS/irrSK9zxAAzaDbM4fowz7qPulOUbi7EICB03084K34jCfJm46nLGmQLKCIIrb1pt21rcOSDVbLmVDA==}
+  '@starwind-ui/runtime@1.2.0':
+    resolution: {integrity: sha512-9AXolYEJ9yHhacFOxJDha4+q/gxLtZ8C+f1gPEZQKigSALoIVCtmgCnO9JvslP3V5+TPsldyzJeBK6t3JHxf9A==}
     engines: {node: '>=22.12.0'}
 
   '@sveltejs/acorn-typescript@1.0.13':
@@ -3142,12 +3142,12 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@starwind-ui/astro@1.0.0(astro@7.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)(yaml@2.9.0))':
+  '@starwind-ui/astro@1.2.0(astro@7.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
-      '@starwind-ui/runtime': 1.0.0
+      '@starwind-ui/runtime': 1.2.0
       astro: 7.2.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)(yaml@2.9.0)
 
-  '@starwind-ui/runtime@1.0.0':
+  '@starwind-ui/runtime@1.2.0':
     dependencies:
       '@floating-ui/dom': 1.8.0
       embla-carousel: 8.6.0

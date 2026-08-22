@@ -2,6 +2,19 @@ import type { CollectionEntry } from 'astro:content';
 
 type TripData = CollectionEntry<'trips'>['data'];
 
+/**
+ * `zambia-sports-outreach` — trips have no slug field in the CMS, the URL is built
+ * from the country they run in plus the trip title.
+ */
+export function tripSlug(countryName: string, title: string): string {
+  return `${countryName} ${title}`
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 const DAY = 24 * 60 * 60 * 1000;
 
 // Directus date fields are plain `YYYY-MM-DD`, so parse them as UTC to keep the day stable in every timezone.

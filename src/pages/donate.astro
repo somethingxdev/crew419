@@ -1,31 +1,51 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import CardGridSection from '@/components/shared/CardGridSection.astro';
+import Hero from '@/components/shared/Hero.astro';
+import heroBg from '@/assets/images/hero/donate.png';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import giftBg from '@/assets/images/backgrounds/donate-gift.png';
 import Campaign from '@/components/donate/Campaign.astro';
-import Cta from '@/components/donate/Cta.astro';
-import Hero from '@/components/donate/Hero.astro';
 import JoinMission from '@/components/donate/JoinMission.astro';
-import WhereGiftGoes from '@/components/donate/WhereGiftGoes.astro';
-import WhySupport from '@/components/donate/WhySupport.astro';
 import Impact from '@/components/home/Impact.astro';
-import Stories from '@/components/home/Stories.astro';
+import StoriesCarousel from '@/components/shared/StoriesCarousel.astro';
+import FeaturesSection from '@/components/shared/FeaturesSection.astro';
 import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
 
 const {
   donate_seo_title,
   donate_seo_description,
   donate_og_image,
+  donate_hero_eyebrow: heroEyebrow,
+  donate_hero_title: heroTitle,
+  donate_hero_description: heroDescription,
+  donate_gift_eyebrow: giftEyebrow,
+  donate_gift_heading: giftHeading,
+  donate_gift_features: giftFeatures,
   donate_stories_eyebrow: storiesEyebrow,
   donate_stories_heading: storiesHeading,
+  donate_why_eyebrow: whyEyebrow,
+  donate_why_heading: whyHeading,
+  donate_why_text: whyText,
 } = await getSingleton('website_content');
 ---
 
 <Layout title={donate_seo_title} description={donate_seo_description} ogImage={donate_og_image}>
-  <Hero />
-  <WhySupport />
-  <WhereGiftGoes />
+  <Hero id="donate-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href="#join-mission" variant="cream" class="md:w-82.5">Give Today</Button>
+    </Fragment>
+  </Hero>
+  <CardGridSection id="why-support" eyebrow={whyEyebrow} heading={whyHeading} text={whyText} class="relative z-20 py-15 md:py-30" headingClass="max-w-151" textClass="max-w-119" />
+  <FeaturesSection id="where-gift-goes" eyebrow={giftEyebrow} heading={giftHeading} features={giftFeatures} bg={giftBg} />
   <Impact eyebrow="The nets are getting fuller" heading="Lives Changed Through Your Generosity" media={false} class="py-15 xl:py-20" />
-  <Stories eyebrow={storiesEyebrow} heading={storiesHeading} />
+  <StoriesCarousel eyebrow={storiesEyebrow} heading={storiesHeading} />
   <Campaign />
   <JoinMission />
-  <Cta />
+  <Cta {...CTA.donate} />
 </Layout>

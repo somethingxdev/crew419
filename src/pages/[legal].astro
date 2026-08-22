@@ -1,0 +1,28 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { getSingleton } from '@/lib/content';
+
+export function getStaticPaths() {
+  return [
+    { params: { legal: 'privacy-policy' }, props: { title: 'Privacy Policy' } },
+    { params: { legal: 'terms-of-service' }, props: { title: 'Terms of Service' } },
+    { params: { legal: 'refund-policy' }, props: { title: 'Refund Policy' } },
+  ];
+}
+
+const { title } = Astro.props;
+
+// Legal pages have no CMS entry — description/OG image come from the global site defaults.
+const { seo_description, og_image } = await getSingleton('global');
+---
+
+<Layout title={`${title} | Crew419`} description={seo_description} ogImage={og_image}>
+  <section class="pt-32 pb-24 xl:pt-[169px] xl:pb-30" aria-labelledby="legal-heading">
+    <div class="container">
+      <div class="flex flex-col items-start gap-7.5">
+        <h1 id="legal-heading" class="text-4xl leading-[1.1] font-bold md:text-5xl xl:text-[52px]">{title}</h1>
+        <p class="max-w-131.75 text-lg leading-none font-medium">Text</p>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -28,7 +28,8 @@ const columns = [items.slice(0, mid), items.slice(mid)];
       <h2 id="faq-heading" class="text-3xl font-bold xl:text-5xl">Frequently Asked Questions</h2>
     </div>
 
-    <Accordion type="multiple" defaultValue={items.map((item) => item.key)} class="flex flex-col gap-5 xl:flex-row xl:items-start">
+    {/* `single` — everything starts closed and opening a question closes the previous one. */}
+    <Accordion type="single" class="flex flex-col gap-5 xl:flex-row xl:items-start">
       {
         columns.map((column) => (
           <div class="flex flex-1 flex-col gap-5">

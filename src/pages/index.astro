@@ -1,7 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
 import AnsweringTheCall from '@/components/home/AnsweringTheCall.astro';
-import Cta from '@/components/home/Cta.astro';
 import Faq from '@/components/home/Faq.astro';
 import Hero from '@/components/home/Hero.astro';
 import FindYourMissionPath from '@/components/home/FindYourMissionPath.astro';
@@ -25,5 +26,5 @@ const { home_seo_title, home_seo_description, home_og_image, home_stories_eyebro
   <FindYourMissionPath />
   <Stories eyebrow={home_stories_eyebrow} heading={home_stories_heading} text={home_stories_text} />
   <Faq />
-  <Cta />
+  <Cta {...CTA.home} />
 </Layout>

@@ -1,12 +1,13 @@
 ---
-import CmsImage from '@/components/base/CmsImage.astro';
+import VideoPoster from '@/components/shared/VideoPoster.astro';
 import { getSingleton } from '@/lib/content';
 
 const {
-  about_founder_eyebrow: eyebrow,
   about_founder_heading: heading,
   about_founder_name: name,
+  about_founder_role: role,
   about_founder_photo: photo,
+  about_founder_video: video,
   about_founder_bio_before: bioBefore,
   about_founder_bio_after: bioAfter,
 } = await getSingleton('website_content');
@@ -15,18 +16,18 @@ const {
 <section class="py-15" aria-labelledby="founder-heading">
   <div class="container">
     <div class="mx-auto flex max-w-146.75 flex-col items-center gap-10 text-center">
-      <div class="flex w-full flex-col items-center gap-3.75">
-        <p class="text-muted-foreground text-base leading-none font-bold uppercase">{eyebrow}</p>
-        <h2 id="founder-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
-      </div>
+      <h2 id="founder-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">{heading}</h2>
 
       <div class="flex w-full max-w-110.75 flex-col items-center gap-7.5">
         <p class="text-base leading-none">{bioBefore}</p>
 
-        <figure class="bg-cream flex w-81 max-w-full items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
-          <div class="relative aspect-square min-w-0 flex-1 overflow-hidden rounded-sm">
-            <CmsImage image={photo} alt={name} widths={[600, 1200]} class="size-full object-cover" />
-          </div>
+        <figure class="bg-cream flex w-99.75 max-w-full flex-col gap-3 rounded-sm p-3 shadow-polaroid">
+          <VideoPoster {video} poster={photo} alt={`${name}, ${role}`} widths={[400, 800]} class="aspect-375/292 w-full" rounded="rounded-sm" playLabel={`Play the video about ${name}`} />
+
+          <figcaption class="flex flex-col gap-2.5 text-left">
+            <p class="text-lg leading-none font-medium">{name}</p>
+            <p class="text-muted-foreground text-base leading-none">{role}</p>
+          </figcaption>
         </figure>
 
         <p class="text-base leading-none">{bioAfter}</p>

@@ -6,11 +6,15 @@ import { getSingleton } from '@/lib/content';
 const { about_mission_blocks: blocks } = await getSingleton('website_content');
 ---
 
-<section class="overflow-x-clip border-t border-cream pb-15" aria-label="Mission, vision and motto">
-  <div class="container">
-    {
-      blocks.map((block, index) => (
-        <div class:list={['flex flex-col xl:flex-row xl:items-center xl:gap-25', index > 0 && 'border-t border-cream']}>
+{/* From xl every block sticks to the top of the viewport, so the next one scrolls up and covers it edge to edge. */}
+<section class="relative overflow-x-clip border-t border-cream pb-15" aria-label="Mission, vision and motto">
+  {
+    blocks.map((block, index) => (
+      <div
+        class:list={['mission-panel xl:sticky xl:top-0', index > 0 && 'border-t border-cream']}
+        style={`z-index:${index + 1}`}
+      >
+        <div class="container flex flex-col xl:flex-row xl:items-center xl:gap-25">
           <div class="min-w-0 flex-1">
             <MissionVisionCopy eyebrow={block.eyebrow} title={block.title} text={block.text} kind={block.kind} />
           </div>
@@ -22,7 +26,19 @@ const { about_mission_blocks: blocks } = await getSingleton('website_content');
             class="-mr-15 h-75 w-[calc(100%+3.75rem)] object-cover md:h-100 xl:h-150 xl:w-197.5 xl:max-w-197.5 xl:shrink-0"
           />
         </div>
-      ))
-    }
-  </div>
+      </div>
+    ))
+  }
 </section>
+
+<style>
+  /* Panels overlap from xl, so each one repeats the page background (colour + paper texture) to hide the panel below. */
+  @media (min-width: 1280px) {
+    .mission-panel {
+      background-color: var(--color-background);
+      background-image: url('../../assets/images/home/paper-texture.jpg');
+      background-repeat: repeat;
+      background-size: 512px 512px;
+    }
+  }
+</style>

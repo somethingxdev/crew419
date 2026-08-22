@@ -1,29 +1,61 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import BeyondTheTrip from '@/components/churches/BeyondTheTrip.astro';
-import ChurchesCta from '@/components/churches/Cta.astro';
-import Hero from '@/components/churches/Hero.astro';
-import Partners from '@/components/churches/Partners.astro';
-import Solution from '@/components/churches/Solution.astro';
-import WhyPartner from '@/components/churches/WhyPartner.astro';
+import PartnerLogos from '@/components/shared/PartnerLogos.astro';
+import CardGridSection from '@/components/shared/CardGridSection.astro';
+import BeyondTheTrip from '@/components/shared/BeyondTheTrip.astro';
+import Hero from '@/components/shared/Hero.astro';
+import { SITE_LINKS } from '@/lib/links';
+import heroBg from '@/assets/images/hero/churches.png';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
+import solutionBg from '@/assets/images/backgrounds/churches-features.png';
 import Widget from '@/components/churches/Widget.astro';
 import Faq from '@/components/home/Faq.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
 import Impact from '@/components/home/Impact.astro';
+import FeaturesSection from '@/components/shared/FeaturesSection.astro';
 import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
 
-const { churches_seo_title, churches_seo_description, churches_og_image } = await getSingleton('website_content');
+const {
+  churches_seo_title,
+  churches_seo_description,
+  churches_og_image,
+  churches_hero_eyebrow: heroEyebrow,
+  churches_hero_title: heroTitle,
+  churches_hero_description: heroDescription,
+  churches_features_eyebrow: solutionEyebrow,
+  churches_features_heading: solutionHeading,
+  churches_features_text: solutionText,
+  churches_feature_cards: solutionFeatures,
+  churches_intro_eyebrow: introEyebrow,
+  churches_intro_heading: introHeading,
+  churches_intro_text: introText,
+  churches_challenge_cards: introCards,
+  churches_more_eyebrow: moreEyebrow,
+  churches_more_heading: moreHeading,
+  churches_more_text: moreText,
+  churches_more_cards: moreCards,
+} = await getSingleton('website_content');
 ---
 
 <Layout title={churches_seo_title} description={churches_seo_description} ogImage={churches_og_image}>
-  <Hero />
-  <WhyPartner />
-  <Solution />
-  <BeyondTheTrip />
+  <Hero id="churches-hero" bg={heroBg}>
+    <Fragment slot="eyebrow">{heroEyebrow}</Fragment>
+    <Fragment slot="title">{heroTitle}</Fragment>
+    <Fragment slot="description">{heroDescription}</Fragment>
+    <Fragment slot="actions">
+      <Button size="lg" href={SITE_LINKS.call.href} variant="cream">{SITE_LINKS.call.label}</Button>
+      <Button size="lg" href="#how-it-works" variant="glass">See how it works</Button>
+    </Fragment>
+  </Hero>
+  <CardGridSection id="why-partner" eyebrow={introEyebrow} heading={introHeading} text={introText} cards={introCards} textClass="max-w-124" />
+  <FeaturesSection id="solution" eyebrow={solutionEyebrow} heading={solutionHeading} text={solutionText} features={solutionFeatures} bg={solutionBg} bgPosition="bottom" />
+  <BeyondTheTrip id="beyond-the-trip" eyebrow={moreEyebrow} heading={moreHeading} text={moreText} cards={moreCards} />
   <HowItWorks />
   <Widget />
   <Impact heading="Trusted by Churches Across Multiple Countries" class="py-30" />
-  <Partners where="audience" />
+  <PartnerLogos where="audience" />
   <Faq page="churches" />
-  <ChurchesCta />
+  <Cta {...CTA.churches} />
 </Layout>

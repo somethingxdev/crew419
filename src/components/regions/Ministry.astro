@@ -28,61 +28,67 @@ const opportunities: Opportunity[] = [
     text: 'Help reach young people through sports clinics and mentorship.',
     image: sports,
     alt: 'Volunteers playing sports with local kids on a dirt field',
-    class: 'xl:left-0 xl:-rotate-5',
+    class: 'left-0 -rotate-3 xl:left-0 xl:-rotate-5',
   },
   {
     title: 'Construction',
     text: 'Support local churches and families through building projects.',
     image: construction,
     alt: 'Team members laying bricks on a construction site',
-    class: 'xl:left-17.5 xl:rotate-5',
+    class: 'left-2.5 rotate-3 xl:left-17.5 xl:rotate-5',
   },
   {
     title: 'Medical Outreach',
     text: 'Provide healthcare while sharing the love of Christ.',
     image: medical,
     alt: 'A volunteer checking a patient at a field clinic',
-    class: 'xl:left-35 xl:-rotate-5',
+    class: 'left-5 -rotate-3 xl:left-35 xl:-rotate-5',
   },
   {
     title: 'Children’s Ministry',
     text: 'Partner with local churches through VBS and community programs.',
     image: children,
     alt: 'Children smiling during a community program',
-    class: 'xl:left-52.5 xl:rotate-5',
+    class: 'left-7.5 rotate-3 xl:left-52.5 xl:rotate-5',
   },
   {
     title: 'Evangelism',
     text: 'Share the Gospel alongside trusted local believers.',
     image: evangelism,
     alt: 'Believers praying together outdoors',
-    class: 'xl:left-75',
+    class: 'left-10 xl:left-75',
   },
 ];
 
 const last = opportunities.length - 1;
 ---
 
-<section id="ministry" class="overflow-x-clip py-30" aria-labelledby="ministry-heading">
+<section id="ministry" class="overflow-x-clip py-15 md:py-30" aria-labelledby="ministry-heading">
   <div class="container flex flex-col xl:flex-row xl:items-center xl:justify-between xl:gap-20">
     <div class="flex max-w-130 flex-col items-start">
       <p class="text-muted-foreground leading-none font-bold uppercase">Ministry Opportunities</p>
-      <h2 id="ministry-heading" class="mt-3.75 text-3xl  font-bold md:text-5xl">{heading}</h2>
+      <h2 id="ministry-heading" class="mt-3.75 text-3xl font-bold md:text-5xl">{heading}</h2>
       <p class="mt-7.5 max-w-112 leading-none">{text}</p>
-      <p class="mt-12.5 hidden font-serif text-5xl  font-bold xl:block" data-ministry-counter aria-hidden="true">01 / 05</p>
+      <p class="mt-12.5 hidden font-serif text-5xl font-bold xl:block" data-ministry-counter aria-hidden="true">01 / 05</p>
     </div>
 
-    <div class="mt-10 flex flex-col gap-5 xl:relative xl:mt-0 xl:block xl:h-130 xl:w-192.5 xl:shrink-0">
+    {/* The cards are stacked and dealt in by the scroll timeline; without motion they fall back to a plain column. */}
+    <div
+      class="relative mt-10 h-110 w-full max-w-112.5 self-center motion-reduce:flex motion-reduce:h-auto motion-reduce:flex-col motion-reduce:gap-5 xl:mt-0 xl:h-130 xl:w-192.5 xl:max-w-none xl:shrink-0 xl:self-auto"
+    >
       {
         opportunities.map((item, index) => (
           <article
             data-ministry-card
-            class:list={['bg-cream w-full max-w-112.5 rounded-lg p-5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] xl:absolute xl:top-1/2 xl:w-112.5 xl:-translate-y-1/2', item.class]}
+            class:list={[
+              'bg-cream absolute top-1/2 w-[calc(100%-2.5rem)] -translate-y-1/2 rounded-lg p-5 shadow-polaroid motion-reduce:static motion-reduce:w-full motion-reduce:translate-y-0 motion-reduce:rotate-0 xl:w-112.5',
+              item.class,
+            ]}
           >
             <Image src={item.image} alt={item.alt} widths={[800]} class="h-65 w-full rounded-lg object-cover xl:h-85" />
             <h3 class="mt-5 text-2xl  font-bold">{item.title}</h3>
             <p class="mt-5 leading-none">{item.text}</p>
-            {index < last && <div data-ministry-overlay class="absolute inset-0 hidden rounded-lg bg-black/20 opacity-0 xl:block" />}
+            {index < last && <div data-ministry-overlay class="absolute inset-0 rounded-lg bg-black/20 opacity-0 motion-reduce:hidden" />}
           </article>
         ))
       }
@@ -104,13 +110,14 @@ const last = opportunities.length - 1;
     const counter = section.querySelector<HTMLElement>('[data-ministry-counter]');
     const mm = gsap.matchMedia();
 
-    mm.add('(min-width: 1280px) and (prefers-reduced-motion: no-preference)', () => {
+    // The stack animates on every breakpoint; only the scroll distance differs.
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
       const tl = gsap.timeline({
         defaults: { ease: 'power1.out' },
         scrollTrigger: {
           trigger: section,
           start: 'center center',
-          end: `+=${cards.length * 500}`,
+          end: () => `+=${cards.length * (window.innerWidth < 1280 ? 350 : 500)}`,
           pin: true,
           scrub: 1,
           anticipatePin: 1,

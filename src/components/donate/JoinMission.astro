@@ -1,38 +1,55 @@
 ---
-import CmsImage from '@/components/base/CmsImage.astro';
+import SectionHeading from '@/components/shared/SectionHeading.astro';
+import VideoPoster from '@/components/shared/VideoPoster.astro';
 import { getSingleton } from '@/lib/content';
 
-const {
-  donate_join_eyebrow: eyebrow,
-  donate_join_heading: heading,
-  donate_join_text: text,
-  donate_join_video: video,
-  donate_givebutter_embed: givebutterEmbed,
-} = await getSingleton('website_content');
+const { donate_join_eyebrow: eyebrow, donate_join_heading: heading, donate_join_text: text, donate_join_poster: poster, donate_join_video: video } = await getSingleton('website_content');
+
+const posterAlt = 'A Crew419 team member speaking from a home office';
+
+const givebutterAccount = 'QLgB1F1LwmDIirvi';
+const givebutterWidget = 'LlKxzm';
+const givebutterLoader = `https://widgets.givebutter.com/latest.umd.cjs?acct=${givebutterAccount}&p=other`;
 ---
 
 <section id="join-mission" class="relative z-20 py-15 xl:py-20" aria-labelledby="join-mission-heading">
-  <div class="container flex flex-col items-stretch gap-10 xl:flex-row xl:items-center xl:justify-between">
+  <div class="container flex flex-col items-stretch gap-10 xl:flex-row xl:items-end xl:justify-between">
     <div class="flex w-full max-w-185 flex-col gap-7.5">
       <div class="flex max-w-151 flex-col gap-7.5">
-        <div class="flex flex-col gap-4">
-          <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-          <h2 id="join-mission-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
-        </div>
-        <p class="max-w-90 leading-none">{text}</p>
+        <SectionHeading id="join-mission-heading" {eyebrow} {heading} {text} align="start" textClass="max-w-90" />
       </div>
 
-      <CmsImage image={video} alt="A Crew419 team member speaking from a home office" widths={[800, 1600]} class="aspect-740/428 h-auto w-full rounded-lg object-cover" />
+      <VideoPoster {video} {poster} alt={posterAlt} class="aspect-740/428 h-auto w-full" />
     </div>
 
-    {
-      givebutterEmbed ? (
-        <div class="w-full max-w-185" set:html={givebutterEmbed} />
-      ) : (
-        <div class="bg-secondary flex min-h-125 w-full max-w-185 items-center justify-center rounded-lg xl:min-h-164">
-          <p class="text-cream leading-none font-bold uppercase">Givebutter Embed</p>
-        </div>
-      )
-    }
+    <div class="w-full max-w-185 overflow-hidden rounded-lg">
+      <givebutter-widget id={givebutterWidget}></givebutter-widget>
+      <noscript>
+        <p class="leading-none">
+          Enable JavaScript to use the donation form, or <a href={`https://givebutter.com/${givebutterWidget}`} class="underline">donate on Givebutter</a>.
+        </p>
+      </noscript>
+    </div>
   </div>
 </section>
+
+<script async is:inline src={givebutterLoader}></script>
+
+<script>
+  // Givebutter serves a fixed `embed_max_width` (440px) from the dashboard; stretch the form to our column instead.
+  const widget = document.querySelector('givebutter-widget');
+
+  const stretch = (root: ShadowRoot) => {
+    const form = root.querySelector('givebutter-giving-form');
+    if (form && form.getAttribute('max-width') !== '100%') form.setAttribute('max-width', '100%');
+  };
+
+  if (widget) {
+    customElements.whenDefined('givebutter-widget').then(() => {
+      const root = widget.shadowRoot;
+      if (!root) return;
+      stretch(root);
+      new MutationObserver(() => stretch(root)).observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['max-width'] });
+    });
+  }
+</script>

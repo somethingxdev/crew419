@@ -1,8 +1,9 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '@/layouts/Layout.astro';
+import Cta from '@/components/shared/Cta.astro';
+import { CTA } from '@/lib/cta';
 import Article from '@/components/story-detail/Article.astro';
-import Cta from '@/components/story-detail/Cta.astro';
 import MoreStories from '@/components/story-detail/MoreStories.astro';
 import { getSingleton } from '@/lib/content';
 
@@ -24,5 +25,5 @@ const { og_image } = await getSingleton('global');
 <Layout title={seo_title} description={seo_description} ogImage={og_image}>
   <Article entry={entry} />
   <MoreStories entry={entry} />
-  <Cta />
+  <Cta {...CTA.story} />
 </Layout>
