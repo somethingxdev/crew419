@@ -3,20 +3,17 @@ import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
 import { Button } from '@/shared/ui/button';
 
-type MissionPathVariant = 'default' | 'custom';
-
 interface Props {
-  /** Which copy/cards set to show — matches `mission_paths.<variant>_*`. */
-  variant?: MissionPathVariant;
   class?: string;
 }
 
-const { variant = 'default', class: className = 'py-15' } = Astro.props;
+const { class: className = 'py-15' } = Astro.props;
 
-const missionPaths = await getSingleton('mission_paths');
-const eyebrow = missionPaths[`${variant}_eyebrow`];
-const heading = missionPaths[`${variant}_heading`];
-const pathCards = missionPaths[`${variant}_cards`];
+// The copy is part of the design and identical on every page — only the cards come from the CMS.
+const eyebrow = 'Find your mission path';
+const heading = "Everyone Has a Place in God's Mission";
+
+const { cards: pathCards } = await getSingleton('mission_paths');
 
 // Alternating card tilt (styling only — content comes from the CMS).
 const rotations = ['-rotate-2', 'rotate-3', '-rotate-3', 'rotate-2'];
@@ -28,7 +25,7 @@ const cards = [...pathCards, ...pathCards].map((card, index) => ({ ...card, rota
   <div
     class="relative z-0 mx-auto flex max-w-[63.7rem] flex-col items-center gap-4 px-5 text-center group-data-scroll-active/path:absolute group-data-scroll-active/path:inset-0 group-data-scroll-active/path:z-0 group-data-scroll-active/path:justify-center"
   >
-    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+    <p class="text-muted-foreground text-xs leading-none font-bold uppercase md:text-base">{eyebrow}</p>
     <h2 id="find-your-mission-path-heading" class="text-foreground text-3xl font-bold md:text-5xl xl:text-[4.625rem]">{heading}</h2>
   </div>
 

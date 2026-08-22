@@ -11,7 +11,6 @@ const query: Partial<Record<Name, Query>> = {
   resources: { filter: { status: { _eq: 'published' } }, sort: ['title'] },
   stories: { sort: ['-published_on'] },
   faqs: { sort: ['sort'] },
-  impact_stats: { sort: ['sort'] },
   life_in_mission: { sort: ['sort'] },
   partners: { sort: ['sort'] },
   regions: { sort: ['sort'] },
@@ -25,9 +24,7 @@ const loader = (name: Name) =>  directusLoader({ collection: name, singleton: (s
 export const collections = {
   faqs: defineCollection({ loader: loader('faqs'), schema: schemas.faqs }),
   global: defineCollection({ loader: loader('global'), schema: schemas.global }),
-  how_it_works: defineCollection({ loader: loader('how_it_works'), schema: schemas.how_it_works }),
   impact: defineCollection({ loader: loader('impact'), schema: schemas.impact }),
-  impact_stats: defineCollection({ loader: loader('impact_stats'), schema: schemas.impact_stats }),
   life_in_mission: defineCollection({ loader: loader('life_in_mission'), schema: schemas.life_in_mission }),
   mission_paths: defineCollection({ loader: loader('mission_paths'), schema: schemas.mission_paths }),
   partners: defineCollection({ loader: loader('partners'), schema: schemas.partners }),

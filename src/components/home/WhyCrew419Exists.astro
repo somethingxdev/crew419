@@ -14,21 +14,22 @@ const {
 } = await getSingleton('website_content');
 
 // Layout of the five polaroids (styling only — photos come from the CMS; no CMS field for alt texts).
+// mLeft/mTop — own mobile scatter (362px-wide canvas, per the 390px design); left/top — desktop (1500px canvas).
 const layout = [
-  { alt: 'Students in uniforms sitting at desks in a classroom', rotate: 3, left: 0, top: 0, wrapperW: 343, wrapperH: 388, z: 2 },
-  { alt: 'Empty chairs along a weathered school veranda', rotate: -6, left: 289, top: 122, wrapperW: 361, wrapperH: 404, z: 1 },
-  { alt: 'People praying with heads bowed in church pews', rotate: 0, left: 590, top: 67, wrapperW: 324, wrapperH: 372, z: 3 },
-  { alt: 'A community gathering in a circle outdoors', rotate: 6, left: 852, top: 122, wrapperW: 361, wrapperH: 404, z: 4 },
-  { alt: 'A small group in discussion seated in a circle', rotate: -3, left: 1157, top: 9, wrapperW: 343, wrapperH: 388, z: 5 },
+  { alt: 'Students in uniforms sitting at desks in a classroom', rotate: 3, left: 0, top: 0, wrapperW: 343, wrapperH: 388, z: 2, mLeft: 0, mTop: 36 },
+  { alt: 'Empty chairs along a weathered school veranda', rotate: -6, left: 289, top: 122, wrapperW: 361, wrapperH: 404, z: 1, mLeft: 109, mTop: 0 },
+  { alt: 'People praying with heads bowed in church pews', rotate: 0, left: 590, top: 67, wrapperW: 324, wrapperH: 372, z: 3, mLeft: 218, mTop: 22 },
+  { alt: 'A community gathering in a circle outdoors', rotate: 6, left: 852, top: 122, wrapperW: 361, wrapperH: 404, z: 4, mLeft: 49, mTop: 144 },
+  { alt: 'A small group in discussion seated in a circle', rotate: -3, left: 1157, top: 9, wrapperW: 343, wrapperH: 388, z: 5, mLeft: 184, mTop: 127 },
 ];
 
 const polaroids = [photo1, photo2, photo3, photo4, photo5].map((image, index) => ({ image, ...layout[index]! }));
 ---
 
-<section id="why-crew419" class="relative z-30 py-30" aria-labelledby="why-crew419-heading" data-why-crew419>
+<section id="why-crew419" class="relative z-30 py-15 md:py-30" aria-labelledby="why-crew419-heading" data-why-crew419>
   <div class="mx-auto flex max-w-4xl flex-col items-center gap-8 px-5 text-center md:px-12">
     <div class="flex flex-col items-center gap-4" data-why-copy>
-      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
+      <p class="text-muted-foreground text-xs leading-none font-bold uppercase md:text-base">{eyebrow}</p>
       <h2 id="why-crew419-heading" class="max-w-154 text-3xl leading-none font-bold md:text-5xl">{heading}</h2>
     </div>
     <div class="text-foreground flex max-w-130 flex-col gap-2.5 md:text-lg leading-tight" data-why-copy>
@@ -36,15 +37,18 @@ const polaroids = [photo1, photo2, photo3, photo4, photo5].map((image, index) =>
     </div>
   </div>
 
-  <div class="relative mt-0 h-75 sm:h-90 md:h-108 xl:h-132" data-why-gallery>
-    <div class="absolute top-0 left-1/2 h-132 w-375 origin-top -translate-x-1/2 scale-60 sm:scale-70 md:scale-80 lg:scale-90 xl:scale-100">
+  <div class="relative mt-8 h-79 sm:mt-0 sm:h-90 md:h-108 xl:h-132" data-why-gallery>
+    <div class="absolute top-0 left-1/2 h-79 w-[362px] origin-top -translate-x-1/2 sm:h-132 sm:w-375 sm:scale-70 md:scale-80 lg:scale-90 xl:scale-100">
       {
         polaroids.map((card) => (
-          <div class="absolute flex items-center justify-center" style={`left:${card.left}px;top:${card.top}px;width:${card.wrapperW}px;height:${card.wrapperH}px;z-index:${card.z}`}>
+          <div
+            class="absolute flex size-auto items-center justify-center left-(--m-left) top-(--m-top) sm:left-(--d-left) sm:top-(--d-top) sm:h-(--d-h) sm:w-(--d-w)"
+            style={`--m-left:${card.mLeft}px;--m-top:${card.mTop}px;--d-left:${card.left}px;--d-top:${card.top}px;--d-w:${card.wrapperW}px;--d-h:${card.wrapperH}px;z-index:${card.z}`}
+          >
             <figure
               data-polaroid
               data-rotate={card.rotate}
-              class="bg-cream flex h-93 w-81 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_15px_rgba(0,0,0,0.2)] will-change-transform"
+              class="bg-cream flex h-40 w-36 items-center rounded-sm px-[5px] pt-[5px] pb-5 shadow-[0_4px_15px_rgba(0,0,0,0.2)] will-change-transform sm:h-93 sm:w-81 sm:px-3 sm:pt-3 sm:pb-15"
               style={`transform: rotate(${card.rotate}deg)`}
             >
               <div class="relative h-full min-w-0 flex-1 overflow-hidden rounded-sm">

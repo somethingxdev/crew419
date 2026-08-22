@@ -4,6 +4,7 @@ import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import { getCollection } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
 import Quote from '@/icons/quote.svg';
+import { Button } from '@/shared/ui/button';
 
 interface Props {
   eyebrow: string;
@@ -14,48 +15,56 @@ interface Props {
 const { eyebrow, heading, text } = Astro.props;
 
 // Quote cards = testimonials of kind "quote_card" (video testimonials live in <Impact />).
-const stories = (await getCollection('testimonials', ({ data }) => data.kind === 'quote_card'))
-  .map(({ data }) => data)
-  .sort((a, b) => a.sort - b.sort);
+const stories = (await getCollection('testimonials', ({ data }) => data.kind === 'quote_card')).map(({ data }) => data).sort((a, b) => a.sort - b.sort);
 ---
 
-<section id="stories" class="overflow-x-hidden py-15" aria-labelledby="stories-heading" data-stories>
+<section id="stories" class="py-15" aria-labelledby="stories-heading" data-stories>
   <div class="relative container">
-    <div class="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center">
-      <div class="flex flex-col items-center gap-4">
-        <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-        <h2 id="stories-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
+    <div class="mx-auto flex max-w-2xl flex-col items-center gap-5 text-center lg:gap-8">
+      <div class="flex flex-col items-center gap-2.5 lg:gap-4">
+        <p class="text-muted-foreground text-xs leading-none font-bold uppercase lg:text-base">{eyebrow}</p>
+        <h2 id="stories-heading" class="text-3xl font-bold lg:text-5xl">{heading}</h2>
       </div>
-      {text && <p class="text-foreground max-w-md leading-none">{text}</p>}
+      {text && <p class="text-foreground max-w-md text-sm leading-none lg:text-base">{text}</p>}
     </div>
 
-    <div class="mt-6 flex justify-center gap-4 lg:absolute lg:right-12 lg:bottom-0 lg:mt-0">
-      <button type="button" class="flex size-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40" aria-label="Previous story" data-stories-prev>
+    <!-- Swipe-only below lg — the design has no arrows on mobile or tablet. -->
+    <div class="hidden lg:absolute lg:right-12 lg:bottom-0 lg:flex lg:gap-4">
+      <Button type="button" variant="secondary" size="icon" aria-label="Previous story" data-stories-prev>
         <ArrowLeft class="size-6" />
-      </button>
-      <button type="button" class="flex size-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-40" aria-label="Next story" data-stories-next>
+      </Button>
+      <Button type="button" variant="secondary" size="icon" aria-label="Next story" data-stories-next>
         <ArrowRight class="size-6" />
-      </button>
+      </Button>
     </div>
   </div>
 
-  <div class="mt-10 overflow-hidden" data-stories-viewport>
-    <ul class="flex touch-pan-y gap-5 pl-5 md:pl-12" data-stories-container>
+  <div class="mt-10 px-5" data-stories-viewport>
+    <ul class="flex touch-pan-y items-start gap-3.75 transition-[height] duration-200 motion-reduce:transition-none lg:gap-5" data-stories-container>
       {
         stories.map((story) => (
-          <li class="min-w-0 flex-[0_0_min(690px,calc(100vw-2.5rem))]">
-            <article class="bg-secondary text-cream relative flex h-full flex-col items-stretch gap-5 rounded-lg p-5 md:flex-row md:items-center md:gap-7.5 md:p-7.5">
-              <div class="flex min-h-60 flex-1 flex-col justify-between md:h-75 md:min-h-0">
-                <Quote class="h-24 w-28 shrink-0 text-cream md:h-35 md:w-40" aria-hidden="true" />
-                <div class="flex flex-col gap-4">
-                  <div class="flex flex-col gap-2.5">
-                    <h3 class="text-2xl  font-bold">{story.name}</h3>
-                    <p class="leading-none font-bold uppercase opacity-60">{story.role}</p>
-                  </div>
-                  <p class="leading-none">{story.quote}</p>
-                </div>
+          <li class="min-w-0 flex-[0_0_min(330px,calc(100vw-2.5rem))] lg:flex-[0_0_min(690px,calc(100vw-2.5rem))]">
+            {/* Below lg the photo sits next to the quote mark; from lg it moves to the right of the card. */}
+            <article class="bg-secondary text-cream relative flex h-full flex-col gap-3.75 rounded-lg p-5 lg:min-h-90 lg:gap-0 lg:p-7.5">
+              <div class="flex items-start justify-between">
+                {story.photo && (
+                  <CmsImage
+                    image={story.photo}
+                    alt={story.photo_alt ?? ''}
+                    widths={[260, 500]}
+                    class="h-31.5 w-31.5 shrink-0 rounded-lg object-cover lg:absolute lg:top-7.5 lg:right-7.5 lg:h-75 lg:w-62.5"
+                  />
+                )}
+                <Quote class="h-21.75 w-25 shrink-0 text-cream lg:h-35 lg:w-40" aria-hidden="true" />
               </div>
-              {story.photo && <CmsImage image={story.photo} alt={story.photo_alt ?? ''} widths={[500]} class="h-60 w-full rounded-lg object-cover md:h-75 md:w-62.5 md:shrink-0" />}
+
+              <div class="flex flex-col gap-3.75 lg:mt-auto lg:gap-4 lg:pr-70">
+                <div class="flex flex-col gap-2.5">
+                  <h3 class="text-lg leading-[1.1] font-bold lg:text-2xl">{story.name}</h3>
+                  <p class="text-xs leading-none font-bold uppercase opacity-60 lg:text-base">{story.role}</p>
+                </div>
+                <p class="text-sm leading-none lg:text-base">{story.quote}</p>
+              </div>
             </article>
           </li>
         ))
@@ -66,6 +75,7 @@ const stories = (await getCollection('testimonials', ({ data }) => data.kind ===
 
 <script>
   import EmblaCarousel from 'embla-carousel';
+  import AutoHeight from 'embla-carousel-auto-height';
 
   const section = document.querySelector<HTMLElement>('[data-stories]');
   const viewport = section?.querySelector<HTMLElement>('[data-stories-viewport]');
@@ -74,12 +84,16 @@ const stories = (await getCollection('testimonials', ({ data }) => data.kind ===
 
   if (section && viewport && prev && next) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const embla = EmblaCarousel(viewport, {
-      align: 'start',
-      containScroll: 'trimSnaps',
-      duration: reduced ? 0 : 25,
-      watchDrag: !reduced,
-    });
+    const embla = EmblaCarousel(
+      viewport,
+      {
+        align: 'start',
+        containScroll: 'trimSnaps',
+        duration: reduced ? 0 : 25,
+        watchDrag: !reduced,
+      },
+      [AutoHeight()],
+    );
 
     const toggleButtons = () => {
       prev.disabled = !embla.canScrollPrev();

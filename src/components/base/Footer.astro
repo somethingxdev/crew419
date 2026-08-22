@@ -17,36 +17,44 @@ const columns = [
   { title: 'Connect', links: nav.connect },
 ];
 const legal = nav.legal;
+
+const socials = [
+  { href: facebook_url, label: 'Facebook', Icon: Facebook },
+  { href: instagram_url, label: 'Instagram', Icon: Instagram },
+  { href: youtube_url, label: 'YouTube', Icon: Youtube },
+] as const;
 ---
 
 <LifeInMission />
 
 <footer class="pb-10 pt-15">
   <div class="container">
-    <div class="flex justify-between">
-      <div class="w-96">
-        <a href="/">
-          <CmsImage image={logo} alt={site_name} widths={[221, 442]} class="h-18 w-auto" />
-        </a>
-        <p class="mt-8 text-lg leading-none font-medium">{tagline}</p>
-        <div class="mt-8 flex gap-3">
+    <div class="flex flex-col gap-8 lg:flex-row lg:justify-between lg:gap-12">
+      <div class="lg:w-96">
+        <div class="flex items-center justify-between">
+          <a href="/">
+            <CmsImage image={logo} alt={site_name} widths={[221, 442]} class="h-9 w-auto lg:h-18" />
+          </a>
+          <div class="flex gap-2.5 lg:hidden">
+            {
+              socials.map(
+                ({ href, label, Icon }) =>
+                  href && (
+                    <a href={href} aria-label={label} target="_blank" rel="noopener" class="flex size-10 items-center justify-center rounded-lg bg-card">
+                      <Icon />
+                    </a>
+                  ),
+              )
+            }
+          </div>
+        </div>
+        <p class="mt-5 text-sm leading-none font-medium lg:mt-8 lg:text-lg">{tagline}</p>
+        <div class="mt-8 hidden gap-3 lg:flex">
           {
-            (
-              [
-                { href: facebook_url, label: 'Facebook', Icon: Facebook },
-                { href: instagram_url, label: 'Instagram', Icon: Instagram },
-                { href: youtube_url, label: 'YouTube', Icon: Youtube },
-              ] as const
-            ).map(
+            socials.map(
               ({ href, label, Icon }) =>
                 href && (
-                  <a
-                    href={href}
-                    aria-label={label}
-                    target="_blank"
-                    rel="noopener"
-                    class="flex size-12 items-center justify-center rounded-lg bg-card hover:-translate-y-0.5 transition-all duration-300"
-                  >
+                  <a href={href} aria-label={label} target="_blank" rel="noopener" class="flex size-12 items-center justify-center rounded-lg bg-card transition-all duration-300 hover:-translate-y-0.5">
                     <Icon />
                   </a>
                 ),
@@ -55,15 +63,15 @@ const legal = nav.legal;
         </div>
       </div>
 
-      <nav class="flex items-start gap-12">
+      <nav class="grid grid-cols-2 gap-x-12 gap-y-5 lg:flex lg:items-start lg:gap-12">
         {
-          columns.map((column) => (
-            <div class="w-48 last:w-auto">
-              <p class="leading-none font-bold text-muted-foreground uppercase mb-6">{column.title}</p>
-              <ul class="space-y-3">
+          columns.map((column, index) => (
+            <div class:list={['lg:w-48 lg:last:w-auto', index === 0 && 'row-span-3']}>
+              <p class="mb-2.5 text-xs leading-none font-bold text-muted-foreground uppercase lg:mb-6 lg:text-base">{column.title}</p>
+              <ul class="space-y-1.5 lg:space-y-3">
                 {column.links.map((item) => (
                   <li>
-                    <a href={item.href} class="text-lg leading-none font-medium  hover:text-primary">
+                    <a href={item.href} class="text-sm leading-none font-medium hover:text-primary lg:text-lg">
                       {item.label}
                     </a>
                   </li>
@@ -75,12 +83,12 @@ const legal = nav.legal;
       </nav>
     </div>
 
-    <div class="mt-12 flex items-center justify-between text-lg leading-none font-medium">
-      <p>{copyright}</p>
-      <div class="flex gap-25">
+    <div class="mt-12 flex flex-row-reverse items-end justify-between text-xs leading-none font-medium lg:flex-row lg:items-center lg:text-lg">
+      <p class="max-w-45 lg:max-w-none">{copyright}</p>
+      <div class="flex flex-col gap-2.5 lg:flex-row lg:gap-25">
         {
           legal.map((item) => (
-            <a href={item.href} class="hover:text-primary transition-colors">
+            <a href={item.href} class="transition-colors hover:text-primary">
               {item.label}
             </a>
           ))

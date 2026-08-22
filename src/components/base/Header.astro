@@ -1,6 +1,8 @@
 ---
-import Menu from '@tabler/icons/outline/menu-2.svg';
 import CmsImage from '@/components/base/CmsImage.astro';
+import Facebook from '@/icons/facebook.svg';
+import Instagram from '@/icons/instragram.svg';
+import Youtube from '@/icons/youtube.svg';
 import { getSingleton } from '@/lib/content';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/ui/accordion';
 import { Button } from '@/shared/ui/button';
@@ -8,18 +10,26 @@ import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMe
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
 import { getNavigation } from './nav';
 
-const { logo, site_name } = await getSingleton('global');
+const { logo, site_name, facebook_url, instagram_url, youtube_url } = await getSingleton('global');
 const { mission_trips: missionTripItems, resources: resourceItems, about: aboutItems, simple: simpleLinks } = await getNavigation('header');
+
+const socials = [
+  { href: facebook_url, label: 'Facebook', Icon: Facebook },
+  { href: instagram_url, label: 'Instagram', Icon: Instagram },
+  { href: youtube_url, label: 'YouTube', Icon: Youtube },
+] as const;
 ---
 
 <header
   data-site-header
-  class="fixed top-0 left-0 z-40 w-full py-4 transition-[background-color,box-shadow] duration-300 ease-out motion-reduce:transition-none data-scrolled:bg-background data-scrolled:shadow-sm"
+  class="fixed top-0 left-0 z-40 w-full py-2.5 transition-[background-color,box-shadow] duration-300 ease-out motion-reduce:transition-none xl:py-4 xl:data-scrolled:bg-background xl:data-scrolled:shadow-sm"
 >
   <div class="container">
-    <div class="flex items-center justify-between">
+    <div
+      class="flex items-center justify-between rounded-full border border-white/16 bg-cream/50 px-5 py-2.5 backdrop-blur-xl xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0 xl:backdrop-blur-none"
+    >
       <a href="/" class="shrink-0">
-        <CmsImage image={logo} alt={site_name} widths={[221, 442]} class="h-auto w-55" />
+        <CmsImage image={logo} alt={site_name} widths={[221, 442]} class="h-auto w-24 xl:w-55" />
       </a>
 
       <NavigationMenu class="header-nav hidden max-w-none flex-none xl:flex" align="start" sideOffset={16} aria-label="Main">
@@ -85,82 +95,93 @@ const { mission_trips: missionTripItems, resources: resourceItems, about: aboutI
         <Button size="md" href="/donate" variant="secondary"> Donate </Button>
         <Button size="md" href="/trips" variant="outline" class="bg-white/35"> Find your trip </Button>
       </div>
+
+      <div class="flex items-center gap-5 xl:hidden">
+        <Button size="sm" href="/donate" variant="secondary" class="px-5 text-xs"> Donate </Button>
+
+        <Sheet>
+          <SheetTrigger asChild>
+            <button type="button" aria-label="Open menu" class="flex w-10 flex-col gap-1.5 py-2">
+              <span class="h-0.5 w-full rounded-full bg-secondary"></span>
+              <span class="h-0.5 w-full rounded-full bg-secondary"></span>
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" class="w-full max-w-none border-l-0 bg-background text-secondary sm:max-w-sm sm:border-l">
+            <SheetHeader class="flex-row items-center justify-between p-6 pb-0">
+              <a href="/">
+                <CmsImage image={logo} alt={site_name} widths={[221, 442]} class="h-auto w-29" />
+              </a>
+              <SheetTitle class="sr-only">Menu</SheetTitle>
+              <SheetDescription class="sr-only">Site navigation</SheetDescription>
+            </SheetHeader>
+
+            <nav class="mt-4 flex flex-col overflow-y-auto px-6" aria-label="Mobile">
+              <Accordion type="multiple">
+                {
+                  (
+                    [
+                      { value: 'mission-trips', label: 'Mission Trips', items: missionTripItems },
+                      { value: 'resources', label: 'Resources', items: resourceItems },
+                      { value: 'about', label: 'About', items: aboutItems },
+                    ] as const
+                  ).map((group) => (
+                    <AccordionItem value={group.value}>
+                      <AccordionTrigger class="justify-start gap-2.5 py-3.5 font-sans text-lg leading-none font-medium text-secondary hover:text-secondary/70">
+                        {group.label}
+                        <span slot="icon" class="flex items-center">
+                          <svg width="12" height="6" viewBox="0 0 12 6" fill="none" class="transition-transform duration-200" aria-hidden="true">
+                            <path d="M1 1L6 5L11 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                        </span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <ul class="flex flex-col pb-2 pl-2.5">
+                          {group.items.map((item) => (
+                            <li>
+                              <a href={item.href} class="block py-2 leading-none text-secondary/80">
+                                {item.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))
+                }
+              </Accordion>
+
+              {
+                simpleLinks.map((link) => (
+                  <a href={link.href} class="py-3.5 text-lg leading-none font-medium text-secondary">
+                    {link.label}
+                  </a>
+                ))
+              }
+            </nav>
+
+            <SheetFooter class="gap-5 p-6">
+              <div class="flex w-full gap-2.5">
+                <Button href="/donate" variant="secondary" size="md" class="flex-1 text-xs"> Donate </Button>
+                <Button href="/trips" variant="primary" size="md" class="flex-1 text-xs"> Find your trip </Button>
+              </div>
+              <div class="flex gap-2.5">
+                {
+                  socials.map(
+                    ({ href, label, Icon }) =>
+                      href && (
+                        <a href={href} aria-label={label} target="_blank" rel="noopener" class="flex size-12.5 items-center justify-center rounded-lg bg-cream text-secondary">
+                          <Icon />
+                        </a>
+                      ),
+                  )
+                }
+              </div>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+      </div>
     </div>
   </div>
-
-  <Sheet class="xl:hidden">
-    <SheetTrigger asChild>
-      <Button variant="ghost" size="icon" aria-label="Open menu" class="text-primary">
-        <Menu />
-      </Button>
-    </SheetTrigger>
-    <SheetContent side="right" class="bg-background text-primary">
-      <SheetHeader>
-        <SheetTitle class="font-sans text-primary">Menu</SheetTitle>
-        <SheetDescription class="sr-only">Site navigation</SheetDescription>
-      </SheetHeader>
-
-      <nav class="flex flex-col gap-1 overflow-y-auto px-4" aria-label="Mobile">
-        <Accordion type="multiple">
-          <AccordionItem value="mission-trips">
-            <AccordionTrigger class="text-lg text-primary hover:text-primary/70">Mission Trips</AccordionTrigger>
-            <AccordionContent>
-              <ul class="flex flex-col">
-                {
-                  missionTripItems.map((item) => (
-                    <li>
-                      <a href={item.href} class="text-primary/80 block py-2">
-                        {item.label}
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="resources">
-            <AccordionTrigger class="text-lg text-primary hover:text-primary/70">Resources</AccordionTrigger>
-            <AccordionContent>
-              <ul class="flex flex-col">
-                {
-                  resourceItems.map((item) => (
-                    <li>
-                      <a href={item.href} class="text-primary/80 block py-2">
-                        {item.label}
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="about">
-            <AccordionTrigger class="text-lg text-primary hover:text-primary/70">About</AccordionTrigger>
-            <AccordionContent>
-              <ul class="flex flex-col">
-                {
-                  aboutItems.map((item) => (
-                    <li>
-                      <a href={item.href} class="text-primary/80 block py-2">
-                        {item.label}
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        {simpleLinks.map((link) => <a href={link.href}>{link.label}</a>)}
-      </nav>
-
-      <SheetFooter>
-        <Button href="/donate" variant="primary" class="w-full"> Donate </Button>
-        <Button href="/trips" variant="ghost"> Find your trip </Button>
-      </SheetFooter>
-    </SheetContent>
-  </Sheet>
 </header>
 
 <style>
@@ -173,6 +194,17 @@ const { mission_trips: missionTripItems, resources: resourceItems, about: aboutI
 
   .header-nav :global([data-slot='navigation-menu-content']) {
     padding: 0;
+  }
+
+  /* Design: circle-outline close button in the mobile menu. */
+  [data-site-header] :global([data-slot='sheet-close']) {
+    top: 1.375rem;
+    right: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1.5px solid var(--color-secondary);
+    border-radius: calc(infinity * 1px);
+    color: var(--color-secondary);
   }
 </style>
 

@@ -1,10 +1,8 @@
 ---
-import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
-import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
+import ChevronRight from '@tabler/icons/outline/chevron-right.svg';
 import { getCollection } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
-import { Button } from '@/shared/ui/button';
 
 const { trips_hub_locations_eyebrow: eyebrow, trips_hub_locations_heading: heading } = await getSingleton('website_content');
 
@@ -13,66 +11,53 @@ const locations = (await getCollection('regions'))
   .sort((a, b) => a.sort - b.sort)
   .map((region) => ({ ...region, href: `/trips/${region.slug}` }));
 
-const last = locations.length - 1;
-const initial = locations[0];
+// Coverflow position of every card on first paint; the carousel takes over after hydration.
+const position = (index: number) => {
+  const last = locations.length - 1;
+  if (index === 0) return 'c';
+  if (index <= 3) return `r${index}`;
+  if (index >= last - 2) return `l${last - index + 1}`;
+  return 'far';
+};
 ---
 
 <section id="destinations" class="relative z-20 overflow-x-clip py-30" aria-labelledby="locations-heading" data-locations>
-  <div class="flex flex-col items-center gap-4 px-5 text-center">
+  <div class="flex flex-col items-center gap-3.75 px-5 text-center">
     <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-    <h2 id="locations-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
+    <h2 id="locations-heading" class="text-3xl leading-[1.1] font-bold md:text-5xl">{heading}</h2>
   </div>
 
-  <div class="@container mx-auto mt-12.5 w-full max-w-200">
-    <div class="relative h-[min(400px,50cqi)]">
-      <div class="absolute top-0 left-0 h-100 w-200 origin-top-left" data-locations-canvas>
+  <div class="@container mt-10 w-full">
+    <div class="relative w-full" data-locations-frame>
+      <div class="absolute top-0 left-1/2" data-locations-canvas>
         {
-          locations.map((location, index) => {
-            const pos = index === 0 ? 'selected' : index === 1 ? 'next' : index === last ? 'prev' : 'far';
+          locations.map((location, index) => (
+            <a href={location.href} data-locations-slide data-pos={position(index)} aria-label={`${location.name} — explore region`}>
+              <article class="border-background relative size-full overflow-hidden rounded-lg border-5 shadow-[0px_4px_15px_rgba(0,0,0,0.2)]">
+                <CmsImage image={location.card_image} alt="" widths={[600, 1200]} class="absolute inset-0 size-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#4e515a]/70"></div>
+                <div class="absolute inset-0 bg-black/0" data-locations-dim></div>
 
-            return (
-              <div class="absolute flex items-center justify-center" data-locations-slide data-pos={pos} data-name={location.name} data-href={location.href}>
-                <article class="bg-cream flex items-center rounded-lg p-2.5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]" data-locations-card>
-                  <div class="relative size-full min-w-0 overflow-hidden rounded-lg">
-                    <CmsImage image={location.card_image} alt={location.name} widths={[800]} class="absolute inset-0 size-full object-cover" />
-                    <div class="absolute inset-0 bg-black/50" data-locations-dim />
+                <div class="relative flex size-full flex-col justify-end" data-locations-body>
+                  <h3 class="text-cream leading-[1.1] font-bold" data-locations-name>
+                    {location.name}
+                  </h3>
+                  <div class="flex items-center justify-between rounded-lg bg-white/15 backdrop-blur-[2px]" data-locations-cta>
+                    <span class="text-cream leading-none font-black uppercase">View Guide</span>
+                    <ChevronRight class="text-cream shrink-0" aria-hidden="true" />
                   </div>
-                </article>
-              </div>
-            );
-          })
+                </div>
+              </article>
+            </a>
+          ))
         }
+      </div>
 
-        <div class="absolute inset-0 z-10" data-locations-viewport>
-          <div class="flex h-full">
-            {locations.map(() => <div class="h-full min-w-0 flex-[0_0_100%]" />)}
-          </div>
+      <div class="absolute inset-0 z-20 cursor-pointer" data-locations-viewport>
+        <div class="flex h-full">
+          {locations.map(() => <div class="h-full min-w-0 flex-[0_0_100%]" />)}
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="mt-7.5 flex flex-col items-center gap-7.5">
-    <div class="flex flex-col items-center gap-5 text-center">
-      <h3 class="text-2xl  font-bold" data-locations-title aria-live="polite">
-        {initial?.name}
-      </h3>
-      <a
-        href={initial?.href}
-        class="text-muted-foreground border-muted-foreground hover:text-foreground hover:border-foreground border-b pb-2 leading-none font-black uppercase transition-colors"
-        data-locations-link
-      >
-        Explore Region
-      </a>
-    </div>
-
-    <div class="flex items-center gap-4">
-      <Button type="button" variant="secondary" size="icon" aria-label="Previous destination" data-locations-prev>
-        <ArrowLeft />
-      </Button>
-      <Button type="button" variant="secondary" size="icon" aria-label="Next destination" data-locations-next>
-        <ArrowRight />
-      </Button>
     </div>
   </div>
 </section>
@@ -82,12 +67,8 @@ const initial = locations[0];
 
   const section = document.querySelector<HTMLElement>('[data-locations]');
   const viewport = section?.querySelector<HTMLElement>('[data-locations-viewport]');
-  const prev = section?.querySelector<HTMLButtonElement>('[data-locations-prev]');
-  const next = section?.querySelector<HTMLButtonElement>('[data-locations-next]');
-  const title = section?.querySelector<HTMLElement>('[data-locations-title]');
-  const link = section?.querySelector<HTMLAnchorElement>('[data-locations-link]');
 
-  if (section && viewport && prev && next && title && link) {
+  if (section && viewport) {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const embla = EmblaCarousel(viewport, {
       loop: true,
@@ -95,8 +76,9 @@ const initial = locations[0];
       watchDrag: !reduced,
     });
 
-    const slides = section.querySelectorAll<HTMLElement>('[data-locations-slide]');
+    const slides = [...section.querySelectorAll<HTMLAnchorElement>('[data-locations-slide]')];
 
+    /** Distance from the selected slide, wrapped around the loop. */
     const shortestDiff = (index: number, selected: number, count: number) => {
       let diff = index - selected;
       if (diff > count / 2) diff -= count;
@@ -106,16 +88,14 @@ const initial = locations[0];
 
     const sync = () => {
       const selected = embla.selectedScrollSnap();
-      const count = slides.length;
 
       slides.forEach((slide, index) => {
-        const diff = shortestDiff(index, selected, count);
-        slide.dataset.pos = diff === 0 ? 'selected' : diff === -1 ? 'prev' : diff === 1 ? 'next' : 'far';
+        const diff = shortestDiff(index, selected, slides.length);
+        const level = Math.abs(diff);
+        slide.dataset.pos = level === 0 ? 'c' : level > 3 ? 'far' : `${diff < 0 ? 'l' : 'r'}${level}`;
+        // Only the centred card is reachable by keyboard; the rest are decoration until they are centred.
+        slide.tabIndex = level === 0 ? 0 : -1;
       });
-
-      const active = slides[selected];
-      title.textContent = active.dataset.name ?? '';
-      link.href = active.dataset.href ?? '#';
     };
 
     let pointerX = 0;
@@ -130,16 +110,23 @@ const initial = locations[0];
       if (Math.abs(event.clientX - pointerX) > 8) dragged = true;
     });
 
+    // The viewport sits on top of the cards, so clicks land here: the middle opens the region, the sides scroll.
     viewport.addEventListener('click', (event) => {
       if (dragged) return;
       const rect = viewport.getBoundingClientRect();
       const ratio = (event.clientX - rect.left) / rect.width;
-      if (ratio < 0.33) embla.scrollPrev();
-      else if (ratio > 0.67) embla.scrollNext();
+      const centre = slides[embla.selectedScrollSnap()];
+
+      if (ratio < 0.4) embla.scrollPrev();
+      else if (ratio > 0.6) embla.scrollNext();
+      else if (centre) window.location.href = centre.href;
     });
 
-    prev.addEventListener('click', () => embla.scrollPrev());
-    next.addEventListener('click', () => embla.scrollNext());
+    section.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') embla.scrollPrev();
+      if (event.key === 'ArrowRight') embla.scrollNext();
+    });
+
     embla.on('select', sync);
     embla.on('reInit', sync);
     sync();
@@ -147,85 +134,129 @@ const initial = locations[0];
 </script>
 
 <style>
+  /* Coverflow measured off the design: a 300x394 centre card on a 1096 wide stage, every other
+     card the same card scaled down, turned away and pushed aside. `--u` is one design pixel —
+     it shrinks with the container down to the mobile size, where the stage runs off both edges. */
+  [data-locations-frame] {
+    --u: clamp(0.72px, 100cqw / 1096, 1px);
+    height: calc(394 * var(--u));
+  }
+
   [data-locations-canvas] {
-    transform: scale(min(1, 100cqi / 800));
+    width: calc(1096 * var(--u));
+    height: calc(394 * var(--u));
+    transform: translateX(-50%);
   }
 
   [data-locations-slide] {
-    top: 50px;
-    left: 250px;
+    --x: 0;
+    --s: 1;
+    --r: 0deg;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(300 * var(--u));
+    height: calc(394 * var(--u));
     z-index: 0;
-    width: 300px;
-    height: 300px;
     opacity: 0;
     pointer-events: none;
+    transform: translate(-50%, -50%) translateX(calc(var(--x) * var(--u))) scale(var(--s)) perspective(calc(1600 * var(--u))) rotateY(var(--r));
   }
 
-  [data-locations-slide][data-pos='prev'] {
-    top: 37px;
-    left: 0;
-    z-index: 1;
-    width: 325px;
-    height: 325px;
+  [data-locations-body] {
+    gap: calc(15 * var(--u));
+    padding: calc(15 * var(--u)) calc(15 * var(--u)) calc(20 * var(--u));
+  }
+
+  [data-locations-name] {
+    font-size: calc(24 * var(--u));
+  }
+
+  [data-locations-cta] {
+    padding: calc(5 * var(--u));
+    font-size: calc(16 * var(--u));
+  }
+
+  [data-locations-cta] svg {
+    width: calc(24 * var(--u));
+    height: calc(24 * var(--u));
+  }
+
+  [data-locations-slide][data-pos='c'] {
+    z-index: 4;
     opacity: 1;
   }
 
-  [data-locations-slide][data-pos='next'] {
-    top: 37px;
-    left: 475px;
-    z-index: 1;
-    width: 325px;
-    height: 325px;
-    opacity: 1;
-  }
-
-  [data-locations-slide][data-pos='selected'] {
-    top: 0;
-    left: 200px;
+  [data-locations-slide][data-pos='l1'],
+  [data-locations-slide][data-pos='r1'] {
+    --s: 0.906;
     z-index: 3;
-    width: 400px;
-    height: 400px;
     opacity: 1;
   }
 
-  [data-locations-card] {
-    width: 300px;
-    height: 300px;
+  [data-locations-slide][data-pos='l2'],
+  [data-locations-slide][data-pos='r2'] {
+    --s: 0.746;
+    z-index: 2;
+    opacity: 1;
   }
 
-  [data-locations-slide][data-pos='prev'] [data-locations-card] {
-    transform: rotate(-5deg);
+  [data-locations-slide][data-pos='l3'],
+  [data-locations-slide][data-pos='r3'] {
+    --s: 0.51;
+    z-index: 1;
+    opacity: 1;
   }
 
-  [data-locations-slide][data-pos='next'] [data-locations-card] {
-    transform: rotate(5deg);
+  [data-locations-slide][data-pos='l1'] {
+    --x: -190;
+    --r: -17deg;
+  }
+  [data-locations-slide][data-pos='r1'] {
+    --x: 190;
+    --r: 17deg;
+  }
+  [data-locations-slide][data-pos='l2'] {
+    --x: -352.5;
+    --r: -17deg;
+  }
+  [data-locations-slide][data-pos='r2'] {
+    --x: 352.5;
+    --r: 17deg;
+  }
+  [data-locations-slide][data-pos='l3'] {
+    --x: -476.5;
+    --r: -20deg;
+  }
+  [data-locations-slide][data-pos='r3'] {
+    --x: 476.5;
+    --r: 20deg;
   }
 
-  [data-locations-slide][data-pos='selected'] [data-locations-card] {
-    width: 400px;
-    height: 400px;
-    transform: none;
+  /* Cards sink into the background the further they sit from the centre. */
+  [data-locations-slide][data-pos='l1'] [data-locations-dim],
+  [data-locations-slide][data-pos='r1'] [data-locations-dim] {
+    background-color: rgb(0 0 0 / 0.15);
   }
-
-  [data-locations-slide][data-pos='selected'] [data-locations-dim] {
-    opacity: 0;
+  [data-locations-slide][data-pos='l2'] [data-locations-dim],
+  [data-locations-slide][data-pos='r2'] [data-locations-dim] {
+    background-color: rgb(0 0 0 / 0.3);
+  }
+  [data-locations-slide][data-pos='l3'] [data-locations-dim],
+  [data-locations-slide][data-pos='r3'] [data-locations-dim] {
+    background-color: rgb(0 0 0 / 0.45);
   }
 
   [data-locations-slide],
-  [data-locations-card],
   [data-locations-dim] {
     transition:
-      left 0.45s ease,
-      top 0.45s ease,
-      width 0.45s ease,
-      height 0.45s ease,
       transform 0.45s ease,
-      opacity 0.45s ease;
+      opacity 0.45s ease,
+      background-color 0.45s ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
     [data-locations-slide],
-    [data-locations-card],
     [data-locations-dim] {
       transition: none;
     }

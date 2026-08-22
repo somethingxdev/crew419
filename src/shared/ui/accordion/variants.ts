@@ -13,7 +13,7 @@ export const accordionContent = tv({
 });
 
 export const accordionItem = tv({
-  base: "not-last:border-b",
+  base: "",
 });
 
 export const accordionTrigger = tv({

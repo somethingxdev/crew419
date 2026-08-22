@@ -1,72 +1,65 @@
 ---
 import { Image } from 'astro:assets';
 import bg from '@/assets/images/hero/trips.png';
+import polaroid from '@/assets/images/hero/trips-polaroid.jpg';
 import decor from '@/assets/images/decor-bottom.png';
-import CmsImage from '@/components/base/CmsImage.astro';
-import { getSingleton } from '@/lib/content';
+import { SITE_LINKS } from '@/lib/links';
 import { Button } from '@/shared/ui/button';
 
-const {
-  trips_hub_hero_eyebrow: eyebrow,
-  trips_hub_hero_title: title,
-  trips_hub_hero_description: description,
-  trips_hub_hero_polaroid: polaroid,
-} = await getSingleton('website_content');
-const { default_primary_cta_label: ctaLabel, default_primary_cta_href: ctaHref } = await getSingleton('global');
+// Static hero — the wording and the photos are part of the design, so nothing here is editable in the CMS.
+const eyebrow = 'Discover your next mission';
+const description = 'Whether through sports, construction, medical outreach, or evangelism, every Crew419 trip strengthens your faith while making a lasting impact.';
 
-// "Find the Mission God Is Calling You To" → "Find the" / "Mission" / "God Is" "Calling" "You To".
-const words = title.split(/\s+/);
-const lead = words.slice(0, 2).join(' ');
-const accent = words[2];
-const tail = words.slice(3);
-const tailStart = tail.slice(0, 2).join(' ');
-const tailAccent = tail[2];
-const tailEnd = tail.slice(3).join(' ');
-const tailText = tail.join(' ');
+// "Find the Mission God Is Calling You To" — laid out around the polaroid, so the words are split by hand.
+const lead = 'Find the';
+const accent = 'Mission';
+const tailStart = 'God Is';
+const tailAccent = 'Calling';
+const tailEnd = 'You To';
+const tailText = `${tailStart} ${tailAccent} ${tailEnd}`;
 ---
 
-<section class="relative flex min-h-150 flex-col pt-20 xl:min-h-226 xl:pt-26" aria-labelledby="trips-hero-heading">
+<section class="relative flex min-h-161.25 flex-col pt-20 md:min-h-201.75 xl:min-h-226 xl:pt-26" aria-labelledby="trips-hero-heading">
   <div class="absolute inset-0 overflow-hidden">
     <Image src={bg} alt="" widths={[800, 1600, 2400]} loading="eager" class="size-full object-cover object-bottom" />
   </div>
 
-  <div class="relative w-full px-5 py-15 md:px-12 xl:pt-24 xl:pb-20">
+  <div class="relative w-full px-3.5 py-6 md:px-5 md:py-15 xl:px-12 xl:pt-24 xl:pb-20">
     <div class="mx-auto flex w-full max-w-7xl flex-col items-center">
-      <div class="flex w-full flex-col items-center gap-6 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_max-content] xl:items-start xl:gap-0">
-        <div class="flex flex-col items-center text-center xl:items-start xl:pt-5 xl:text-left">
-          <p class="leading-none font-bold text-cream/80 uppercase">{eyebrow}</p>
-          <h1 id="trips-hero-heading" class="mt-3 text-4xl font-bold text-cream md:text-6xl xl:text-7xl z-10 text-shadow-2xs">
-            <span class="block">{lead}</span>
-            <span class="text-primary mt-0 block pl-10 uppercase xl:pl-40 xl:text-[72px]">{accent}</span>
+      {/* Below xl the heading runs as three staggered lines with the polaroid pulled up over them. */}
+      <div class="flex w-full flex-col xl:grid xl:grid-cols-[minmax(0,1fr)_auto_max-content] xl:items-start">
+        <div class="text-secondary flex flex-col items-start text-left xl:pt-5">
+          <p class="text-cream text-xs leading-none font-bold uppercase xl:text-base xl:text-secondary/80">{eyebrow}</p>
+          <h1 id="trips-hero-heading" class="text-shadow-2xs z-10 mt-2.5 text-[35px] leading-[1.1] font-bold md:text-6xl xl:mt-3 xl:text-7xl">
+            <span class="xl:block">{lead} </span>
+            <span class="uppercase xl:mt-0 xl:block xl:pl-40 xl:text-[72px] xl:text-primary">{accent}</span>
             <span class="sr-only">{tailText}</span>
           </h1>
         </div>
 
-        <figure class="relative z-10 w-60 shrink-0 rotate-6 xl:-mx-16 xl:-translate-x-15 xl:w-75">
-          <div class="bg-cream flex aspect-300/344 items-center rounded-sm px-3 pt-3 pb-15 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)]">
-            <div class="relative h-full min-w-0 flex-1 overflow-hidden rounded-sm">
-              <CmsImage image={polaroid} alt="A mission team standing together on a hillside overlooking mountains" widths={[600, 1200]} class="size-full object-cover" />
-            </div>
-          </div>
-        </figure>
-
+        {/* Second and third heading lines: centred, then right-aligned. */}
         <div
-          class="relative z-20 flex flex-col items-center text-center font-serif text-4xl font-bold whitespace-nowrap md:text-6xl xl:-ml-8 xl:self-end xl:items-end xl:text-right xl:text-7xl text-shadow-2xs"
+          class="text-secondary text-shadow-2xs z-10 order-2 flex w-full flex-col text-[35px] leading-[1.1] font-bold md:text-6xl xl:order-3 xl:w-auto xl:self-end xl:text-right xl:text-7xl"
           aria-hidden="true"
         >
-          <span>
-            <span class="text-cream">{tailStart} </span>
+          <span class="self-center xl:self-auto">
+            <span>{tailStart} </span>
             <span class="text-primary">{tailAccent}</span>
           </span>
-          <span class="text-cream">{tailEnd}</span>
+          <span class="self-end xl:self-auto">{tailEnd}</span>
         </div>
+
+        <figure class="order-3 -mt-20 w-54 shrink-0 translate-x-3 rotate-6 self-center md:-mt-32 md:w-62 xl:order-2 xl:mt-0 xl:w-80 xl:self-auto">
+          <div class="bg-cream flex flex-col gap-2.5 rounded-sm p-1.25 pb-7.5 shadow-[0_4px_7.5px_rgba(0,0,0,0.2)] md:p-2.5 md:pb-7.5 xl:p-3 xl:pb-7.5">
+            <Image src={polaroid} alt="A mission team standing together on a hillside overlooking mountains" widths={[600, 1200]} class="aspect-297/245 w-full rounded-sm object-cover" />
+            <p class="text-secondary text-sm leading-none font-medium text-justify">{description}</p>
+          </div>
+        </figure>
       </div>
 
-      <p class="mt-8 max-w-113 text-center text-lg leading-none font-medium text-cream">{description}</p>
-
-      <div class="mt-8 flex w-full max-w-135 flex-col items-center justify-center gap-4 sm:flex-row">
-        <Button href={ctaHref} variant="cream" size="lg">{ctaLabel}</Button>
-        <Button href="#destinations" variant="glass" size="lg">Find Your Destination</Button>
+      <div class="mt-6.25 flex w-full max-w-130 flex-col items-center justify-center gap-2.5 md:mt-7.5 md:flex-row md:gap-4">
+        <Button href={SITE_LINKS.call.href} variant="cream" size="lg" class="w-full md:flex-1">{SITE_LINKS.call.label}</Button>
+        <Button href="#destinations" variant="glass" size="lg" class="w-full md:flex-1">Find Your Destination</Button>
       </div>
     </div>
   </div>

@@ -11,14 +11,14 @@ const {
 } = await getSingleton('website_content');
 ---
 
-<section class="relative z-30 py-30" aria-labelledby="statements-heading">
+<section class="relative z-30 py-15 md:py-30" aria-labelledby="statements-heading">
   <div class="container">
-    <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-    <div class="mt-4 flex flex-col gap-10 xl:flex-row xl:items-start xl:gap-36">
+    <p class="text-muted-foreground text-sm leading-none font-bold uppercase md:text-base mb-3">{eyebrow}</p>
+    <div class="flex flex-col gap-5 md:gap-10 xl:flex-row xl:items-start xl:gap-36">
       <h2 id="statements-heading" class="max-w-154 shrink-0 text-3xl leading-none font-bold xl:text-5xl">{heading}</h2>
       <div class="flex w-full max-w-122 flex-col gap-8">
-        <div class="flex flex-col gap-10 leading-none [&_h3]:text-2xl [&_h3]:leading-none [&_h3]:font-bold [&_h3+p]:-mt-4" set:html={text} />
-        <Button href={ctaHref} class="w-full max-w-82">{ctaLabel}</Button>
+        <div class="flex flex-col gap-10 leading-tight [&_h3]:text-xl md:[&_h3]:text-2xl [&_h3]:leading-none [&_h3]:font-bold [&_h3+p]:-mt-4" set:html={text} />
+        <Button href={ctaHref} class="w-full sm:max-w-82">{ctaLabel}</Button>
       </div>
     </div>
   </div>

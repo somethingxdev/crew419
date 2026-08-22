@@ -28,9 +28,9 @@ const text = 'Whether you\'re leading a church, bringing students on their first
 
         <div class="flex w-full max-w-135 flex-col items-center gap-8">
           <p class="max-w-108 text-lg leading-none font-medium">Let's build a mission experience that changes lives – and strengthens your faith.</p>
-          <div class="flex flex-col items-center gap-4 sm:flex-row">
-            <Button href={primaryHref} variant="cream">{primaryLabel}</Button>
-            <Button href={secondaryHref} variant="glass">{secondaryLabel}</Button>
+          <div class="flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row">
+            <Button href={primaryHref} variant="cream" class="w-full sm:w-auto">{primaryLabel}</Button>
+            <Button href={secondaryHref} variant="glass" class="w-full sm:w-auto">{secondaryLabel}</Button>
           </div>
         </div>
       </div>

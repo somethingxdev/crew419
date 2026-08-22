@@ -2,41 +2,32 @@
 import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
 import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import PlayerPlay from '@tabler/icons/filled/player-play.svg';
-import { getCollection } from 'astro:content';
 import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
-
-type ImpactVariant = 'default' | 'audience' | 'donate';
+import { Button } from '@/shared/ui/button';
 
 interface Props {
-  /** Which copy/stats set to show — matches `impact.<variant>_*` and `impact_stats.group`. */
-  variant?: ImpactVariant;
+  /** Section heading — override per page; the copy is part of the design, only stats/videos come from the CMS. */
+  eyebrow?: string;
+  heading?: string;
+  /** Hide the video stack (e.g. on the donate page). */
+  media?: boolean;
   class?: string;
 }
 
-const { variant = 'default', class: className = 'py-15' } = Astro.props;
+const { eyebrow = 'Impact & Stories', heading = 'Lives Changed. Communities Served. Faith Strengthened.', media = true, class: className = 'py-15 md:py-30' } = Astro.props;
 
-const impact = await getSingleton('impact');
-const eyebrow = impact[`${variant}_eyebrow`];
-const heading = impact[`${variant}_heading`];
-const showMedia = impact[`${variant}_show_media`];
+const { stats, videos } = await getSingleton('impact');
+const showMedia = media && videos.length > 0;
 
-const stats = (await getCollection('impact_stats', ({ data }) => data.group === variant)).map(({ data }) => data).sort((a, b) => a.sort - b.sort);
-
-// Media cards = video testimonials (quote cards are shown by <Stories />).
-const stories = (await getCollection('testimonials', ({ data }) => data.kind === 'video'))
-  .map(({ data }) => data)
-  .sort((a, b) => a.sort - b.sort)
-  .map((item) => ({ ...item, attribution: `${item.name}, ${item.role}` }));
-
-const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-opacity hover:opacity-90';
+const stories = videos.map((item) => ({ ...item, attribution: `${item.name}, ${item.role}` }));
 ---
 
 <section id="impact" class:list={['overflow-x-hidden relative z-20', className]} aria-labelledby="impact-heading" data-impact>
   <div class="container">
     <div class="flex flex-col items-center gap-4 mx-auto max-w-215 text-center mb-15">
-      <p class="text-muted-foreground leading-none font-bold uppercase">{eyebrow}</p>
-      <h2 id="impact-heading" class="text-3xl  font-bold md:text-5xl">{heading}</h2>
+      <p class="text-muted-foreground text-xs leading-none font-bold uppercase md:text-base">{eyebrow}</p>
+      <h2 id="impact-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
     </div>
 
     <div class="flex w-full flex-col items-center gap-10 md:gap-15">
@@ -55,45 +46,47 @@ const navButtonClass = 'flex size-10 items-center justify-center rounded-full bg
       </div>
 
       {
-        showMedia && stories.length > 0 && (
+        showMedia && (
           <div class="flex w-full max-w-218 flex-col items-center gap-8">
             <div class="relative h-110 w-full md:h-175" data-impact-stack>
-              {
-                stories.map((story, index) => (
-                  <button
-                    type="button"
-                    class="bg-cream absolute top-1/2 left-1/2 w-70 rounded-lg p-2.5 shadow-[0px_4px_15px_rgba(0,0,0,0.2)] will-change-transform md:w-117.5"
-                    data-impact-card
-                    data-quote={story.quote}
-                    data-attribution={story.attribution}
-                    data-video={story.video?.url}
-                    aria-label={`Play story from ${story.attribution}`}
-                    aria-current={index === 0 ? 'true' : undefined}
-                  >
-                    <span class="relative block aspect-45/65 overflow-hidden rounded-lg">
-                      {story.video_poster && <CmsImage image={story.video_poster} alt="" widths={[900]} class="size-full object-cover" />}
-                      <span class="absolute inset-0 bg-black/20" data-impact-overlay aria-hidden="true" />
-                      <span class="absolute top-1/2 left-1/2 flex size-15 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 shadow-[inset_0_0_2px_rgba(0,0,0,0.25)] backdrop-blur-[10px]">
-                        <PlayerPlay class="size-5 text-white" aria-hidden="true" />
-                      </span>
+              {stories.map((story, index) => (
+                <button
+                  type="button"
+                  class="bg-cream absolute top-1/2 left-1/2 w-70 rounded-lg p-2.5 shadow-[0px_4px_15px_rgba(0,0,0,0.2)] will-change-transform md:w-117.5"
+                  data-impact-card
+                  data-quote={story.quote}
+                  data-attribution={story.attribution}
+                  data-video={story.video?.url}
+                  aria-label={`Play story from ${story.attribution}`}
+                  aria-current={index === 0 ? 'true' : undefined}
+                >
+                  <span class="relative block aspect-45/65 overflow-hidden rounded-lg">
+                    {story.video_poster && <CmsImage image={story.video_poster} alt="" widths={[900]} class="size-full object-cover" />}
+                    <span class="absolute inset-0 bg-black/20" data-impact-overlay aria-hidden="true" />
+                    <span class="absolute top-1/2 left-1/2 flex size-15 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 shadow-[inset_0_0_2px_rgba(0,0,0,0.25)] backdrop-blur-[10px]">
+                      <PlayerPlay class="size-5 text-white" aria-hidden="true" />
                     </span>
-                  </button>
-                ))
-              }
+                  </span>
+                </button>
+              ))}
             </div>
 
-            <blockquote class="flex max-w-140 flex-col items-center gap-6" data-impact-quote>
-              <p class="font-serif text-xl  font-bold md:text-2xl" data-impact-quote-text>“{stories[0]!.quote}”</p>
-              <footer class="text-muted-foreground text-lg leading-none" data-impact-quote-attr>— {stories[0]!.attribution}</footer>
+            <blockquote class="flex max-w-140 flex-col text-center items-center gap-6" data-impact-quote>
+              <p class="font-serif text-xl font-bold md:text-2xl" data-impact-quote-text>
+                “{stories[0]!.quote}”
+              </p>
+              <footer class="text-muted-foreground text-lg leading-none" data-impact-quote-attr>
+                — {stories[0]!.attribution}
+              </footer>
             </blockquote>
 
             <div class="flex items-center gap-4">
-              <button type="button" class={navButtonClass} aria-label="Previous story" data-impact-prev>
-                <ArrowLeft class="size-5" />
-              </button>
-              <button type="button" class={navButtonClass} aria-label="Next story" data-impact-next>
-                <ArrowRight class="size-5" />
-              </button>
+              <Button type="button" variant="secondary" size="icon" aria-label="Previous story" data-impact-prev>
+                <ArrowLeft />
+              </Button>
+              <Button type="button" variant="secondary" size="icon" aria-label="Next story" data-impact-next>
+                <ArrowRight />
+              </Button>
             </div>
           </div>
         )

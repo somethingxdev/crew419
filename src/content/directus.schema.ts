@@ -37,35 +37,12 @@ export const schemas = {
     copyright: z.string(),
   }),
 
-  how_it_works: z.object({
-    id: z.number(),
-    eyebrow: z.string(),
-    steps: z.array(z.object({ step_label: z.string(), title: z.string(), text: z.string() })),
-    heading: z.string(),
-    text: z.string(),
-    cta_label: z.string(),
-    cta_href: z.string(),
-  }),
-
   impact: z.object({
     id: z.number(),
-    default_eyebrow: z.string(),
-    audience_eyebrow: z.string(),
-    donate_eyebrow: z.string(),
-    default_heading: z.string(),
-    audience_heading: z.string(),
-    donate_heading: z.string(),
-    default_show_media: z.boolean(),
-    audience_show_media: z.boolean(),
-    donate_show_media: z.boolean(),
-  }),
-
-  impact_stats: z.object({
-    id: z.number(),
-    value: z.string(),
-    label: z.string(),
-    group: z.enum(["default", "audience", "donate"]),
-    sort: z.number(),
+    stats: z.array(z.object({ value: z.string(), label: z.string() })),
+    videos: z.array(
+      z.object({ quote: z.string(), name: z.string(), role: z.string(), video: fileSchema.nullable(), video_poster: imageSchema.nullable() }),
+    ),
   }),
 
   life_in_mission: z.object({
@@ -77,12 +54,7 @@ export const schemas = {
 
   mission_paths: z.object({
     id: z.number(),
-    default_eyebrow: z.string(),
-    custom_eyebrow: z.string(),
-    default_heading: z.string(),
-    custom_heading: z.string(),
-    default_cards: z.array(z.object({ title: z.string(), text: z.string(), cta: z.string(), href: z.string(), image: imageSchema, alt: z.string() })),
-    custom_cards: z.array(z.object({ title: z.string(), text: z.string(), cta: z.string(), href: z.string(), image: imageSchema, alt: z.string() })),
+    cards: z.array(z.object({ title: z.string(), text: z.string(), cta: z.string(), href: z.string(), image: imageSchema, alt: z.string() })),
   }),
 
   partners: z.object({
@@ -260,7 +232,6 @@ export const schemas = {
     custom_more_eyebrow: z.string(),
     custom_included_eyebrow: z.string(),
     trips_hub_seo_title: z.string(),
-    trips_hub_hero_eyebrow: z.string(),
     trips_hub_locations_eyebrow: z.string(),
     trips_hub_compass_heading: z.string(),
     trips_hub_custom_eyebrow: z.string(),
@@ -328,7 +299,6 @@ export const schemas = {
     custom_more_heading: z.string(),
     custom_included_heading: z.string(),
     trips_hub_seo_description: z.string(),
-    trips_hub_hero_title: z.string(),
     trips_hub_locations_heading: z.string(),
     trips_hub_compass_text: z.string(),
     trips_hub_custom_heading: z.string(),
@@ -394,7 +364,6 @@ export const schemas = {
     custom_more_text: z.string(),
     custom_included_items: z.array(z.string()),
     trips_hub_og_image: imageSchema,
-    trips_hub_hero_description: z.string(),
     trips_hub_compass_cta_label: z.string(),
     trips_hub_custom_text: z.string(),
     donate_og_image: imageSchema,
@@ -459,7 +428,6 @@ export const schemas = {
     custom_feature_cards: z.array(z.object({ title: z.string(), text: z.string(), num: z.string().nullish() })),
     trips_hub_compass_image: imageSchema,
     trips_hub_custom_photo_right: imageSchema,
-    trips_hub_hero_polaroid: imageSchema,
     donate_campaign_goal: z.number(),
     donate_givebutter_embed: z.string().nullable(),
     thank_you_secondary_label: z.string(),
@@ -484,5 +452,5 @@ export const schemas = {
 };
 
 /** Collections configured as singletons in Directus. */
-export const singletons = ["global","how_it_works","impact","mission_paths","website_content"] as const;
+export const singletons = ["global","impact","mission_paths","website_content"] as const;
 

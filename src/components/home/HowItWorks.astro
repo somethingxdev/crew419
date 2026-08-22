@@ -3,54 +3,74 @@ import { Image } from 'astro:assets';
 import bg from '@/assets/images/backgrounds/how-it-works.png';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
-import { getSingleton } from '@/lib/content';
+import { SITE_LINKS } from '@/lib/links';
 import { Button } from '@/shared/ui/button';
 
-// The background is part of the design and identical on every page that shows this section.
-const { eyebrow, heading, text, steps, cta_label: ctaLabel, cta_href: ctaHref } = await getSingleton('how_it_works');
+// Static section — the same wording and background on every page that shows it.
+const eyebrow = 'How it works';
+const heading = 'Mission Trips Done Right';
+const text = 'A simple process that helps you serve with confidence.';
+const ctaLabel = 'Take the first step';
+const ctaHref = SITE_LINKS.call.href;
 
-// Per-card colour/offset (styling only — content comes from the CMS).
-const cardClasses = ['bg-[#576d87] md:left-2.5 md:top-2 md:-rotate-3', 'bg-[#2b4767] md:left-30 md:top-12 md:rotate-3', 'bg-secondary md:left-16 md:top-20'];
+const steps = [
+  {
+    step_label: 'Step 1',
+    title: 'Book a 30-Minute Call',
+    text: 'Tell us about your church, school, or personal mission goals. We’ll help you choose the right opportunity.',
+    class: 'bg-[#576d87] left-0 top-0 -rotate-3 md:left-2.5 md:top-2',
+  },
+  {
+    step_label: 'Step 2',
+    title: 'We’ll Build Your Mission Experience',
+    text: 'From logistics and trusted local partnerships to discipleship training and travel preparation – we’ll handle the details together.',
+    class: 'bg-[#2b4767] left-14 top-9 rotate-3 md:left-30 md:top-12',
+  },
+  {
+    step_label: 'Step 3',
+    title: 'Go. Serve. Grow.',
+    text: 'Experience a mission that changes lives – including your own – and continue growing through post-trip discipleship.',
+    class: 'bg-secondary left-7 top-16 rotate-0 md:left-16 md:top-20',
+  },
+];
 ---
 
-<section id="how-it-works" class="relative py-15 md:py-0" aria-labelledby="how-it-works-heading">
+<section id="how-it-works" class="relative py-30 md:py-60 overflow-hidden" aria-labelledby="how-it-works-heading">
   <div class="absolute inset-0 overflow-hidden">
-    <Image src={bg} alt="" widths={[1600, 2400]} class="size-full object-cover object-bottom" />
+    <Image src={bg} alt="crew419" class="size-full object-cover object-bottom" />
     <div class="absolute inset-0 bg-black/20"></div>
   </div>
   <div class="container">
-    <div class="relative overflow-hidden py-40 md:py-52" data-how-it-works-stage>
-      <div class="relative mx-auto flex flex-col items-center gap-10">
-        <div class="flex flex-col gap-8 text-center text-cream">
-          <div class="flex flex-col gap-4">
-            <p class="leading-none font-bold uppercase opacity-65">{eyebrow}</p>
-            <h2 id="how-it-works-heading" class="text-3xl leading-none font-bold md:text-5xl">{heading}</h2>
-          </div>
-          <p class="leading-none">{text}</p>
+    <div class="relative flex flex-col items-center gap-10" data-how-it-works-stage>
+      <div class="flex flex-col gap-8 text-center text-cream">
+        <div class="flex flex-col gap-4">
+          <p class="text-sm leading-none font-bold uppercase opacity-65 md:text-base">{eyebrow}</p>
+          <h2 id="how-it-works-heading" class="text-3xl font-bold md:text-5xl">{heading}</h2>
         </div>
-
-        <div class="flex w-full flex-col items-center gap-5 md:relative md:block md:h-105 md:w-115">
-          {
-            steps.map((item, index) => (
-              <article
-                data-step-card
-                class:list={[
-                  'flex h-85 w-full max-w-82 flex-col justify-between rounded-lg border border-white/15 p-8 text-cream shadow-[0px_4px_10px_rgba(0,0,0,0.1)] md:absolute md:w-82',
-                  cardClasses[index],
-                ]}
-              >
-                <div class="flex flex-col gap-5">
-                  <p class="leading-none font-bold uppercase opacity-50">{item.step_label}</p>
-                  <h3 class="text-2xl leading-none font-bold">{item.title}</h3>
-                </div>
-                <p class="leading-none">{item.text}</p>
-              </article>
-            ))
-          }
-        </div>
-
-        <Button href={ctaHref} size="lg" class="w-82 max-w-full">{ctaLabel}</Button>
+        <p class="leading-none">{text}</p>
       </div>
+
+      <div class="relative h-101 w-full max-w-90 md:h-105 md:w-115 md:max-w-none">
+        {
+          steps.map((item) => (
+            <article
+              data-step-card
+              class:list={[
+                'absolute flex h-85 w-76 flex-col justify-between rounded-lg border border-white/15 p-6 text-cream shadow-[0px_4px_10px_rgba(0,0,0,0.1)] md:w-82 md:p-8',
+                item.class,
+              ]}
+            >
+              <div class="flex flex-col gap-5">
+                <p class="leading-none font-bold uppercase opacity-50">{item.step_label}</p>
+                <h3 class="text-2xl leading-none font-bold">{item.title}</h3>
+              </div>
+              <p class="leading-none">{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <Button href={ctaHref} size="lg" class="w-82 max-w-full">{ctaLabel}</Button>
     </div>
 
     <div class="pointer-events-none absolute top-0 left-0 z-10 w-full -translate-y-1/2">

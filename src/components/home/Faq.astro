@@ -24,7 +24,7 @@ const columns = [items.slice(0, mid), items.slice(mid)];
 <section class="py-15" aria-labelledby="faq-heading">
   <div class="container">
     <div class="flex flex-col items-center gap-4 text-center mb-12">
-      <p class="text-muted-foreground leading-none font-bold uppercase">Everything you need to know</p>
+      <p class="text-muted-foreground text-xs leading-none font-bold uppercase md:text-base">Everything you need to know</p>
       <h2 id="faq-heading" class="text-3xl font-bold xl:text-5xl">Frequently Asked Questions</h2>
     </div>
 
@@ -33,12 +33,12 @@ const columns = [items.slice(0, mid), items.slice(mid)];
         columns.map((column) => (
           <div class="flex flex-1 flex-col gap-5">
             {column.map((item) => (
-              <Card class="px-7.5">
+              <Card class="px-4 md:px-7.5">
                 <AccordionItem value={item.key}>
-                  <AccordionTrigger class="items-center gap-5 rounded-lg font-serif text-2xl font-bold hover:text-foreground [&[data-state=open]_svg]:rotate-180">
+                  <AccordionTrigger class="items-center gap-5 rounded-lg font-serif text-lg font-bold hover:text-foreground md:text-2xl [&[data-state=open]_svg]:rotate-180">
                     {item.question}
-                    <span slot="icon" class="bg-secondary text-primary-foreground flex size-10 shrink-0 items-center justify-center rounded-full">
-                      <ChevronDown class="size-5 transition-transform duration-200" aria-hidden="true" />
+                    <span slot="icon" class="bg-secondary text-primary-foreground flex size-7.5 shrink-0 items-center justify-center rounded-full md:size-10">
+                      <ChevronDown class="size-4.5 transition-transform duration-200 md:size-5" aria-hidden="true" />
                     </span>
                   </AccordionTrigger>
                   <AccordionContent class="leading-tight">{item.answer}</AccordionContent>

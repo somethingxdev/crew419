@@ -1,9 +1,12 @@
 ---
+import ArrowLeft from '@tabler/icons/outline/arrow-left.svg';
+import ArrowRight from '@tabler/icons/outline/arrow-right.svg';
 import { Image } from 'astro:assets';
 import decorBottom from '@/assets/images/decor-bottom.png';
 import decorTop from '@/assets/images/decor-top.png';
 import CmsImage from '@/components/base/CmsImage.astro';
 import { getSingleton } from '@/lib/content';
+import { Button } from '@/shared/ui/button';
 
 const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_problems: problems } = await getSingleton('website_content');
 ---
@@ -22,38 +25,55 @@ const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_proble
     }
   </div>
 
-  <div class="relative z-10 mx-auto flex max-w-400 flex-col gap-12 px-12 pt-48 pb-25 lg:grid lg:min-h-212 lg:grid-cols-[1fr_420px_1fr] lg:gap-x-12 lg:pb-48">
-    <div class="flex flex-col gap-4 lg:self-start">
-      <p class="leading-none font-bold text-muted-foreground uppercase">{eyebrow}</p>
-      <h2 class="max-w-117 text-5xl leading-none font-bold text-cream">{heading}</h2>
-    </div>
+  <div class="relative z-10 py-30 md:py-60">
+    <div class="container">
+      <div class="grid gap-12 lg:grid-cols-[1fr_420px_1fr]">
+        <div class="flex flex-col gap-4 text-center lg:text-start lg:self-start">
+          <p class="text-sm leading-none font-bold text-muted-foreground uppercase md:text-base">{eyebrow}</p>
+          <h2 class="max-w-117 text-3xl leading-none font-bold text-cream md:text-5xl">{heading}</h2>
+        </div>
 
-    <div class="relative w-full max-w-105 justify-self-center lg:self-start">
-      {
-        problems.map((problem, index) => (
-          <article data-slide data-active={index === 0 ? '' : undefined} class="flex w-full flex-col gap-4 rounded-lg bg-cream px-2.5 pt-2.5 pb-5">
-            <CmsImage image={problem.image} alt={problem.alt} widths={[800]} class="h-81 w-full rounded-lg object-cover" loading={index > 0 ? 'lazy' : 'eager'} />
-            <div class="flex flex-col gap-5 px-2.5">
-              <h3 class="text-2xl leading-none font-bold">{problem.title}</h3>
-              <p class="text-justify text-sm leading-none">{problem.text}</p>
+        <div class="relative min-w-0 w-full max-w-105 justify-self-center lg:self-start">
+          <div id="answering-call-cards" class="min-w-0 w-full overflow-hidden lg:overflow-visible" data-call-viewport>
+            <div class="flex min-w-0 gap-3 touch-pan-y lg:block" data-call-container>
+              {
+                problems.map((problem, index) => (
+                  <article data-slide data-active={index === 0 ? '' : undefined} class="flex min-w-0 flex-[0_0_100%] flex-col gap-4 rounded-lg bg-cream px-2.5 pt-2.5 pb-5 lg:w-full">
+                    <CmsImage image={problem.image} alt={problem.alt} widths={[800]} class="h-60 w-full rounded-lg object-cover md:h-81" />
+                    <div class="flex flex-col gap-5 px-2.5">
+                      <h3 class="text-lg leading-none font-bold md:text-2xl">{problem.title}</h3>
+                      <p class="text-justify text-sm leading-none">{problem.text}</p>
+                    </div>
+                  </article>
+                ))
+              }
             </div>
-          </article>
-        ))
-      }
-    </div>
+          </div>
 
-    <div class="flex flex-col items-start gap-5 lg:items-end lg:self-end lg:justify-self-end">
-      {
-        problems.map((problem, index) => (
-          <button type="button" data-slide-btn data-active={index === 0 ? '' : undefined} class="group flex items-center gap-4" aria-pressed={index === 0 ? 'true' : 'false'}>
-            <span class="text-lg leading-none font-medium text-cream opacity-60 transition-opacity duration-300 group-hover:opacity-100 group-data-active:opacity-100">{problem.label}</span>
-            <span class="flex w-6 items-center opacity-50 transition-all duration-300 group-hover:opacity-100 group-data-active:w-8 group-data-active:opacity-100">
-              <span class="h-0.5 flex-1 bg-cream" />
-              <span class="-ml-1.5 size-2 shrink-0 rotate-45 bg-cream" />
-            </span>
-          </button>
-        ))
-      }
+          <div class="mt-5 flex items-center justify-center gap-4 lg:hidden">
+            <Button type="button" variant="cream" size="icon" aria-label="Previous card" aria-controls="answering-call-cards" data-call-prev>
+              <ArrowLeft aria-hidden="true" />
+            </Button>
+            <Button type="button" variant="cream" size="icon" aria-label="Next card" aria-controls="answering-call-cards" data-call-next>
+              <ArrowRight aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+
+        <div class="hidden flex-col items-start gap-5 lg:flex lg:items-end lg:self-end lg:justify-self-end">
+          {
+            problems.map((problem, index) => (
+              <button type="button" data-slide-btn data-active={index === 0 ? '' : undefined} class="group flex items-center gap-4" aria-pressed={index === 0 ? 'true' : 'false'}>
+                <span class="text-lg leading-none font-medium text-cream opacity-60 transition-opacity duration-300 group-hover:opacity-100 group-data-active:opacity-100">{problem.label}</span>
+                <span class="flex w-6 items-center opacity-50 transition-all duration-300 group-hover:opacity-100 group-data-active:w-8 group-data-active:opacity-100">
+                  <span class="h-0.5 flex-1 bg-cream" />
+                  <span class="-ml-1.5 size-2 shrink-0 rotate-45 bg-cream" />
+                </span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
     </div>
   </div>
 
@@ -66,6 +86,7 @@ const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_proble
 </section>
 
 <script>
+  import EmblaCarousel from 'embla-carousel';
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -79,6 +100,11 @@ const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_proble
     const slides = [...section.querySelectorAll<HTMLElement>('[data-slide]')];
     const buttons = [...section.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')];
     const layers = gsap.utils.toArray<HTMLElement>('[data-parallax-bg]', section);
+    const viewport = section.querySelector<HTMLElement>('[data-call-viewport]');
+    const mobilePrev = section.querySelector<HTMLButtonElement>('[data-call-prev]');
+    const mobileNext = section.querySelector<HTMLButtonElement>('[data-call-next]');
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     let current = 0;
 
     const mm = gsap.matchMedia();
@@ -124,9 +150,33 @@ const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_proble
 
     const start = () => {
       stop();
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (!desktop.matches || reduced.matches) return;
       timer = setInterval(next, INTERVAL_MS);
     };
+
+    if (viewport && mobilePrev && mobileNext) {
+      const embla = EmblaCarousel(viewport, {
+        align: 'start',
+        containScroll: 'trimSnaps',
+        duration: reduced.matches ? 0 : 25,
+        breakpoints: {
+          '(min-width: 1024px)': { active: false },
+        },
+      });
+
+      const syncMobile = () => {
+        const selected = embla.selectedScrollSnap();
+        activate(selected);
+        mobilePrev.disabled = !embla.canScrollPrev();
+        mobileNext.disabled = !embla.canScrollNext();
+      };
+
+      mobilePrev.addEventListener('click', () => embla.scrollPrev());
+      mobileNext.addEventListener('click', () => embla.scrollNext());
+      embla.on('select', syncMobile);
+      embla.on('reInit', syncMobile);
+      syncMobile();
+    }
 
     buttons.forEach((button, index) => {
       button.addEventListener('click', () => {
@@ -137,6 +187,7 @@ const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_proble
 
     section.addEventListener('mouseenter', stop);
     section.addEventListener('mouseleave', start);
+    desktop.addEventListener('change', start);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) stop();
       else start();
@@ -156,23 +207,25 @@ const { home_call_eyebrow: eyebrow, home_call_heading: heading, home_call_proble
     opacity: 1;
   }
 
-  [data-slide] {
-    position: absolute;
-    inset-inline: 0;
-    top: 0;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(16px);
-    transition:
-      opacity 0.35s ease,
-      transform 0.35s ease,
-      visibility 0.35s;
-  }
+  @media (min-width: 64rem) {
+    [data-slide] {
+      position: absolute;
+      inset-inline: 0;
+      top: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(16px);
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s ease,
+        visibility 0.35s;
+    }
 
-  [data-slide][data-active] {
-    position: relative;
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    [data-slide][data-active] {
+      position: relative;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
   }
 </style>
